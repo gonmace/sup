@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-3xl font-bold; /* Ejemplo de estilos para h1 */
+  }
+
+  h2 {
+    @apply text-2xl font-bold; /* Ejemplo de estilos para h2 */
+  }
+
+  h3 {
+    @apply text-xl ; /* Ejemplo de estilos para h2 */
+  }
+
+  p {
+    @apply text-base text-gray-700; /* Ejemplo de estilos para texto párrafo */
+  
+}}
+
+.rangos {
+    @apply range-xs max-w-64;
+}
+
+.active {
+    @apply text-green-300;
+}
+
+.leaflet-control {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+  }
+
+  .leaflet-control table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .leaflet-control th, .leaflet-control td {
+    border: 1px solid #ccc;
+    padding: 5px;
+    text-align: center;
+  }
