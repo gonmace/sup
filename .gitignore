@@ -12,3 +12,5 @@ ArchivosBase
 .vscode/
 .env
 db.sqlite3
+
+tailwind.css
