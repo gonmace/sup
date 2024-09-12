@@ -6,12 +6,29 @@
 
 Uses the default Django development server.
 
-1. Install requierements.dev.txt
-2. Run Django, has browser reload is  
+1. Create virtual environment
+2. Install requierements.dev.txt
+3. Make migrations and create super user
+4. Open another terminal, install dependences tailwind and start tailwind
+5. Run Django, has browser reload
+6. Once the application is finished, the Tailwind build must be executed
 
     ```sh
+    python3 -m venv .venv
+    source .venv/bin/activate
+
     pip install -r requirements.dev.txt
+
+    python manage.py migrate
+    python manage.py createsuperuser
+
+    npm --prefix theme/static_src/ install
+    python manage.py tailwind start
+
     python manage.py runserver
+
+    python manage.py tailwind build
+
     ```
 
     Test it out at [http://localhost:8000](http://localhost:8000).
