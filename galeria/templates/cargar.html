@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load widget_tweaks tailwind_tags static %}
+
+{% block css %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Incluir JavaScript de Flatpickr -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    {% tailwind_css %}
+{% endblock css %}
+
+{% block body_class %}bg-gray-200 min-h-screen{% endblock body_class%}
+
+
+{% block content %} 
+  <div class="w-full max-w-7xl mx-auto px-4 py-6 ">
+    <!-- Título del formulario -->
+    <div class="text-center mb-1">
+      <h1 class="text-2xl font-bold text-gray-800">CARGA DE IMAGENES</h1>
+      <p class="text-md text-gray-500">Escoge el sitio para la carga de multiples imagenes.</p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class=" space-y-4 p-6 rounded-lg shadow-lg">
+        {% csrf_token %}
+            <!-- Campo sitio -->
+        <div class="mb-4">
+            <label for="id_sitio" class="field-label">Sitio</label>
+            {{ form.sitio|add_class:"input" }}
+        </div>
+
+            <!-- Campo fecha_carga -->
+        <div class="mb-4">
+            <label for="id_fecha_carga" class="field-label">Fecha de Carga</label>
+            {{ form.fecha_carga|add_class:"input" }}
+        </div>
+
+        <!-- Campo comentario -->
+        <div class="mb-4">
+            <label for="id_comentario" class="field-label">Comentario</label>
+            {{ form.comentario|add_class:"textarea"|attr:"rows:5,placeholder:Escribe tu comentario aquí" }}
+        </div>
+        
+        <input type="file" name="imagenes" multiple class="button is-sm">
+        
+        <button type="submit" class="button is-lg">
+        Cargar Reporte
+        </button>
+    </form>
+  </div>
+
+{% endblock content %} 
+
+{% block js %}
+<script src="{% static 'js/galeria.js' %}"></script>
+
+{% endblock js %}
+

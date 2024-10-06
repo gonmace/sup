@@ -45,3 +45,10 @@
     padding: 5px;
     text-align: center;
   }
+
+  .neodiv {
+    border-radius: 35px;
+    background: #e0e0e0;
+    box-shadow:  -7px -7px 9px #c5c5c5,
+             7px 7px 9px #fbfbfb;
+  }

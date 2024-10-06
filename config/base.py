@@ -2,7 +2,7 @@ from decouple import config
 from pathlib import Path
 import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY', default='your secret key')
@@ -15,7 +15,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'import_export',
+    'widget_tweaks',
+
     'main',
+    'avance',
+    'galeria',
 ]
 
 MIDDLEWARE = [
@@ -102,3 +107,5 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# IMPORT_EXPORT_FORMATS = [XLSX]

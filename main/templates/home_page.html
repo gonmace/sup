@@ -1,28 +1,27 @@
 {% extends 'base.html' %}
-{% load tailwind_tags %}
+{% load static tailwind_tags %}
 
 {% block css %}
     {% comment %} {% tailwind_preload_css %} {% endcomment %}
     {% tailwind_css %}
 {% endblock css %}
 
-{% block body_class %}bg-yellow-500{% endblock %}
+{% block body_class %}{% endblock %}
 
 {% block content %}
+<div class="h-screen bg-stone-200 p-3">
+    <div id="map" class="h-1/2 w-1/2 nm-protrude-2xl size-32 rounded-lg"> 
 
-<div class="bg-yellow-200">
-    Django | PostgreSQL | Redis | Tailwind
+    </div>	
 </div>
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li {% if message.tags %} class="text-red-600 {{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
-{% if user.is_authenticated %}
-Esta autenticado
-{% endif %}
-
 {% endblock content %}
+
+{% block js %}
+<script type="text/javascript">
+	
+	let static_url = "{% get_static_prefix %}";
+	
+</script>
+
+<script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+{% endblock js %}

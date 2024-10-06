@@ -1,0 +1,24 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "vite build --watch",
+    "build:admin": "vite build -c vite.config.admin.js --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "vite": "^5.4.8"
+  },
+  "dependencies": {
+    "leaflet": "^1.7.1",
+    "leaflet-control-custom": "^1.0.0",
+    "leaflet-groupedlayercontrol": "^0.6.1",
+    "leaflet.markercluster": "^1.5.3",
+    "leaflet.markercluster.layersupport": "^2.0.1"
+  }
+}
