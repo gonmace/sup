@@ -10,6 +10,8 @@ import { OpenStreetMap_Mapnik, Esri_WorldImagery, OpenStreetMap_Dark } from './d
 
 document.addEventListener("DOMContentLoaded", function () {
 
+    console.log(sitios);
+    
     // Opacidad para el mapa
     const opacidad = 1;
 
@@ -21,5 +23,20 @@ document.addEventListener("DOMContentLoaded", function () {
         zoom: mapZoomLevel,
         layers: [OpenStreetMap_Mapnik(opacidad)]
     });
+
+    let groupASG = L.layerGroup(), 
+    groupCAB = L.layerGroup(), 
+    groupEJE = L.layerGroup(), 
+    groupTER = L.layerGroup(), 
+    groupPTG = L.layerGroup(), 
+    groupCAN = L.layerGroup();
+
+    sitios.forEach(sitio => {
+        let marker = L.marker([sitio.lat, sitio.lon], { icon: yellowIcon }).bindPopup(sitio.popup);
+        marker.addTo(groupEJE);
+    })
+
+    map.addLayer(groupEJE);
+
 
 });
