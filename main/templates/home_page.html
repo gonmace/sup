@@ -20,7 +20,8 @@
 <script type="text/javascript">
 	
 	let static_url = "{% get_static_prefix %}";
-	
+	// Datos de sitios pasados al template
+    var sitios = {{ sitios_json|safe }};
 </script>
 
 <script type="text/javascript" src="{% static 'js/main.js' %}"></script>

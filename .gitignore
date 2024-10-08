@@ -13,4 +13,4 @@ ArchivosBase
 .env
 db.sqlite3
 
-tailwind.css
+node_modules/

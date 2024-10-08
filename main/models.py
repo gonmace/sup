@@ -53,3 +53,37 @@ class Sitio(models.Model):
 
     def __str__(self):
         return f"{self.sitio}"
+
+
+ESTADO_CHOICES = [
+    ('ASG', 'Asignado',),
+    ('EJE', 'Ejecución'),
+    ('TER', 'Terminado'),
+    ('PTG', 'Postergado'),
+    ('CAN', 'Cancelado'),
+]
+
+
+class Avance(models.Model):
+    sitio = models.OneToOneField(Sitio, on_delete=models.CASCADE)
+    estado = models.CharField(
+        "Estado",
+        max_length=3,
+        choices=ESTADO_CHOICES,
+        default='EJE'
+        )
+    excavacion = models.DateField("Excavación", null=True, blank=True)
+    hormigonado = models.DateField("Hormigonado", null=True, blank=True)
+    montaje = models.DateField("Montaje", null=True, blank=True)
+    ener_prov = models.DateField("Energía Provisional", null=True, blank=True)
+    ener_def = models.DateField("Energía Definitiva", null=True, blank=True)
+    porcentaje = models.FloatField("Porcentaje", default=0.0)
+    fecha_fin = models.DateField("Fecha Fin", blank=True, null=True)
+    comentario = models.TextField("Comentarios", blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Avance"
+        verbose_name_plural = "Avance Proyectos"
+
+    def __str__(self):
+        return f"{self.sitio}"
