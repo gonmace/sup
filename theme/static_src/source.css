@@ -52,3 +52,15 @@
     box-shadow:  -7px -7px 9px #c5c5c5,
              7px 7px 9px #fbfbfb;
   }
+
+  .contenedor {
+    overflow: hidden;
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: separate;
+    border-radius: 16px;
+    overflow: hidden;
+    color: #0f172a;
+    -webkit-box-shadow: 4px 4px 8px rgba(15,23,42,0.3), -4px -4px 8px rgba(255,255,255,0.5), inset 1px 1px 1px rgba(224,234,249,0.5);
+            box-shadow: 4px 4px 8px rgba(15,23,42,0.3), -4px -4px 8px rgba(255,255,255,0.5), inset 1px 1px 1px rgba(224,234,249,0.5);
+  }
