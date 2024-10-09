@@ -2,7 +2,6 @@
 services:
   sup-db:
     image: postgres:15-alpine  
-    container_name: postgres_db
     ports:
       - "5438:5432"
     env_file:
@@ -14,7 +13,6 @@ services:
 
   sup-redis:
     image: redis:alpine
-    container_name: redis_cache
     ports:
       - "6385:6379"
     networks:
@@ -24,7 +22,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: django_app
     command: ./entrypoint.sh
     volumes:
       - ./staticfiles:/app/staticfiles  
