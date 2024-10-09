@@ -1,0 +1,45 @@
+<!-- galeria_detalle.html -->
+{% extends 'base.html' %}
+{% load tailwind_tags %}
+
+{% block css %}
+    {% tailwind_css %}
+{% endblock css %}
+
+{% block body_class %}bg-gray-200 min-h-screen{% endblock body_class%}
+
+{% block content %}
+<main class="container mx-auto">
+    <div class="py-4 text-center">
+        <h1 class="text-3xl font-bold text-gray-800 mb-1">{{ sitio.sitio }}_{{ sitio.cod_id }} </h1>
+        <p class="text-2xl text-gray-600">{{ sitio.nombre }} {{ galeria.descripcion }}</p>
+    </div>      
+{% for fecha, items in items_por_fecha.items %}
+    {% with day=fecha|date:"l" %}
+    <h2 class="{% if day == 'sábado' or day == 'domingo' %}text-red-500{% else %}text-gray-700{% endif %} text-xl font-semibold">
+        {{ fecha|date:"j F Y (l)" }}
+    </h2>
+    {% endwith %}
+    
+    <!-- Mostrar imágenes de ese día -->
+    <div class="columns-3 gap-4 my-3 mx-2">    
+    {% for imagen in items.imagenes %}
+        <img class="h-auto max-w-full contenedor" src="{{ imagen.imagen.url }}" alt="{{ imagen.descripcion }}" >
+    {% endfor %}
+
+    <!-- Verificar y Mostrar comentarios de ese día si existen -->
+    {% if items.comentarios %}   
+        {% for comentario in items.comentarios %}
+        <div class="contenedor bg-white w-full min-h-14 flex flex-col justify-between rounded-lg p-4 mt-4">
+            <p class="mb-4">{{ comentario.comentario }}</p>
+            <div class="text-right text-sm text-gray-600">
+                {{ comentario.usuario }}
+            </div>
+        </div>       
+        {% endfor %}
+    {% endif %}
+
+    </div>
+{% endfor %}
+</main>
+{% endblock content %}

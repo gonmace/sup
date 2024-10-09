@@ -2,55 +2,57 @@
 {% load static tailwind_tags %}
 
 {% block css %}
-    {% comment %} {% tailwind_preload_css %} {% endcomment %}
-    
-    <link rel="stylesheet" href="{% static 'css/neomorphism.css' %}">
-    {% tailwind_css %}
-{% endblock css %}
+  {% comment %} {% tailwind_preload_css %} {% endcomment %}
+  <link rel="stylesheet" href="{% static 'css/neomorphism.css' %}" />
+  {% tailwind_css %}
+ 
+{% endblock %}
 
-{% block body_class %}{% endblock %}
+{% block body_class %}
+
+{% endblock body_class %}
 
 {% block content %}
-<div class="h-screen bg-stone-200">
+  <div class="h-screen bg-stone-200">
     <div class="flex flex-col md:flex-row md:gap-4 h-full">
-        <div id="map" class="flex-1 w-full contenedor"> </div>
+      <div id="map" class="flex-1 w-full contenedor"></div>
 
-        <div class="flex-1 h-1/2 w-full text-center pt-2">
-            <h1 id="sitio"></h1>
-            <h3 id="nombre" class="mb-3"></h3>
-            
-            <div class="flex flex-col md:flex-row h-full gap-4">
+      <div class="flex-1 h-1/2 w-full text-center pt-2">
+        <h1 id="sitio"></h1>
+        <h3 id="nombre" class="mb-3"></h3>
 
-                <div id="images-container" class="carousel w-full md:w-1/2 h-full p-4"></div>
-                
-                <div class="w-full md:w-1/2 h-full flex flex-col md:flex-row md:gap-4">
-                    <div class="flex-1 w-full h-full flex flex-col justify-around">
-                        <div class="text-left">
-                            <p id="cod_id"></p>
-                            <p id="altura"></p>
-                            <p id="contratista"></p>
-                        </div>
+        <div class="flex flex-col md:flex-row h-full gap-4">
+          <div id="images-container" class="carousel w-full md:w-1/2 h-full p-2"></div>
 
-                        <div id="comentario" class="p-4"></div>
-                    
-                        <div id="fecha"></div>
-                    </div>
-                </div>
+          <div class="w-full md:w-1/2 h-full flex flex-col md:flex-row md:gap-4 mr-2">
+            <div class="flex-1 w-full h-full flex flex-col justify-around">
+              <div class="text-left">
+                <p id="cod_id"></p>
+                <p id="altura"></p>
+                <p id="contratista"></p>
+              </div>
 
+              <div id="comentario" class="p-4"></div>
+
+              <div id="fecha"></div>
             </div>
+          </div>
         </div>
-        
+      </div>
     </div>
-</div>
-{% endblock content %}
+  </div>
+{% endblock %}
 
 {% block js %}
-<script type="text/javascript">
-	
+  <script type="text/javascript">
 	let static_url = "{% get_static_prefix %}";
 	// Datos de sitios pasados al template
-    var sitios = {{ sitios_json|safe }};
+    const sitios = {{ sitios_json|safe }};
+    const contratistas = {{ contratistas_json|safe }};
+    // https://github.com/ismail9k/neomorphism
 </script>
-
-<script type="text/javascript" src="{% static 'js/main.js' %}"></script>
-{% endblock js %}
+  <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+  <style>
+    
+  </style>
+{% endblock %}
