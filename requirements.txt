@@ -9,5 +9,5 @@ django-import-export[xlsx]
 # whitenoise>=6.2.0 
 pillow>=10.4.0
 django-widget-tweaks>=1.0.5
-
+django-tailwind>=3.8.0
 
