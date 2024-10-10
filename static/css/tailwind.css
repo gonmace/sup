@@ -1131,20 +1131,6 @@ p {
   text-decoration-line: underline;
 }
 
-.stats {
-  display: inline-grid;
-  border-radius: var(--rounded-box, 1rem);
-  --tw-bg-opacity: 1;
-  background-color: var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity)));
-  --tw-text-opacity: 1;
-  color: var(--fallback-bc,oklch(var(--bc)/var(--tw-text-opacity)));
-}
-
-:where(.stats) {
-  grid-auto-flow: column;
-  overflow-x: auto;
-}
-
 .textarea {
   min-height: 3rem;
   flex-shrink: 1;
@@ -1415,19 +1401,6 @@ p {
   }
 }
 
-:where(.stats) > :not([hidden]) ~ :not([hidden]) {
-  --tw-divide-x-reverse: 0;
-  border-right-width: calc(1px * var(--tw-divide-x-reverse));
-  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
-  --tw-divide-y-reverse: 0;
-  border-top-width: calc(0px * calc(1 - var(--tw-divide-y-reverse)));
-  border-bottom-width: calc(0px * var(--tw-divide-y-reverse));
-}
-
-:is([dir="rtl"] .stats > :not([hidden]) ~ :not([hidden])) {
-  --tw-divide-x-reverse: 1;
-}
-
 .textarea:focus {
   box-shadow: none;
   border-color: var(--fallback-bc,oklch(var(--bc)/0.2));
@@ -1531,6 +1504,10 @@ p {
   position: absolute;
 }
 
+.relative {
+  position: relative;
+}
+
 .left-0 {
   left: 0px;
 }
@@ -1543,8 +1520,16 @@ p {
   top: 0px;
 }
 
+.top-1 {
+  top: 0.25rem;
+}
+
 .z-\[999\] {
   z-index: 999;
+}
+
+.m-4 {
+  margin: 1rem;
 }
 
 .mx-1 {
@@ -1552,19 +1537,13 @@ p {
   margin-right: 0.25rem;
 }
 
-.mx-2 {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-}
-
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
 }
 
-.my-3 {
-  margin-top: 0.75rem;
-  margin-bottom: 0.75rem;
+.\!mt-1 {
+  margin-top: 0.25rem !important;
 }
 
 .mb-1 {
@@ -1583,8 +1562,16 @@ p {
   margin-bottom: 1rem;
 }
 
+.ml-3 {
+  margin-left: 0.75rem;
+}
+
 .mr-2 {
   margin-right: 0.5rem;
+}
+
+.mt-3 {
+  margin-top: 0.75rem;
 }
 
 .mt-4 {
@@ -1660,6 +1647,10 @@ p {
        columns: 3;
 }
 
+.flex-row {
+  flex-direction: row;
+}
+
 .flex-col {
   flex-direction: column;
 }
@@ -1721,6 +1712,10 @@ p {
   padding: 0.5rem;
 }
 
+.p-3 {
+  padding: 0.75rem;
+}
+
 .p-4 {
   padding: 1rem;
 }
@@ -1758,6 +1753,10 @@ p {
   padding-top: 0.5rem;
 }
 
+.pt-9 {
+  padding-top: 2.25rem;
+}
+
 .text-left {
   text-align: left;
 }
@@ -1778,6 +1777,11 @@ p {
 .text-3xl {
   font-size: 1.875rem;
   line-height: 2.25rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
 }
 
 .text-sm {

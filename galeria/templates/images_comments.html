@@ -16,15 +16,15 @@
     </div>      
 {% for fecha, items in items_por_fecha.items %}
     {% with day=fecha|date:"l" %}
-    <h2 class="{% if day == 'sábado' or day == 'domingo' %}text-red-500{% else %}text-gray-700{% endif %} text-xl font-semibold">
+    <h2 class="ml-3 {% if day == 'sábado' or day == 'domingo' %}text-red-500{% else %}text-gray-700{% endif %} text-xl font-semibold">
         {{ fecha|date:"j F Y (l)" }}
     </h2>
     {% endwith %}
     
     <!-- Mostrar imágenes de ese día -->
-    <div class="columns-3 gap-4 my-3 mx-2">    
+    <div class="columns-3 gap-4 m-4">    
     {% for imagen in items.imagenes %}
-        <img class="h-auto max-w-full contenedor" src="{{ imagen.imagen.url }}" alt="{{ imagen.descripcion }}" >
+        <img class="h-auto max-w-full contenedor mb-4" src="{{ imagen.imagen.url }}" alt="{{ imagen.descripcion }}" >
     {% endfor %}
 
     <!-- Verificar y Mostrar comentarios de ese día si existen -->

@@ -163,9 +163,13 @@ def get_site_images(request):
             'cod_id': sitio.cod_id,
             'nombre': sitio.nombre,
             'altura': sitio.altura,
+            'lat': sitio.lat,
+            'lon': sitio.lon,
+
             'contratista': sitio.contratista.name
             if sitio.contratista else None,
-            'ito': sitio.ito.nombre if sitio.ito else None,
+
+            'ito': sitio.ito.user if sitio.ito else None,
         }
     })
 

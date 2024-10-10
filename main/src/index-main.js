@@ -12,20 +12,22 @@ import { osm, osm_dark, ewi } from './data/tiles.js';
 
 
 const carousel = document.getElementById('images-container');
-const sitio = document.getElementById('sitio');
+const titulo = document.getElementById('titulo');
 const nombre = document.getElementById('nombre');
 const cod_id = document.getElementById('cod_id');
 const altura = document.getElementById('altura');
 const contratista = document.getElementById('contratista');
 const comentario = document.getElementById('comentario');
-const dateElement = document.getElementById('fecha');
+const latitud = document.getElementById('latitud');
+const longitud = document.getElementById('longitud');
+const googleMaps = document.getElementById('googleMaps');
+
 let sitio_id;
 
 function initCarousel() {
     var carousel = document.querySelector('.carousel');
     var items = carousel.querySelectorAll('.carousel-item');
     var currentIndex = 0;
-
     // Ocultar todos los elementos excepto el primero
     items.forEach(function (item, index) {
         if (index !== 0) {
@@ -41,20 +43,32 @@ function initCarousel() {
 }
 
 
-function updateImages(data) {
+function updateImages(data) {    
     var images = data.images;
     var latestDate = data.latest_date;
     var comments = data.comments;
-    sitio.innerHTML = data.sitio.sitio;
+    titulo.innerHTML = data.sitio.sitio;
     nombre.innerHTML = data.sitio.nombre;
-    cod_id.innerHTML = `Codigo Cliente: <span class="font-bold">${data.sitio.cod_id}</span>`;
+    cod_id.innerHTML = `Código Cliente: <span class="font-bold">${data.sitio.cod_id}</span>`;
     altura.innerHTML = `Altura: <span class="font-bold">${data.sitio.altura} metros</span>`;
-    dateElement.innerHTML = latestDate ? latestDate : "";
     contratista.innerHTML = data.sitio.contratista ?
         `Contratista: <span class="font-bold">${data.sitio.contratista}</span>` :
         "";
+    latitud.innerHTML = `Latitud: <span class="font-bold">${data.sitio.lat}</span>`;
+    longitud.innerHTML = `Longitud: <span class="font-bold">${data.sitio.lon}</span>`;
 
     carousel.innerHTML = '';
+
+    googleMaps.classList.remove('hidden');
+
+    googleMaps.addEventListener('click', function() {
+        const lat = data.sitio.lat;
+        const lon = data.sitio.lon;
+        const mapUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
+        // Redirigir al usuario a la URL de Google Maps
+        window.open(mapUrl, '_blank'); // Abre Google Maps en una nueva pestaña
+    });
+
 
     if (images.length === 0 && comments.length === 0) {
         var vacio = document.createElement('div');
@@ -83,17 +97,23 @@ function updateImages(data) {
 
     // Mostrar comentarios
     if (comments.length > 0) {
-        comentario.innerHTML = '';
-        comentario.classList.add('contenedor');
         var comment = comments[0];
+        comentario.innerHTML = '';
+        comentario.classList.add('contenedor','relative');
+        var fecha = document.createElement('p');
         var commentElement = document.createElement('p');
         var autorElement = document.createElement('p');
 
-        commentElement.classList.add('mb-4', 'font-semibold');
+        fecha.classList.add('absolute', 'top-1');
+        fecha.innerHTML = latestDate ? latestDate : "";
+
+        commentElement.classList.add('mb-4', 'text-lg');
         commentElement.innerHTML = comment.comentario;
 
         autorElement.classList.add('italic', 'text-right', 'text-sm', 'text-gray-600');
         autorElement.innerHTML = `${comment.usuario}`;
+
+        comentario.appendChild(fecha);
         comentario.appendChild(commentElement);
         comentario.appendChild(autorElement);
 
@@ -103,9 +123,9 @@ function updateImages(data) {
     }
 }
 
-
-
 document.addEventListener("DOMContentLoaded", function () {
+
+
 
     carousel.addEventListener('click', function () {
         const primerHijo = carousel.firstElementChild;
@@ -191,15 +211,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     })
 
-
+// Activar en el mapa
     map.addLayer(groupEJE);
     map.addLayer(groupASG);
     map.addLayer(groupTER);
     map.addLayer(groupPTG);
     map.addLayer(groupCAN);
     map.addLayer(groupNULL);
-    
-    
 
     var baseTree = {
         label: "<strong>MAPAS BASE</strong>",
@@ -257,8 +275,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         ],
     };
-    
-
     // Agregar el control de capas al mapa con el plugin de árbol leaflet.control.layers.tree
     L.control.layers.tree(baseTree, overlayTree, {
         position: "topleft",
