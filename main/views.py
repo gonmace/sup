@@ -87,8 +87,10 @@ def home(request):
 
     context = {
         'sitios_json': sitios_json,
-        'contratistas_cod_list': contratistas_cod_list,  # Lista simple ["MER", "AJ", "GH3"]
-        'contratistas_json': contratistas_json  # JSON ["MER", "AJ", "GH3"]
+        # Lista simple ["MER", "AJ", "GH3"]
+        'contratistas_cod_list': contratistas_cod_list,
+        # JSON ["MER", "AJ", "GH3"]
+        'contratistas_json': contratistas_json
     }
     return render(request, 'home_page.html', context)
 

@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     break;
                 case 'EJE':
                     marker = L.marker([sitio.lat, sitio.lon], { icon: greenIcon }).bindPopup(sitio.sitio);
-                    marker.addTo(groupASG);
+                    marker.addTo(groupEJE);
                     break;
                 case 'TER':
                     marker = L.marker([sitio.lat, sitio.lon], { icon: blueIcon }).bindPopup(sitio.sitio);

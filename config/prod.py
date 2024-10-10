@@ -6,7 +6,7 @@ DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='').split(',')
 
 INSTALLED_APPS += [
-    'tailwind',
+    
 ]
 
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
