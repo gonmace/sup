@@ -8,6 +8,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='your secret key')
 
 INSTALLED_APPS = [
+    # "admin_interface",
+    # "colorfield",
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -21,6 +24,7 @@ INSTALLED_APPS = [
 
     'main',
     'galeria',
+    'actividades',
 ]
 
 MIDDLEWARE = [
@@ -32,6 +36,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# X_FRAME_OPTIONS = "SAMEORIGIN"
+# SILENCED_SYSTEM_CHECKS = ["security.W019"]
 
 ROOT_URLCONF = 'config.urls'
 

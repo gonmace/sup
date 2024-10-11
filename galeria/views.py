@@ -79,7 +79,8 @@ def display_images_comments(request, site_id):
 
     # Combinar imágenes y comentarios en la misma estructura
     for item in list(imagenes) + list(comentarios):
-        items_por_fecha.setdefault(item.fecha, {'imagenes': [], 'comentarios': []})
+        items_por_fecha.setdefault(
+            item.fecha, {'imagenes': [], 'comentarios': []})
         if isinstance(item, Imagen):
             items_por_fecha[item.fecha]['imagenes'].append(item)
         elif isinstance(item, Comentario):
@@ -95,7 +96,8 @@ def display_images_comments(request, site_id):
 
 # class CustomLoginView(LoginView):
 #     template_name = 'login.html'
-#     redirect_authenticated_user = True  # Redirige a los usuarios ya autenticados
+# Redirige a los usuarios ya autenticados
+#     redirect_authenticated_user = True
 #     next_page = reverse_lazy('imgs/cargar')
 
 

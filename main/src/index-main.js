@@ -6,9 +6,18 @@ import "leaflet.markercluster";
 import 'leaflet.markercluster.layersupport';
 import "leaflet.control.layers.tree";
 import "leaflet.control.layers.tree/L.Control.Layers.Tree.css";
-
 import { yellowIcon, redIcon, greenIcon, blueIcon, grayIcon, nullIcon } from './data/icons.js';
 import { osm, osm_dark, ewi } from './data/tiles.js';
+
+
+import * as echarts from 'echarts/core';
+import {
+    DatasetComponent,
+    GridComponent,
+    VisualMapComponent
+} from 'echarts/components';
+import { BarChart } from 'echarts/charts';
+import { CanvasRenderer } from 'echarts/renderers';
 
 
 const carousel = document.getElementById('images-container');
@@ -21,7 +30,6 @@ const comentario = document.getElementById('comentario');
 const latitud = document.getElementById('latitud');
 const longitud = document.getElementById('longitud');
 const googleMaps = document.getElementById('googleMaps');
-
 let sitio_id;
 
 function initCarousel() {
@@ -43,7 +51,7 @@ function initCarousel() {
 }
 
 
-function updateImages(data) {    
+function updateSite(data) {
     var images = data.images;
     var latestDate = data.latest_date;
     var comments = data.comments;
@@ -61,7 +69,7 @@ function updateImages(data) {
 
     googleMaps.classList.remove('hidden');
 
-    googleMaps.addEventListener('click', function() {
+    googleMaps.addEventListener('click', function () {
         const lat = data.sitio.lat;
         const lon = data.sitio.lon;
         const mapUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
@@ -99,7 +107,7 @@ function updateImages(data) {
     if (comments.length > 0) {
         var comment = comments[0];
         comentario.innerHTML = '';
-        comentario.classList.add('contenedor','relative');
+        comentario.classList.add('contenedor', 'relative');
         var fecha = document.createElement('p');
         var commentElement = document.createElement('p');
         var autorElement = document.createElement('p');
@@ -107,7 +115,7 @@ function updateImages(data) {
         fecha.classList.add('absolute', 'top-1');
         fecha.innerHTML = latestDate ? latestDate : "";
 
-        commentElement.classList.add('mb-4', 'text-lg');
+        commentElement.classList.add('text-lg');
         commentElement.innerHTML = comment.comentario;
 
         autorElement.classList.add('italic', 'text-right', 'text-sm', 'text-gray-600');
@@ -124,8 +132,6 @@ function updateImages(data) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-
-
 
     carousel.addEventListener('click', function () {
         const primerHijo = carousel.firstElementChild;
@@ -200,7 +206,7 @@ document.addEventListener("DOMContentLoaded", function () {
             fetch(`/get_site_images/?site_id=${sitio_id}`)
                 .then(response => response.json())
                 .then(data => {
-                    updateImages(data);
+                    updateSite(data);
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -211,13 +217,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     })
 
-// Activar en el mapa
+    // Activar en el mapa
     map.addLayer(groupEJE);
-    map.addLayer(groupASG);
-    map.addLayer(groupTER);
-    map.addLayer(groupPTG);
-    map.addLayer(groupCAN);
-    map.addLayer(groupNULL);
+    // map.addLayer(groupASG);
+    // map.addLayer(groupTER);
+    // map.addLayer(groupPTG);
+    // map.addLayer(groupCAN);
+    // map.addLayer(groupNULL);
 
     var baseTree = {
         label: "<strong>MAPAS BASE</strong>",
@@ -229,10 +235,10 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     var childrenContratistas = [];
-    contratistas.forEach(contratista => {        
+    contratistas.forEach(contratista => {
         childrenContratistas.push({ label: ` ${contratista}`, layer: groupsContratista[contratista].addTo(map) });
     })
-    
+
     var overlayTree = {
         label: "<strong> SITIOS / PROYECTOS</strong>",
         selectAllCheckbox: 'Un/select all',
@@ -241,31 +247,31 @@ document.addEventListener("DOMContentLoaded", function () {
                 label: "<strong> ESTADO</strong>",
                 selectAllCheckbox: true,
                 children: [
-                    { 
+                    {
                         label: `<img src="${static_url}/leaflet/icons/yellow.png" class="inline h-5 mx-1">Asignados`,
-                        layer: groupASG 
+                        layer: groupASG
                     },
-                    { 
+                    {
                         label: `<img src="${static_url}/leaflet/icons/green.png" class="inline h-5 mx-1">En Ejecución`,
-                        layer: groupEJE 
+                        layer: groupEJE
                     },
-                    { 
+                    {
                         label: `<img src="${static_url}/leaflet/icons/blue.png" class="inline h-5 mx-1">Concluidos`,
-                        layer: groupTER 
+                        layer: groupTER
                     },
-                    { 
+                    {
                         label: `<img src="${static_url}/leaflet/icons/gray.png" class="inline h-5 mx-1">Postergados`,
-                        layer: groupPTG 
+                        layer: groupPTG
                     },
-                    { 
+                    {
                         label: `<img src="${static_url}/leaflet/icons/red.png" class="inline h-5 mx-1">Cancelados`,
-                        layer: groupCAN 
+                        layer: groupCAN
                     },
                     {
                         label: `<img src="${static_url}/leaflet/icons/null.png" class="inline h-5 mx-1">Sin establecer`,
-                        layer: groupNULL 
+                        layer: groupNULL
                     },
-                    {   label: '<div class="leaflet-control-layers-separator"></div>' }
+                    { label: '<div class="leaflet-control-layers-separator"></div>' }
                 ],
             },
             {
@@ -284,4 +290,66 @@ document.addEventListener("DOMContentLoaded", function () {
         openedSymbol: '&#8863; &#x1f5c1;',
         collapsed: false,
     }).addTo(map);
+
+    // ECHARTS
+
+    echarts.use([
+        DatasetComponent,
+        GridComponent,
+        VisualMapComponent,
+        BarChart,
+        CanvasRenderer
+    ]);
+
+    var chartDom = document.getElementById('charts');
+    var myChart = echarts.init(chartDom);
+    var option;
+
+    option = {
+        dataset: {
+          source: [
+            ['score', 'amount', 'product'],
+            [89.3, 58212, 'Matcha Latte'],
+            [57.1, 78254, 'Milk Tea'],
+            [74.4, 41032, 'Cheese Cocoa'],
+            [50.1, 12755, 'Cheese Brownie'],
+            [89.7, 20145, 'Matcha Cocoa'],
+            [68.1, 79146, 'Tea'],
+            [19.6, 91852, 'Orange Juice'],
+            [10.6, 101852, 'Lemon Juice'],
+            [32.7, 20112, 'Walnut Brownie']
+          ]
+        },
+        grid: { containLabel: true },
+        xAxis: { name: 'amount' },
+        yAxis: { type: 'category' },
+        visualMap: {
+          orient: 'horizontal',
+          left: 'center',
+          min: 10,
+          max: 100,
+          text: ['High Score', 'Low Score'],
+          // Map the score column to color
+          dimension: 0,
+          inRange: {
+            color: ['#65B581', '#FFCE34', '#FD665F']
+          }
+        },
+        series: [
+          {
+            type: 'bar',
+            encode: {
+              // Map the "amount" column to X axis.
+              x: 'amount',
+              // Map the "product" column to Y axis
+              y: 'product'
+            }
+          }
+        ]
+      };
+      
+      option && myChart.setOption(option);
+
+
+
 });
