@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from actividades.models import DetalleProgreso, Progreso
 from galeria.models import Imagen, Comentario
 from main.models import Contratista, Sitio, Avance
 import json
@@ -20,6 +21,30 @@ MESES_ES = {
     11: 'noviembre',
     12: 'diciembre',
 }
+
+
+def format_fecha(fecha):
+    MESES_ES = {
+        1: 'enero', 2: 'febrero', 3: 'marzo',
+        4: 'abril', 5: 'mayo', 6: 'junio',
+        7: 'julio', 8: 'agosto', 9: 'septiembre',
+        10: 'octubre', 11: 'noviembre', 12: 'diciembre',
+    }
+    return f"{fecha.day} de {MESES_ES[fecha.month]} de {fecha.year}"
+
+
+def sitio_data(sitio):
+    return {
+        'id': sitio.id,
+        'sitio': sitio.sitio,
+        'cod_id': sitio.cod_id,
+        'nombre': sitio.nombre,
+        'altura': sitio.altura,
+        'lat': sitio.lat,
+        'lon': sitio.lon,
+        'contratista': sitio.contratista.name if sitio.contratista else None,
+        'ito': sitio.ito.nombre if sitio.ito else None,
+    }
 
 
 def home(request):
@@ -95,82 +120,58 @@ def home(request):
     return render(request, 'home_page.html', context)
 
 
-def get_site_images(request):
+def get_site_data(request):
     site_id = request.GET.get('site_id')
-    images = Imagen.objects.filter(sitio__id=site_id)
     sitio = Sitio.objects.get(id=site_id)
+    images = Imagen.objects.filter(sitio__id=site_id)
     comments = Comentario.objects.filter(sitio__id=site_id)
 
-    # Obtener la fecha más reciente entre imágenes y comentarios
+    try:
+        progreso = Progreso.objects.get(progreso__proyecto__id=site_id)
+        detalles = DetalleProgreso.objects.filter(
+            progreso=progreso).select_related(
+                'actividad_grupo', 'actividad_grupo__actividad')
+        progreso_data = [{
+            'actividad': detalle.actividad_grupo.actividad.nombre,
+            # 'grupo': detalle.actividad_grupo.grupo.nombre,
+            'ponderacion': detalle.actividad_grupo.ponderacion,
+            'avance': detalle.porcentaje,
+        } for detalle in detalles]
+    except Progreso.DoesNotExist:
+        progreso_data = None
+
     latest_image_date = images.aggregate(
         Max('fecha_carga'))['fecha_carga__max']
     latest_comment_date = comments.aggregate(
         Max('fecha_carga'))['fecha_carga__max']
-
-    # Manejar el caso en que ambas fechas sean None
-    latest_dates = [date for date in
-                    [latest_image_date, latest_comment_date]
-                    if date is not None]
+    latest_dates = [date for date in [latest_image_date, latest_comment_date]
+                    if date]
     latest_date = max(latest_dates) if latest_dates else None
+    latest_date_str = format_fecha(latest_date) if latest_date else ''
 
-    if latest_date:
-        latest_date_str = f"""{latest_date.day} de
-        {MESES_ES[latest_date.month]} de {latest_date.year}"""
-    else:
-        latest_date_str = ''
+    images = images.filter(
+        fecha_carga=latest_date) if latest_date else Imagen.objects.none()
+    comments = comments.filter(
+        fecha_carga=latest_date) if latest_date else Comentario.objects.none()
 
-    # Filtrar imágenes y comentarios por la última fecha disponible
-    if latest_date:
-        images = images.filter(fecha_carga=latest_date)
-        comments = comments.filter(fecha_carga=latest_date)
-    else:
-        images = Imagen.objects.none()
-        comments = Comentario.objects.none()
+    image_data = [{
+        'url': image.imagen.url,
+        'description': image.descripcion or '',
+        'fecha_carga': format_fecha(image.fecha_carga),
+    } for image in images]
 
-    # Construir image_data
-    image_data = []
-    for image in images:
-        fecha = image.fecha_carga
-        fecha_formateada = f"""{fecha.day} de
-        {MESES_ES[fecha.month]} de {fecha.year}"""
-        image_data.append({
-            'url': image.imagen.url,
-            'description': image.descripcion or '',
-            'fecha_carga': fecha_formateada,
-        })
-
-    # Obtener el último comentario
-    latest_comment = comments.order_by('-fecha_carga').first()
-
-    # Construir comment_data
-    comment_data = []
-    if latest_comment:
-        fecha = latest_comment.fecha_carga
-        fecha_formateada = f"""{fecha.day} de
-        {MESES_ES[fecha.month]} de {fecha.year}"""
-        comment_data.append({
-            'comentario': latest_comment.comentario or '',
-            'fecha_carga': fecha_formateada,
-            'usuario': latest_comment.usuario.username,
-        })
+    comment_data = [{
+        'comentario': comment.comentario or '',
+        'fecha_carga': format_fecha(comment.fecha_carga),
+        'usuario': comment.usuario.username,
+    } for comment in comments]
 
     return JsonResponse({
         'images': image_data,
         'latest_date': latest_date_str,
         'comments': comment_data,
-        'sitio': {
-            'sitio': sitio.sitio,
-            'cod_id': sitio.cod_id,
-            'nombre': sitio.nombre,
-            'altura': sitio.altura,
-            'lat': sitio.lat,
-            'lon': sitio.lon,
-
-            'contratista': sitio.contratista.name
-            if sitio.contratista else None,
-
-            'ito': sitio.ito.user if sitio.ito else None,
-        }
+        'sitio': sitio_data(sitio),
+        'progreso': progreso_data
     })
 
 

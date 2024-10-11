@@ -33,14 +33,14 @@ class GrupoActividades(models.Model):
 class ActividadGrupo(models.Model):
     actividad = models.ForeignKey(Actividad, on_delete=models.CASCADE)
     grupo = models.ForeignKey(GrupoActividades, on_delete=models.CASCADE)
-    numero = models.FloatField()
+    ponderacion = models.FloatField()
 
     class Meta:
         unique_together = ('actividad', 'grupo')
 
     def clean(self):
         super().clean()
-        if self.numero is None:
+        if self.ponderacion is None:
             raise ValidationError(
                 f"Debes asignar un número para la actividad \
                     '{self.actividad.nombre}' en el grupo \
@@ -83,7 +83,7 @@ def crear_detalles_progreso(sender, instance, created, **kwargs):
             grupo=instance.progreso.grupo)
         for actividad in actividades:
             DetalleProgreso.objects.create(
-                progreso=instance, actividad_grupo=actividad, valor=0)
+                progreso=instance, actividad_grupo=actividad, porcentaje=0)
 
 
 class DetalleProgreso(models.Model):
@@ -96,7 +96,7 @@ class DetalleProgreso(models.Model):
 
     def __str__(self):
         return f"Grupo {self.actividad_grupo.grupo} \
-            | Ponderación: {self.actividad_grupo.numero} \
+            | Ponderación: {self.actividad_grupo.ponderacion} \
                 | Completado: {self.porcentaje}% "
 
     class Meta:

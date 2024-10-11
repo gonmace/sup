@@ -12,7 +12,7 @@ from .models import (
 class ActividadGrupoInline(admin.TabularInline):
     model = ActividadGrupo
     extra = 1  # Cantidad de filas adicionales para agregar actividades
-    fields = ['actividad', 'numero']  # Mostrar solo actividad y número
+    fields = ['actividad', 'ponderacion']  # Mostrar solo actividad y número
 
 
 @admin.register(GrupoActividades)
