@@ -128,15 +128,19 @@ def get_site_data(request):
 
     try:
         progreso = Progreso.objects.get(progreso__proyecto__id=site_id)
-        detalles = DetalleProgreso.objects.filter(
-            progreso=progreso).select_related(
-                'actividad_grupo', 'actividad_grupo__actividad')
-        progreso_data = [{
-            'actividad': detalle.actividad_grupo.actividad.nombre,
-            # 'grupo': detalle.actividad_grupo.grupo.nombre,
-            'ponderacion': detalle.actividad_grupo.ponderacion,
-            'avance': detalle.porcentaje,
-        } for detalle in detalles]
+        # Verificar si el progreso está activado
+        if not progreso.activar:
+            progreso_data = None
+        else:        
+            detalles = DetalleProgreso.objects.filter(
+                progreso=progreso, mostrar=True).select_related(
+                    'actividad_grupo', 'actividad_grupo__actividad')
+            progreso_data = [{
+                'actividad': detalle.actividad_grupo.actividad.nombre,
+                # 'grupo': detalle.actividad_grupo.grupo.nombre,
+                'ponderacion': detalle.actividad_grupo.ponderacion,
+                'avance': detalle.porcentaje,
+            } for detalle in detalles]
     except Progreso.DoesNotExist:
         progreso_data = None
 

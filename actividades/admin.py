@@ -31,6 +31,7 @@ class ActividadAdmin(admin.ModelAdmin):
 class DetalleProgresoInline(admin.TabularInline):
     model = DetalleProgreso
     extra = 0
+    max_num = 0
 
 
 class ProgresoAdmin(admin.ModelAdmin):

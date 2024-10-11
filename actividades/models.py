@@ -71,6 +71,7 @@ def crear_progreso(sender, instance, created, **kwargs):
 class Progreso(models.Model):
     progreso = models.OneToOneField(
         ProyectoActividad, on_delete=models.CASCADE)
+    activar = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.progreso.proyecto}"
@@ -92,7 +93,7 @@ class DetalleProgreso(models.Model):
     actividad_grupo = models.ForeignKey(
         ActividadGrupo, on_delete=models.CASCADE)
     porcentaje = models.FloatField("Avance %", default=0.0)
-    mostrar = models.BooleanField(default=True)
+    mostrar = models.BooleanField("Agregar", default=True)
 
     def __str__(self):
         return f"Grupo {self.actividad_grupo.grupo} \
