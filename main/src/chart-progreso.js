@@ -76,7 +76,7 @@ export function chartProgreso(actividades) {
                 text: ['Max', 'Ponderacion | Min'],
                 dimension: 0,
                 inRange: {
-                    color: ['#65B581', '#FFCE34', '#FD665F']
+                    color: ['#C6EBBE', '#00d400', '#38a64e']
                 }
             },
             series: [
