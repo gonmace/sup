@@ -12,7 +12,6 @@ import {
 import { CanvasRenderer } from 'echarts/renderers';
 
 export function chartProgreso(actividades) {
-    console.log("PROGRESO");
 
     const chartBarras = document.getElementById('barras-Chart');
     const chartGauge = document.getElementById('avance-Chart');
@@ -20,9 +19,11 @@ export function chartProgreso(actividades) {
 
     if (actividades) {
 
+        chartBarras.style.height = `${1.4 * actividades.length + 8}rem`;
 
         // Calcular la suma total de las ponderaciones
         const totalPonderacion = actividades.reduce((sum, actividad) => sum + actividad.ponderacion, 0);
+
 
         const avanceFisico = actividades.reduce((sum, actividad) => sum + (actividad.avance / totalPonderacion * actividad.ponderacion / 100), 0);
 
@@ -32,12 +33,18 @@ export function chartProgreso(actividades) {
             actividad.actividad // Nombre de la actividad
         ]);
 
+        // Para encontrar el máximo valor de la ponderación porcentual
+        const maxPonderacion = resultado.reduce((max, current) => {
+            return Math.max(max, parseFloat(current[0])); // Comparar el valor máximo actual con el primer elemento de cada sub-arreglo
+        }, 0); // Inicializar max en 0
+
         const resultadoChart = resultado.reverse();
 
         // Insertar la cabecera al inicio del array resultado
         resultadoChart.unshift(['score', 'avance', 'actividad']);
 
         // ECHARTS BARRAS
+        // para las columnas la formula rem es y=1.4x+8
         echarts.use([
             DatasetComponent,
             GridComponent,
@@ -58,16 +65,15 @@ export function chartProgreso(actividades) {
                 type: 'value',  // Cambiado de 'name' a 'value' para un eje numérico
                 name: 'Avance (%)',
                 min: 0,          // Establece el valor mínimo del eje X
-                max: 100         // Establece el valor máximo del eje X
+                max: 100,        // Establece el valor máximo del eje X
             },
             yAxis: { type: 'category' },
             visualMap: {
                 orient: 'horizontal',
                 left: 'center',
                 min: 0,
-                max: 40,
+                max: maxPonderacion,
                 text: ['Max', 'Ponderacion | Min'],
-                // Map the score column to color
                 dimension: 0,
                 inRange: {
                     color: ['#65B581', '#FFCE34', '#FD665F']
@@ -77,11 +83,9 @@ export function chartProgreso(actividades) {
                 {
                     type: 'bar',
                     encode: {
-                        // Map the "amount" column to X axis.
                         x: 'avance',
-                        // Map the "product" column to Y axis
                         y: 'actividad'
-                    }
+                    },
                 }
             ]
         };
@@ -90,7 +94,6 @@ export function chartProgreso(actividades) {
 
         // ECHARTS GAUGE
         // https://echarts.apache.org/examples/en/editor.html?c=gauge-simple
-
 
         echarts.use([TooltipComponent, GaugeChart, CanvasRenderer]);
 
@@ -118,7 +121,9 @@ export function chartProgreso(actividades) {
                     },
                     detail: {
                         valueAnimation: true,
-                        formatter: '{value}'
+                        formatter: function (value) {
+                            return Math.round(value); // Redondea el valor a un entero
+                        }
                     },
                     data: [
                         {

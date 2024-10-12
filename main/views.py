@@ -131,7 +131,7 @@ def get_site_data(request):
         # Verificar si el progreso está activado
         if not progreso.activar:
             progreso_data = None
-        else:        
+        else:
             detalles = DetalleProgreso.objects.filter(
                 progreso=progreso, mostrar=True).select_related(
                     'actividad_grupo', 'actividad_grupo__actividad')

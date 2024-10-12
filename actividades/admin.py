@@ -35,6 +35,8 @@ class DetalleProgresoInline(admin.TabularInline):
 
 
 class ProgresoAdmin(admin.ModelAdmin):
+    list_display = ('progreso', 'activar')
+    list_editable = ('activar',)
     inlines = [
         DetalleProgresoInline,
     ]
