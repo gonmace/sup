@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'tailwind',
     'import_export',
     'widget_tweaks',
+    'adminsortable2',
 
     'main',
     'galeria',

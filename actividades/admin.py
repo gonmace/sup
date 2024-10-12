@@ -7,16 +7,17 @@ from .models import (
     Progreso,
     ProyectoActividad
     )
+from adminsortable2.admin import SortableStackedInline, SortableAdminBase
 
 
-class ActividadGrupoInline(admin.TabularInline):
+class ActividadGrupoInline(SortableStackedInline):
     model = ActividadGrupo
     extra = 1  # Cantidad de filas adicionales para agregar actividades
     fields = ['actividad', 'ponderacion']  # Mostrar solo actividad y número
 
 
 @admin.register(GrupoActividades)
-class GrupoActividadesAdmin(admin.ModelAdmin):
+class GrupoActividadesAdmin(SortableAdminBase, admin.ModelAdmin):
     inlines = [ActividadGrupoInline]
     list_display = ('nombre',)
     search_fields = ('nombre',)

@@ -35,8 +35,11 @@ class ActividadGrupo(models.Model):
     grupo = models.ForeignKey(GrupoActividades, on_delete=models.CASCADE)
     ponderacion = models.FloatField()
 
+    order = models.PositiveIntegerField(default=0, blank=False, null=False)
+
     class Meta:
         unique_together = ('actividad', 'grupo')
+        ordering = ['order']
 
     def clean(self):
         super().clean()
@@ -103,3 +106,4 @@ class DetalleProgreso(models.Model):
     class Meta:
         verbose_name = "Detalle de Progreso"
         verbose_name_plural = "Detalles de Progresos"
+        ordering = ['actividad_grupo__order']
