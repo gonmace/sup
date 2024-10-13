@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from actividades.models import DetalleProgreso, Progreso
 from galeria.models import Imagen, Comentario
-from main.models import Contratista, Sitio, Avance
+from main.models import Contratista, Sitio
 import json
 from django.http import JsonResponse
 from django.db.models import Max
@@ -66,41 +66,42 @@ def home(request):
                 'cod': sitio.contratista.cod
             } if sitio.contratista else None,
             'ito': sitio.ito.nombre if sitio.ito else None,
+            'estado': sitio.estado
         }
 
-        # Intentamos obtener el avance relacionado
-        try:
-            # Gracias al OneToOneField, podemos acceder directamente
-            avance = sitio.avance
-            avance_data = {
-                'estado': avance.estado,
-                'excavacion': avance.excavacion.strftime('%Y-%m-%d')
-                if avance.excavacion else None,
+        # # Intentamos obtener el avance relacionado
+        # try:
+        #     # Gracias al OneToOneField, podemos acceder directamente
+        #     avance = sitio.avance
+        #     avance_data = {
+        #         'estado': avance.estado,
+        #         'excavacion': avance.excavacion.strftime('%Y-%m-%d')
+        #         if avance.excavacion else None,
 
-                'hormigonado': avance.hormigonado.strftime('%Y-%m-%d')
-                if avance.hormigonado else None,
+        #         'hormigonado': avance.hormigonado.strftime('%Y-%m-%d')
+        #         if avance.hormigonado else None,
 
-                'montado': avance.montaje.strftime('%Y-%m-%d')
-                if avance.montaje else None,
+        #         'montado': avance.montaje.strftime('%Y-%m-%d')
+        #         if avance.montaje else None,
 
-                'energia_prov': avance.ener_prov.strftime('%Y-%m-%d')
-                if avance.ener_prov else None,
+        #         'energia_prov': avance.ener_prov.strftime('%Y-%m-%d')
+        #         if avance.ener_prov else None,
 
-                'energia_def': avance.ener_def.strftime('%Y-%m-%d')
-                if avance.ener_def else None,
+        #         'energia_def': avance.ener_def.strftime('%Y-%m-%d')
+        #         if avance.ener_def else None,
 
-                'porcentaje': avance.porcentaje,
-                'fecha_fin': avance.fecha_fin.strftime('%Y-%m-%d')
-                if avance.fecha_fin else None,
+        #         'porcentaje': avance.porcentaje,
+        #         'fecha_fin': avance.fecha_fin.strftime('%Y-%m-%d')
+        #         if avance.fecha_fin else None,
 
-                'comentario': avance.comentario,
-            }
-        except Avance.DoesNotExist:
-            # Si no existe un avance asociado
-            avance_data = None
+        #         'comentario': avance.comentario,
+        #     }
+        # except Avance.DoesNotExist:
+        #     # Si no existe un avance asociado
+        #     avance_data = None
 
-        # Agregamos el avance al sitio
-        sitio_data['avance'] = avance_data
+        # # Agregamos el avance al sitio
+        # sitio_data['avance'] = avance_data
 
         sitios_data.append(sitio_data)
 

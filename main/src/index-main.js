@@ -164,38 +164,34 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     sitios.forEach(sitio => {
-        let marker;
-        if (sitio.avance && sitio.avance.estado) {
-            switch (sitio.avance.estado) {
-                case 'ASG':
-                    marker = L.marker([sitio.lat, sitio.lon], { icon: yellowIcon }).bindPopup(sitio.sitio);
-                    marker.addTo(groupASG);
-                    break;
-                case 'EJE':
-                    marker = L.marker([sitio.lat, sitio.lon], { icon: greenIcon }).bindPopup(sitio.sitio);
-                    marker.addTo(groupEJE);
-                    break;
-                case 'TER':
-                    marker = L.marker([sitio.lat, sitio.lon], { icon: blueIcon }).bindPopup(sitio.sitio);
-                    marker.addTo(groupTER);
-                    break;
-                case 'PTG':
-                    marker = L.marker([sitio.lat, sitio.lon], { icon: grayIcon }).bindPopup(sitio.sitio);
-                    marker.addTo(groupPTG);
-                    break;
-                case 'CAN':
-                    marker = L.marker([sitio.lat, sitio.lon], { icon: redIcon }).bindPopup(sitio.sitio);
-                    marker.addTo(groupCAN);
-                    break;
-                default:
-                    marker = L.marker([sitio.lat, sitio.lon], { icon: nullIcon }).bindPopup(sitio.sitio);
-                    marker.addTo(groupNULL);
-                    break;
-            }
-        } else {
-            marker = L.marker([sitio.lat, sitio.lon], { icon: nullIcon }).bindPopup(sitio.sitio);
-            marker.addTo(groupNULL);
+        let marker;        
+        switch (sitio.estado) {
+            case 'ASG':
+                marker = L.marker([sitio.lat, sitio.lon], { icon: yellowIcon }).bindPopup(sitio.sitio);
+                marker.addTo(groupASG);
+                break;
+            case 'EJE':
+                marker = L.marker([sitio.lat, sitio.lon], { icon: greenIcon }).bindPopup(sitio.sitio);
+                marker.addTo(groupEJE);
+                break;
+            case 'TER':
+                marker = L.marker([sitio.lat, sitio.lon], { icon: blueIcon }).bindPopup(sitio.sitio);
+                marker.addTo(groupTER);
+                break;
+            case 'PTG':
+                marker = L.marker([sitio.lat, sitio.lon], { icon: grayIcon }).bindPopup(sitio.sitio);
+                marker.addTo(groupPTG);
+                break;
+            case 'CAN':
+                marker = L.marker([sitio.lat, sitio.lon], { icon: redIcon }).bindPopup(sitio.sitio);
+                marker.addTo(groupCAN);
+                break;
+            default:
+                marker = L.marker([sitio.lat, sitio.lon], { icon: nullIcon }).bindPopup(sitio.sitio);
+                marker.addTo(groupNULL);
+                break;
         }
+    
         marker.siteId = sitio.id;
         marker.on('click', function () {
             sitio_id = this.siteId;
