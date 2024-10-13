@@ -140,8 +140,19 @@ document.addEventListener("DOMContentLoaded", function () {
     // Opacidad para el mapa
     const opacidad = 1;
 
-    let mapZoomLevel = isNaN(localStorage.theZoom) ? 8 : localStorage.theZoom;
-    let mapCenter = isNaN(localStorage.lat) ? [-33.68075, -70.93344444] : [localStorage.lat, localStorage.lon];
+    let mapZoomLevel = isNaN(localStorage.theZoom) ? 5 : localStorage.theZoom;
+
+    let mapCenter;
+    if (!localStorage.lat) {
+        let totalLat = sitios.reduce((sum, sitio) => sum + (sitio.lat || 0), 0);
+        let totalLon = sitios.reduce((sum, sitio) => sum + (sitio.lon || 0), 0);
+        let promedioLat = totalLat / sitios.length;
+        let promedioLon = totalLon / sitios.length;
+        mapCenter =  [promedioLat, promedioLon]
+    } else {
+        mapCenter = [localStorage.lat, localStorage.lon];
+    }
+    
 
     const map = L.map('map', {
         zoomControl: false,
@@ -281,10 +292,16 @@ document.addEventListener("DOMContentLoaded", function () {
         selectorBack: false,
         closedSymbol: '&#8862; &#x1f5c0;',
         openedSymbol: '&#8863; &#x1f5c1;',
-        collapsed: false,
+        collapsed: true,
+        Layer: { icon: blueIcon },
     }).addTo(map);
 
-
+    map.on('moveend', () => {
+        localStorage.theZoom = map.getZoom();
+        var centro = map.getCenter();
+        localStorage.lat = centro.lat;
+        localStorage.lon = centro.lng;
+      });
 
 
 });
