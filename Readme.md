@@ -46,6 +46,16 @@ Uses gunicorn + Redis.
     docker-compose exec sup-dj python manage.py makemigrations --settings=config.prod
     docker-compose exec sup-dj python manage.py migrate --settings=config.prod
     docker-compose exec sup-dj python manage.py createsuperuser --settings=config.prod
+
+
+    docker-compose exec sup-dj python manage.py dumpdata > datos.json
+    scp -P 38 gonzalo@75.119.135.38:/home/gonzalo/Django/sup/datos.json .
+    python manage.py loaddata datos.json
+
+    scp -r -P 38 gonzalo@75.119.135.38:/home/gonzalo/Django/sup/media/* ./media/
+    rsync -avz --ignore-existing -e "ssh -p 38" gonzalo@75.119.135.38:/home/gonzalo/Django/sup/media/ ./media/
+
+
     ```
 
     Test it out at [http://localhost:8003](http://localhost:8003).

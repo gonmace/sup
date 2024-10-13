@@ -15,6 +15,7 @@
     "vite": "^5.4.8"
   },
   "dependencies": {
+    "countup.js": "^2.8.0",
     "echarts": "^5.5.1",
     "leaflet": "^1.7.1",
     "leaflet-control-custom": "^1.0.0",

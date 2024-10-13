@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from main.models import Sitio
-
+import datetime
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -75,6 +75,8 @@ class Progreso(models.Model):
     progreso = models.OneToOneField(
         ProyectoActividad, on_delete=models.CASCADE)
     activar = models.BooleanField(default=True)
+    fecha_inicio = models.DateField(default=datetime.date.today)
+    fecha_final = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.progreso.proyecto}"

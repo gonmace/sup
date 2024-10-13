@@ -125,6 +125,7 @@ def get_site_data(request):
     sitio = Sitio.objects.get(id=site_id)
     images = Imagen.objects.filter(sitio__id=site_id)
     comments = Comentario.objects.filter(sitio__id=site_id)
+    progreso_gral = []
 
     try:
         progreso = Progreso.objects.get(progreso__proyecto__id=site_id)
@@ -141,6 +142,16 @@ def get_site_data(request):
                 'ponderacion': detalle.actividad_grupo.ponderacion,
                 'avance': detalle.porcentaje,
             } for detalle in detalles]
+
+            # Agregar información de fechas
+            progreso_gral.append({
+                'fecha_inicio': progreso.fecha_inicio.strftime('%Y-%m-%d')
+                if progreso.fecha_inicio else '',
+
+                'fecha_final': progreso.fecha_final.strftime('%Y-%m-%d')
+                if progreso.fecha_final else ''
+            })
+
     except Progreso.DoesNotExist:
         progreso_data = None
 
@@ -175,7 +186,8 @@ def get_site_data(request):
         'latest_date': latest_date_str,
         'comments': comment_data,
         'sitio': sitio_data(sitio),
-        'progreso': progreso_data
+        'progreso': progreso_data,
+        'progreso_gral': progreso_gral
     })
 
 

@@ -11,11 +11,13 @@ import {
 } from 'echarts/charts';
 import { CanvasRenderer } from 'echarts/renderers';
 
+// https://inorganik.github.io/countUp.js/
+import { CountUp } from 'countup.js';
+
 export function chartProgreso(actividades) {
 
     const chartBarras = document.getElementById('barras-Chart');
     const chartGauge = document.getElementById('avance-Chart');
-
 
     if (actividades) {
 
@@ -23,7 +25,6 @@ export function chartProgreso(actividades) {
 
         // Calcular la suma total de las ponderaciones
         const totalPonderacion = actividades.reduce((sum, actividad) => sum + actividad.ponderacion, 0);
-
 
         const avanceFisico = actividades.reduce((sum, actividad) => sum + (actividad.avance / totalPonderacion * actividad.ponderacion / 100), 0);
 
@@ -121,13 +122,14 @@ export function chartProgreso(actividades) {
                     },
                     detail: {
                         valueAnimation: true,
+                        offsetCenter: [0, '75%'], // Mueve el valor 20 px hacia abajo
                         formatter: function (value) {
-                            return Math.round(value); // Redondea el valor a un entero
+                            return Math.round(value) + '%';
                         }
                     },
                     data: [
                         {
-                            value: avanceFisico * 100,
+                            value: `${avanceFisico * 100}`,
                             name: 'Avance'
                         }
                     ]
@@ -137,6 +139,8 @@ export function chartProgreso(actividades) {
 
         option && myChart.setOption(option);
 
+        //  DIAS TRANSCURRIDOS
+        let fechaInicio = new Date();
     }
 
     else {
@@ -153,3 +157,45 @@ export function chartProgreso(actividades) {
 
 }
 
+export function diasTranscurridos(progresoGral) {
+
+    const contenedorAvanceDias = document.getElementById('avance-Dias');
+
+    contenedorAvanceDias.innerHTML = '';
+    
+    if (progresoGral.length > 0) {
+
+        const fechaInicial = new Date(progresoGral[0].fecha_inicio);
+        
+        let fechaFinal;
+
+        let h2_div = document.createElement("h2");
+        h2_div.classList.add("text-lg");
+
+        let p_div = document.createElement("p");
+        p_div.classList.add("text-9xl");
+        p_div.setAttribute("id", "dias");
+
+        if (progresoGral[0].fecha_final) {
+            fechaFinal = new Date(progresoGral[0].fecha_final);
+            h2_div.innerHTML = `Ejecución (Días)`;
+        }
+        else {
+            fechaFinal = new Date();
+            h2_div.innerHTML = `Días transcurridos`;
+        }
+        const diferenciaDias = (fechaFinal - fechaInicial) / (1000 * 60 * 60 * 24);
+        let diasTranscurridos = Math.round(diferenciaDias);
+        diasTranscurridos = diasTranscurridos.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+        contenedorAvanceDias.appendChild(h2_div);
+        contenedorAvanceDias.appendChild(p_div);
+        
+        let dias = new CountUp('dias', diasTranscurridos, {duration: 2, startVal: 0});
+        if (!dias.error) {
+            dias.start();
+        } else {
+            console.error(dias.error);
+        }       
+    }
+}

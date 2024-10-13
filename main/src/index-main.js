@@ -9,7 +9,7 @@ import "leaflet.control.layers.tree/L.Control.Layers.Tree.css";
 
 import { yellowIcon, redIcon, greenIcon, blueIcon, grayIcon, nullIcon } from './data/icons.js';
 import { osm, osm_dark, ewi } from './data/tiles.js';
-import { chartProgreso } from './chart-progreso.js';
+import { chartProgreso, diasTranscurridos } from './charts.js';
 
 const carousel = document.getElementById('images-container');
 const titulo = document.getElementById('titulo');
@@ -43,6 +43,7 @@ function initCarousel() {
 
 
 function updateSite(data) {
+    
     var images = data.images;
     var latestDate = data.latest_date;
     var comments = data.comments;
@@ -53,16 +54,17 @@ function updateSite(data) {
     contratista.innerHTML = data.sitio.contratista ?
         `Contratista: <span class="font-bold">${data.sitio.contratista}</span>` :
         "";
-    latitud.innerHTML = `Latitud: <span class="font-bold">${data.sitio.lat}</span>`;
-    longitud.innerHTML = `Longitud: <span class="font-bold">${data.sitio.lon}</span>`;
+    
+    const lat = data.sitio.lat.toFixed(6);
+    const lon = data.sitio.lon.toFixed(6);
+    latitud.innerHTML = `Latitud: <span class="font-bold">${lat}</span>`;
+    longitud.innerHTML = `Longitud: <span class="font-bold">${lon}</span>`;
 
     carousel.innerHTML = '';
 
     googleMaps.classList.remove('hidden');
 
     googleMaps.addEventListener('click', function () {
-        const lat = data.sitio.lat;
-        const lon = data.sitio.lon;
         const mapUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
         // Redirigir al usuario a la URL de Google Maps
         window.open(mapUrl, '_blank'); // Abre Google Maps en una nueva pestaña
@@ -122,6 +124,7 @@ function updateSite(data) {
     }
 
     chartProgreso(data.progreso);
+    diasTranscurridos(data.progreso_gral);
    
 }
 
