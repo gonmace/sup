@@ -15,7 +15,7 @@ from django.urls import reverse_lazy
 @login_required(login_url='login/')
 def fileupload(request):
     if request.method == 'POST':
-        form = ImagesForm(request.POST, request.FILES)
+        form = ImagesForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             sitio = form.cleaned_data['sitio']
             comentario_texto = form.cleaned_data['comentario']
@@ -49,7 +49,7 @@ def fileupload(request):
                            por favor corrígelos.""")
             return render(request, "cargar.html", {'form': form})
     else:
-        form = ImagesForm()
+        form = ImagesForm(user=request.user)
     return render(request, 'cargar.html', {'form': form})
 
 
