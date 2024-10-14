@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
+
+from clientes.models import Proyecto, UserProfile
 
 ESTADO_CHOICES = [
     ('ASG', 'Asignado',),
@@ -9,11 +10,6 @@ ESTADO_CHOICES = [
     ('CAN', 'Cancelado'),
 ]
 
-CARGO = [
-    ('SUP', 'Supervisor'),
-    ('PRE', 'Prevencionista')
-]
-
 
 class Contratista(models.Model):
     name = models.CharField("Contratista", max_length=20)
@@ -21,18 +17,6 @@ class Contratista(models.Model):
 
     def __str__(self):
         return f"{self.cod}"
-
-
-class Supervisor(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    cargo = models.CharField("Cargo", max_length=3, choices=CARGO)
-
-    def __str__(self):
-        return f"{self.user}"
-
-    class Meta:
-        verbose_name = "Supervisor"
-        verbose_name_plural = "Supervisores"
 
 
 class Sitio(models.Model):
@@ -49,10 +33,11 @@ class Sitio(models.Model):
     lat = models.FloatField("Latitud", max_length=11)
     lon = models.FloatField("Longitud", max_length=11)
     ito = models.ForeignKey(
-        Supervisor,
+        UserProfile,
         on_delete=models.CASCADE,
         blank=True,
-        null=True
+        null=True,
+        limit_choices_to={'cargo': 'SUP'},
     )
     estado = models.CharField(
         "Estado",
@@ -61,10 +46,12 @@ class Sitio(models.Model):
         blank=True,
         null=True
         )
-
-    class Meta:
-        verbose_name = "Proyecto"
-        verbose_name_plural = "Proyectos"
+    proyecto = models.ForeignKey(
+        Proyecto,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return f"{self.sitio}"

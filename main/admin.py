@@ -2,7 +2,7 @@ from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources, fields
 from import_export.widgets import ForeignKeyWidget
-from .models import Contratista, Sitio, Supervisor
+from .models import Contratista, Sitio, UserProfile
 # from django.utils.dateformat import format
 
 
@@ -18,7 +18,7 @@ class SitiosResource(resources.ModelResource):
     lon = fields.Field(column_name='LON', attribute='lon')
     ito = fields.Field(
         column_name='ITO', attribute='ito',
-        widget=ForeignKeyWidget(Supervisor, 'name'))
+        widget=ForeignKeyWidget(UserProfile, 'user'))
 
     class Meta:
         model = Sitio
@@ -45,16 +45,16 @@ class SitioAdmin(ImportExportModelAdmin):
         'contratista',
         'ito',
         'estado',
+        'proyecto',
     )
-    list_editable = ('ito', 'contratista', 'estado')
+    list_editable = ('ito', 'contratista', 'estado', 'proyecto')
     list_display_links = ('sitio', )
+    list_filter = ('contratista', 'estado', 'proyecto', 'ito')
 
 
 admin.site.register(Sitio, SitioAdmin)
 
 admin.site.register(Contratista)
-
-admin.site.register(Supervisor)
 
 
 # class AvanceResource(resources.ModelResource):

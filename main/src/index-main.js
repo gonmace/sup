@@ -271,10 +271,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         label: `<img src="${static_url}/leaflet/icons/red.png" class="inline h-5 mx-1">Cancelados`,
                         layer: groupCAN
                     },
-                    {
-                        label: `<img src="${static_url}/leaflet/icons/null.png" class="inline h-5 mx-1">Sin establecer`,
-                        layer: groupNULL
-                    },
                     { label: '<div class="leaflet-control-layers-separator"></div>' }
                 ],
             },

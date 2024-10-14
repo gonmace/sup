@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from actividades.models import DetalleProgreso, Progreso
+from clientes.models import UserProfile
 from galeria.models import Imagen, Comentario
 from main.models import Contratista, Sitio
 import json
@@ -43,13 +44,28 @@ def sitio_data(sitio):
         'lat': sitio.lat,
         'lon': sitio.lon,
         'contratista': sitio.contratista.name if sitio.contratista else None,
-        'ito': sitio.ito.nombre if sitio.ito else None,
+        'ito': sitio.ito.user.username if sitio.ito else None,
     }
 
 
 def home(request):
-    sitios = Sitio.objects.all()
-    contratistas = Contratista.objects.all()
+    # Obtenemos el perfil del usuario autenticado
+    user_profile = UserProfile.objects.get(user=request.user)
+
+    # Si el usuario es un supervisor (cargo SUP)
+    if user_profile.cargo == 'SUP':
+        # Mostrar solo los sitios donde el ito
+        # coincide con el perfil del usuario
+        sitios = Sitio.objects.filter(ito=user_profile)
+    else:
+        # Filtrar los sitios según los proyectos
+        # a los que el usuario tiene acceso
+        sitios = Sitio.objects.filter(
+            proyecto__in=user_profile.proyectos.all())
+
+    # Filtrar los contratistas que están asociados con los sitios seleccionados
+    contratistas = Contratista.objects.filter(sitio__in=sitios).distinct()
+
     sitios_data = []
     for sitio in sitios:
         # Obtenemos los datos del sitio
@@ -65,43 +81,9 @@ def home(request):
                 'name': sitio.contratista.name,
                 'cod': sitio.contratista.cod
             } if sitio.contratista else None,
-            'ito': sitio.ito.nombre if sitio.ito else None,
+            'ito': sitio.ito.user.username if sitio.ito else None,
             'estado': sitio.estado
         }
-
-        # # Intentamos obtener el avance relacionado
-        # try:
-        #     # Gracias al OneToOneField, podemos acceder directamente
-        #     avance = sitio.avance
-        #     avance_data = {
-        #         'estado': avance.estado,
-        #         'excavacion': avance.excavacion.strftime('%Y-%m-%d')
-        #         if avance.excavacion else None,
-
-        #         'hormigonado': avance.hormigonado.strftime('%Y-%m-%d')
-        #         if avance.hormigonado else None,
-
-        #         'montado': avance.montaje.strftime('%Y-%m-%d')
-        #         if avance.montaje else None,
-
-        #         'energia_prov': avance.ener_prov.strftime('%Y-%m-%d')
-        #         if avance.ener_prov else None,
-
-        #         'energia_def': avance.ener_def.strftime('%Y-%m-%d')
-        #         if avance.ener_def else None,
-
-        #         'porcentaje': avance.porcentaje,
-        #         'fecha_fin': avance.fecha_fin.strftime('%Y-%m-%d')
-        #         if avance.fecha_fin else None,
-
-        #         'comentario': avance.comentario,
-        #     }
-        # except Avance.DoesNotExist:
-        #     # Si no existe un avance asociado
-        #     avance_data = None
-
-        # # Agregamos el avance al sitio
-        # sitio_data['avance'] = avance_data
 
         sitios_data.append(sitio_data)
 
@@ -113,9 +95,6 @@ def home(request):
 
     context = {
         'sitios_json': sitios_json,
-        # Lista simple ["MER", "AJ", "GH3"]
-        'contratistas_cod_list': contratistas_cod_list,
-        # JSON ["MER", "AJ", "GH3"]
         'contratistas_json': contratistas_json
     }
     return render(request, 'home_page.html', context)
