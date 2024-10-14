@@ -118,3 +118,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 X_FRAME_OPTIONS = 'ALLOW-FROM https://cloud.redlinegs.com'
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://sup.tekon-rl.cl',
+    'https://cloud.redlinegs.com'
+    ]
