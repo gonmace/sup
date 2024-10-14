@@ -30,10 +30,10 @@
     <!-- Verificar y Mostrar comentarios de ese día si existen -->
     {% if items.comentarios %}   
         {% for comentario in items.comentarios %}
-        <div class="contenedor bg-white w-full min-h-14 flex flex-col justify-between rounded-lg p-4 mt-4">
+        <div class="contenedor {% if comentario.es_prevencionista %}bg-red-200{% else %}bg-white{% endif %} w-full min-h-14 flex flex-col justify-between rounded-lg p-4 mt-4">
             <p class="mb-4">{{ comentario.comentario }}</p>
             <div class="text-right text-sm text-gray-600">
-                {{ comentario.usuario }}
+                {{ comentario.usuario }} {% if comentario.es_prevencionista %}(Prevencionista){% endif %}
             </div>
         </div>       
         {% endfor %}

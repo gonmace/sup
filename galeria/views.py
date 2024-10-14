@@ -14,17 +14,19 @@ from collections import OrderedDict
 # from django.shortcuts import get_object_or_404
 # from .serializers import GaleriaSerializer
 # from rest_framework.response import Response
-# from django.contrib.auth.decorators import login_required
-# from django.contrib.auth.views import LoginView
-# from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
+from django.urls import reverse_lazy
 
 
 # class GaleriaListView(ListView):
 
-# @login_required(login_url='login/')
+@login_required(login_url='login/')
 def fileupload(request):
     if request.method == 'POST':
-        form = ImagesForm(request.POST, request.FILES)
+        print("#######################")
+        print(request.user)
+        form = ImagesForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             sitio = form.cleaned_data['sitio']
             comentario_texto = form.cleaned_data['comentario']
@@ -58,7 +60,7 @@ def fileupload(request):
                            por favor corrígelos.""")
             return render(request, "cargar.html", {'form': form})
     else:
-        form = ImagesForm()
+        form = ImagesForm(user=request.user)
     return render(request, 'cargar.html', {'form': form})
 
 
@@ -75,16 +77,54 @@ def display_images_comments(request, site_id):
         'day',
         output_field=DateField())).order_by('-fecha')
 
+    comentarios_data = []
+
+    for comentario in comentarios:
+        usuario = comentario.usuario
+        # Asumimos que el cargo está almacenado en un perfil relacionado
+        # Accede al primer perfil de usuario o maneja la ausencia del mismo
+        user_profile = usuario.userprofile_set.first() if usuario else None
+
+        # Accede al cargo del usuario si el perfil existe
+        cargo_usuario = user_profile.cargo if user_profile else ''
+
+        es_prevencionista = cargo_usuario == 'PRE'
+
+        usuario_nombre = (
+            f"{usuario.first_name} {usuario.last_name}"
+            if usuario else "Usuario desconocido"
+            )
+        comentarios_data.append({
+            'comentario': comentario.comentario,
+            'usuario': usuario_nombre,
+            'fecha': comentario.fecha.strftime('%Y-%m-%d'),
+            'es_prevencionista': es_prevencionista
+        })
+
     items_por_fecha = OrderedDict()
 
-    # Combinar imágenes y comentarios en la misma estructura
-    for item in list(imagenes) + list(comentarios):
-        items_por_fecha.setdefault(
-            item.fecha, {'imagenes': [], 'comentarios': []})
-        if isinstance(item, Imagen):
-            items_por_fecha[item.fecha]['imagenes'].append(item)
-        elif isinstance(item, Comentario):
-            items_por_fecha[item.fecha]['comentarios'].append(item)
+    # Agregar imágenes
+    for imagen in imagenes:
+        # Asegúrate de usar el mismo formato
+        fecha_key = imagen.fecha.strftime('%Y-%m-%d')
+        if fecha_key not in items_por_fecha:
+            items_por_fecha[fecha_key] = {'imagenes': [], 'comentarios': []}
+        items_por_fecha[fecha_key]['imagenes'].append(imagen)
+
+    # Agregar comentarios desde comentarios_data
+    for comentario in comentarios_data:
+        # La fecha ya está en el formato correcto
+        fecha_key = comentario['fecha']
+        if fecha_key not in items_por_fecha:
+            items_por_fecha[fecha_key] = {
+                'imagenes': [],
+                'comentarios': [],
+                'prevencionista': False}
+
+        items_por_fecha[fecha_key]['comentarios'].append(comentario)
+        # Actualizar la bandera de prevencionista si es necesario
+        if comentario['es_prevencionista']:
+            items_por_fecha[fecha_key]['prevencionista'] = True
 
     context = {
         'sitio': sitio,
@@ -94,11 +134,11 @@ def display_images_comments(request, site_id):
     return render(request, 'images_comments.html', context)
 
 
-# class CustomLoginView(LoginView):
-#     template_name = 'login.html'
-# Redirige a los usuarios ya autenticados
-#     redirect_authenticated_user = True
-#     next_page = reverse_lazy('imgs/cargar')
+class CustomLoginView(LoginView):
+    template_name = 'login.html'
+    # Redirige a los usuarios ya autenticados
+    redirect_authenticated_user = True
+    next_page = reverse_lazy('galeria:load_images')
 
 
 # class UltimasImagenes(APIView):

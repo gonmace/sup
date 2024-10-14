@@ -1,0 +1,43 @@
+{% extends "base.html" %}  <!-- Asegúrate de extender tu base.html o cualquier base que uses -->
+{% load static tailwind_tags %}
+
+{% block css %}
+  {% comment %}https://github.com/ismail9k/neomorphism{% endcomment %}
+  <link rel="stylesheet" href="{% static 'css/neomorphism.css' %}" />
+  {% tailwind_css %}
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                Inicia sesión en tu cuenta
+            </h2>
+        </div>
+        <form autocomplete="off" class="form" action="#" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+            <div class="rounded-md shadow-sm -space-y-px">
+                <div class="field">
+                    <label for="{{ form.username.id_for_label }}" class="field-label">Usuario</label>
+                    <input id="{{ form.username.id_for_label }}" name="{{ form.username.name }}" type="text" autocomplete="username" placeholder="Tu usuario" required  class="input">
+                  </div>
+
+                  <div class="field">
+                    <label for="{{ form.password.id_for_label }}" class="field-label">Contraseña</label>
+                    <input id="{{ form.password.id_for_label }}" name="{{ form.password.name }}" type="password" required placeholder="Tu contraseña" class="input">
+                  </div>
+
+            </div>
+
+            <div>
+                <div class="field">
+                    <button type="submit" class="button">Iniciar sesión</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -7,6 +7,9 @@ import json
 from django.http import JsonResponse
 from django.db.models import Max
 from collections import defaultdict
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
+from django.urls import reverse_lazy
 
 MESES_ES = {
     1: 'enero',
@@ -44,10 +47,13 @@ def sitio_data(sitio):
         'lat': sitio.lat,
         'lon': sitio.lon,
         'contratista': sitio.contratista.name if sitio.contratista else None,
-        'ito': sitio.ito.user.username if sitio.ito else None,
+        'ito': f"{sitio.ito.user.first_name} {sitio.ito.user.last_name}"
+        if sitio.ito else None,
+
     }
 
 
+@login_required(login_url='login/')
 def home(request):
     # Obtenemos el perfil del usuario autenticado
     user_profile = UserProfile.objects.get(user=request.user)
@@ -81,7 +87,10 @@ def home(request):
                 'name': sitio.contratista.name,
                 'cod': sitio.contratista.cod
             } if sitio.contratista else None,
-            'ito': sitio.ito.user.username if sitio.ito else None,
+
+            'ito': f"{sitio.ito.user.first_name} {sitio.ito.user.last_name}"
+            if sitio.ito else None,
+
             'estado': sitio.estado
         }
 
@@ -158,7 +167,8 @@ def get_site_data(request):
     comment_data = [{
         'comentario': comment.comentario or '',
         'fecha_carga': format_fecha(comment.fecha_carga),
-        'usuario': comment.usuario.username,
+        'usuario': f"{comment.usuario.first_name} {comment.usuario.last_name}"
+        if comment.usuario else None,
     } for comment in comments]
 
     return JsonResponse({
@@ -212,3 +222,10 @@ def get_full_site_data(request):
     return JsonResponse({
         'data': data_ordenada,
     })
+
+
+class CustomLoginView(LoginView):
+    template_name = 'login.html'
+    # Redirige a los usuarios ya autenticados
+    redirect_authenticated_user = True
+    next_page = reverse_lazy('main:home_page')
