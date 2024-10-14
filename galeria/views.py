@@ -139,10 +139,3 @@ class CustomLoginView(LoginView):
     # Redirige a los usuarios ya autenticados
     redirect_authenticated_user = True
     next_page = reverse_lazy('galeria:load_images')
-
-
-# class UltimasImagenes(APIView):
-#     def get(self, request, slug_sitio):
-#         galeria = get_object_or_404(Galeria, slug=slug_sitio)
-#         serializer = GaleriaSerializer(galeria, context={'request': request})
-#         return Response(serializer.data)

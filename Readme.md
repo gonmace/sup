@@ -53,6 +53,8 @@ Uses gunicorn + Redis.
     python manage.py loaddata datos.json
 
     scp -r -P 38 gonzalo@75.119.135.38:/home/gonzalo/Django/sup/media/* ./media/
+    scp -r -P 38 ./media/* gonzalo@75.119.135.38:/home/gonzalo/Django/sup/media/
+
     rsync -avz --ignore-existing -e "ssh -p 38" gonzalo@75.119.135.38:/home/gonzalo/Django/sup/media/ ./media/
 
 
