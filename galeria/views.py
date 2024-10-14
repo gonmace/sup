@@ -1,32 +1,21 @@
 from django.shortcuts import get_object_or_404, render, redirect
 
 from main.models import Sitio
-# from django.db.models import Max
-# from django.views.generic import ListView
 from .forms import ImagesForm
 from .models import Imagen, Comentario
-# from django.utils import timezone
 from django.contrib import messages
 from django.db.models import DateField
 from django.db.models.functions import Trunc
 from collections import OrderedDict
-# from rest_framework.views import APIView
-# from django.shortcuts import get_object_or_404
-# from .serializers import GaleriaSerializer
-# from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 
 
-# class GaleriaListView(ListView):
-
 @login_required(login_url='login/')
 def fileupload(request):
     if request.method == 'POST':
-        print("#######################")
-        print(request.user)
-        form = ImagesForm(request.POST, request.FILES, user=request.user)
+        form = ImagesForm(request.POST, request.FILES)
         if form.is_valid():
             sitio = form.cleaned_data['sitio']
             comentario_texto = form.cleaned_data['comentario']
@@ -60,7 +49,7 @@ def fileupload(request):
                            por favor corrígelos.""")
             return render(request, "cargar.html", {'form': form})
     else:
-        form = ImagesForm(user=request.user)
+        form = ImagesForm()
     return render(request, 'cargar.html', {'form': form})
 
 
@@ -77,54 +66,28 @@ def display_images_comments(request, site_id):
         'day',
         output_field=DateField())).order_by('-fecha')
 
-    comentarios_data = []
-
-    for comentario in comentarios:
-        usuario = comentario.usuario
-        # Asumimos que el cargo está almacenado en un perfil relacionado
-        # Accede al primer perfil de usuario o maneja la ausencia del mismo
-        user_profile = usuario.userprofile_set.first() if usuario else None
-
-        # Accede al cargo del usuario si el perfil existe
-        cargo_usuario = user_profile.cargo if user_profile else ''
-
-        es_prevencionista = cargo_usuario == 'PRE'
-
-        usuario_nombre = (
-            f"{usuario.first_name} {usuario.last_name}"
-            if usuario else "Usuario desconocido"
-            )
-        comentarios_data.append({
-            'comentario': comentario.comentario,
-            'usuario': usuario_nombre,
-            'fecha': comentario.fecha.strftime('%Y-%m-%d'),
-            'es_prevencionista': es_prevencionista
-        })
-
     items_por_fecha = OrderedDict()
 
-    # Agregar imágenes
-    for imagen in imagenes:
-        # Asegúrate de usar el mismo formato
-        fecha_key = imagen.fecha.strftime('%Y-%m-%d')
-        if fecha_key not in items_por_fecha:
-            items_por_fecha[fecha_key] = {'imagenes': [], 'comentarios': []}
-        items_por_fecha[fecha_key]['imagenes'].append(imagen)
-
-    # Agregar comentarios desde comentarios_data
-    for comentario in comentarios_data:
-        # La fecha ya está en el formato correcto
-        fecha_key = comentario['fecha']
-        if fecha_key not in items_por_fecha:
-            items_por_fecha[fecha_key] = {
-                'imagenes': [],
-                'comentarios': [],
-                'prevencionista': False}
-
-        items_por_fecha[fecha_key]['comentarios'].append(comentario)
-        # Actualizar la bandera de prevencionista si es necesario
-        if comentario['es_prevencionista']:
-            items_por_fecha[fecha_key]['prevencionista'] = True
+    # Combinar imágenes y comentarios en la misma estructura
+    for item in list(imagenes) + list(comentarios):
+        items_por_fecha.setdefault(
+            item.fecha, {'imagenes': [], 'comentarios': []})
+        if isinstance(item, Imagen):
+            items_por_fecha[item.fecha]['imagenes'].append(item)
+        elif isinstance(item, Comentario):
+            # Corrección para acceder al primer UserProfile si existe
+            user_profile = item.usuario.userprofile_set.first()
+            es_prevencionista = (
+                user_profile.cargo == 'PRE' if user_profile else False
+                )
+            comentario_info = {
+                'comentario': item.comentario,
+                'usuario': f"{item.usuario.first_name} \
+                    {item.usuario.last_name}",
+                'fecha': item.fecha,
+                'es_prevencionista': es_prevencionista,
+            }
+            items_por_fecha[item.fecha]['comentarios'].append(comentario_info)
 
     context = {
         'sitio': sitio,
