@@ -42,7 +42,7 @@ def fileupload(request):
 
             # Añadir un mensaje de éxito
             messages.success(request, "Imágenes cargadas correctamente.")
-            return redirect('home_page')  # Redirigir a la página de éxito
+            return redirect('main:home_page')  # Redirigir a la página de éxito
         else:
             messages.error(request,
                            """Se encontraron errores en el formulario,
