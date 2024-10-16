@@ -49,6 +49,18 @@ class ActividadGrupo(models.Model):
                     '{self.actividad.nombre}' en el grupo \
                         '{self.grupo.nombre}'.")
 
+    def save(self, *args, **kwargs):
+        # Si el campo 'order' no está establecido
+        # (es decir, es 0 o no se ha modificado)
+        if not self.order:
+            # Obtener el valor máximo de 'order' para el grupo específico
+            max_order = ActividadGrupo.objects.filter(
+                grupo=self.grupo).aggregate(
+                    max_order=models.Max('order'))['max_order']
+            # Asignar el siguiente valor disponible
+            self.order = (max_order or 0) + 1
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.actividad.nombre}"
 
@@ -56,6 +68,7 @@ class ActividadGrupo(models.Model):
 class ProyectoActividad(models.Model):
     proyecto = models.OneToOneField(Sitio, on_delete=models.CASCADE)
     grupo = models.ForeignKey(GrupoActividades, on_delete=models.CASCADE)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = "Proyecto con Actividades"
@@ -86,10 +99,14 @@ class Progreso(models.Model):
 def crear_detalles_progreso(sender, instance, created, **kwargs):
     if created:
         actividades = ActividadGrupo.objects.filter(
-            grupo=instance.progreso.grupo)
+            grupo=instance.progreso.grupo).order_by('order')
         for actividad in actividades:
             DetalleProgreso.objects.create(
-                progreso=instance, actividad_grupo=actividad, porcentaje=0)
+                progreso=instance,
+                actividad_grupo=actividad,
+                porcentaje=0,
+                order=actividad.order
+                )
 
 
 class DetalleProgreso(models.Model):
@@ -99,6 +116,7 @@ class DetalleProgreso(models.Model):
         ActividadGrupo, on_delete=models.CASCADE)
     porcentaje = models.FloatField("Avance %", default=0.0)
     mostrar = models.BooleanField("Agregar", default=True)
+    order = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"Grupo {self.actividad_grupo.grupo} \
@@ -108,4 +126,4 @@ class DetalleProgreso(models.Model):
     class Meta:
         verbose_name = "Detalle de Progreso"
         verbose_name_plural = "Detalles de Progresos"
-        ordering = ['actividad_grupo__order']
+        ordering = ['order']

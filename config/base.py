@@ -8,8 +8,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='your secret key')
 
 INSTALLED_APPS = [
-    # "admin_interface",
-    # "colorfield",
 
     'django.contrib.admin',
     'django.contrib.auth',

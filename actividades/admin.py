@@ -7,13 +7,14 @@ from .models import (
     Progreso,
     ProyectoActividad
     )
-from adminsortable2.admin import SortableStackedInline, SortableAdminBase
+from adminsortable2.admin import SortableAdminBase, SortableTabularInline
 
 
-class ActividadGrupoInline(SortableStackedInline):
+class ActividadGrupoInline(SortableTabularInline):
     model = ActividadGrupo
-    extra = 1  # Cantidad de filas adicionales para agregar actividades
-    fields = ['actividad', 'ponderacion']  # Mostrar solo actividad y número
+    extra = 0
+    fields = ['id', 'actividad', 'ponderacion', 'order']
+    readonly_fields = ('id', )
 
 
 @admin.register(GrupoActividades)
@@ -29,13 +30,13 @@ class ActividadAdmin(admin.ModelAdmin):
     search_fields = ('nombre',)
 
 
-class DetalleProgresoInline(admin.TabularInline):
+class DetalleProgresoInline(SortableTabularInline):
     model = DetalleProgreso
     extra = 0
     max_num = 0
 
 
-class ProgresoAdmin(admin.ModelAdmin):
+class ProgresoAdmin(SortableAdminBase, admin.ModelAdmin):
     list_display = ('progreso', 'activar')
     list_editable = ('activar',)
     inlines = [
@@ -45,4 +46,15 @@ class ProgresoAdmin(admin.ModelAdmin):
 
 admin.site.register(Progreso, ProgresoAdmin)
 
-admin.site.register(ProyectoActividad)
+
+class ProyectoActividadAdmin(admin.ModelAdmin):
+    list_display = ('proyecto', 'grupo', 'fecha_creacion_formateada')
+
+    def fecha_creacion_formateada(self, obj):
+        # Formatear la fecha en el formato deseado
+        return obj.fecha_creacion.strftime('%d-%b-%Y')
+
+    fecha_creacion_formateada.short_description = 'Fecha de Creación'
+
+
+admin.site.register(ProyectoActividad, ProyectoActividadAdmin)

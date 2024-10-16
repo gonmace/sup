@@ -9,6 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
     path('imgs/', include('galeria.urls')),
+
     # path('', include('actividades.urls')),
 ]
 
