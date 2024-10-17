@@ -55,8 +55,8 @@ function updateSite(data) {
         `Contratista: <span class="font-bold">${data.sitio.contratista}</span>` :
         "";
     
-    const lat = data.sitio.lat.toFixed(6);
-    const lon = data.sitio.lon.toFixed(6);
+    let lat = data.sitio.lat.toFixed(6);
+    let lon = data.sitio.lon.toFixed(6);
     latitud.innerHTML = `Latitud: <span class="font-bold">${lat}</span>`;
     longitud.innerHTML = `Longitud: <span class="font-bold">${lon}</span>`;
 
@@ -64,8 +64,9 @@ function updateSite(data) {
 
     googleMaps.classList.remove('hidden');
 
+    let mapUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
+    
     googleMaps.addEventListener('click', function () {
-        const mapUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
         // Redirigir al usuario a la URL de Google Maps
         window.open(mapUrl, '_blank'); // Abre Google Maps en una nueva pestaña
     });
