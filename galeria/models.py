@@ -48,3 +48,4 @@ class Comentario(models.Model):
             else self.comentario
         )
         return f"{self.sitio.sitio} - {comentario_truncado}"
+
