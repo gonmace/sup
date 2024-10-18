@@ -10,10 +10,8 @@ __pycache__/
 staticfiles
 media
 ArchivosBase
-.vscode/
 .env
 db.sqlite3
 
 node_modules
 **/node_modules
-# main/src/node_modules

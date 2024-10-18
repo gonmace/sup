@@ -5,7 +5,6 @@ from galeria.models import Imagen, Comentario
 from main.models import Contratista, Sitio
 import json
 from django.http import JsonResponse
-from django.db.models import Max
 from collections import defaultdict
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
@@ -58,19 +57,11 @@ def home(request):
     # Obtenemos el perfil del usuario autenticado
     user_profile = UserProfile.objects.get(user=request.user)
 
-    # Si el usuario es un supervisor (cargo SUP)
-    if user_profile.cargo == 'SUP':
-        # Mostrar solo los sitios donde el ito
-        # coincide con el perfil del usuario
-        sitios = Sitio.objects.filter(ito=user_profile)
-    else:
-        # Filtrar los sitios según los proyectos
-        # a los que el usuario tiene acceso
-        sitios = Sitio.objects.filter(
-            proyecto__in=user_profile.proyectos.all())
+    # Utilizamos el manager para obtener los sitios
+    sitios = Sitio.objects.for_user_profile(user_profile)
 
-    # Filtrar los contratistas que están asociados con los sitios seleccionados
-    contratistas = Contratista.objects.filter(sitio__in=sitios).distinct()
+    # Utilizamos el manager para obtener los contratistas
+    contratistas = Contratista.objects.for_sitios(sitios)
 
     sitios_data = []
     for sitio in sitios:
@@ -112,69 +103,50 @@ def home(request):
 def get_site_data(request):
     site_id = request.GET.get('site_id')
     sitio = Sitio.objects.get(id=site_id)
-    images = Imagen.objects.filter(sitio__id=site_id)
-    comments = Comentario.objects.filter(sitio__id=site_id)
+    images = Imagen.objects.latest_for_sitio(site_id)
+    comments = Comentario.objects.latest_for_sitio(site_id)
+
+    progreso = Progreso.objects.get_active_for_sitio(site_id)
+    progreso_data = None
     progreso_gral = []
 
-    try:
-        progreso = Progreso.objects.get(progreso__proyecto__id=site_id)
-        # Verificar si el progreso está activado
-        if not progreso.activar:
-            progreso_data = None
-        else:
-            detalles = DetalleProgreso.objects.filter(
-                progreso=progreso, mostrar=True).select_related(
-                    'actividad_grupo', 'actividad_grupo__actividad')
-            progreso_data = [{
-                'actividad': detalle.actividad_grupo.actividad.nombre,
-                # 'grupo': detalle.actividad_grupo.grupo.nombre,
-                'ponderacion': detalle.actividad_grupo.ponderacion,
-                'avance': detalle.porcentaje,
-            } for detalle in detalles]
+    if progreso:
+        detalles = DetalleProgreso.objects.for_progreso(progreso)
+        progreso_data = [{
+            'actividad': detalle.actividad_grupo.actividad.nombre,
+            'ponderacion': detalle.actividad_grupo.ponderacion,
+            'avance': detalle.porcentaje,
+        } for detalle in detalles]
 
-            # Agregar información de fechas
-            progreso_gral.append({
-                'fecha_inicio': progreso.fecha_inicio.strftime('%Y-%m-%d')
-                if progreso.fecha_inicio else '',
-
-                'fecha_final': progreso.fecha_final.strftime('%Y-%m-%d')
+        progreso_gral.append({
+            'fecha_inicio': (
+                progreso.fecha_inicio.strftime('%Y-%m-%d')
+                if progreso.fecha_inicio else ''
+                ),
+            'fecha_final': (
+                progreso.fecha_final.strftime('%Y-%m-%d')
                 if progreso.fecha_final else ''
-            })
+                )
+        })
 
-    except Progreso.DoesNotExist:
-        progreso_data = None
-
-    latest_image_date = images.aggregate(
-        Max('fecha_carga'))['fecha_carga__max']
-    latest_comment_date = comments.aggregate(
-        Max('fecha_carga'))['fecha_carga__max']
-    latest_dates = [date for date in [latest_image_date, latest_comment_date]
-                    if date]
-    latest_date = max(latest_dates) if latest_dates else None
-    latest_date_str = format_fecha(latest_date) if latest_date else ''
-
-    images = images.filter(
-        fecha_carga=latest_date) if latest_date else Imagen.objects.none()
-    comments = comments.filter(
-        fecha_carga=latest_date) if latest_date else Comentario.objects.none()
-
-    image_data = [{
+    images_data = [{
         'url': image.imagen.url,
         'description': image.descripcion or '',
-        'fecha_carga': format_fecha(image.fecha_carga),
+        'fecha_carga': image.fecha_carga,
     } for image in images]
 
-    comment_data = [{
+    comments_data = [{
         'comentario': comment.comentario or '',
-        'fecha_carga': format_fecha(comment.fecha_carga),
-        'usuario': f"{comment.usuario.first_name} {comment.usuario.last_name}"
-        if comment.usuario else None,
+        'fecha_carga': comment.fecha_carga,
+        'usuario': (
+            f"{comment.usuario.first_name} {comment.usuario.last_name}"
+            if comment.usuario else None
+            ),
     } for comment in comments]
 
     return JsonResponse({
-        'images': image_data,
-        'latest_date': latest_date_str,
-        'comments': comment_data,
+        'images': images_data,
+        'comments': comments_data,
         'sitio': sitio_data(sitio),
         'progreso': progreso_data,
         'progreso_gral': progreso_gral

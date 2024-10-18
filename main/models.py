@@ -1,5 +1,6 @@
 from django.db import models
 from clientes.models import Proyecto, UserProfile
+from .managers import SitioManager, ContratistaManager
 
 ESTADO_CHOICES = [
     ('ASG', 'Asignado',),
@@ -13,6 +14,8 @@ ESTADO_CHOICES = [
 class Contratista(models.Model):
     name = models.CharField("Contratista", max_length=20)
     cod = models.CharField("Codigo", max_length=3, help_text="3 Caracteres")
+    
+    objects = ContratistaManager()
 
     def __str__(self):
         return f"{self.cod}"
@@ -51,6 +54,8 @@ class Sitio(models.Model):
         blank=True,
         null=True
     )
+    
+    objects = SitioManager()
 
     def __str__(self):
         return f"{self.sitio}"

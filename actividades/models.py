@@ -4,6 +4,7 @@ from main.models import Sitio
 import datetime
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from .managers import ProgresoManager, DetalleProgresoManager
 
 
 class Actividad(models.Model):
@@ -91,6 +92,8 @@ class Progreso(models.Model):
     fecha_inicio = models.DateField(default=datetime.date.today)
     fecha_final = models.DateField(blank=True, null=True)
 
+    objects = ProgresoManager()
+
     def __str__(self):
         return f"{self.progreso.proyecto}"
 
@@ -117,6 +120,8 @@ class DetalleProgreso(models.Model):
     porcentaje = models.FloatField("Avance %", default=0.0)
     mostrar = models.BooleanField("Agregar", default=True)
     order = models.PositiveIntegerField(default=0)
+
+    objects = DetalleProgresoManager()
 
     def __str__(self):
         return f"Grupo {self.actividad_grupo.grupo} \

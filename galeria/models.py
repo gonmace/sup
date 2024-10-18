@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from main.models import Sitio
 from django.conf import settings
+from .managers import ImagenManager, ComentarioManager
 
 
 class Imagen(models.Model):
@@ -18,6 +19,8 @@ class Imagen(models.Model):
         on_delete=models.CASCADE,
         related_name='imagenes_subidas'
         )
+
+    objects = ImagenManager()
 
     def __str__(self):
         return f"{self.sitio.sitio} - {self.fecha_carga}"
@@ -41,6 +44,8 @@ class Comentario(models.Model):
         related_name='comentarios_subidas'
         )
 
+    objects = ComentarioManager()
+
     def __str__(self):
         comentario_truncado = (
             self.comentario[:75] + '...'
@@ -48,4 +53,3 @@ class Comentario(models.Model):
             else self.comentario
         )
         return f"{self.sitio.sitio} - {comentario_truncado}"
-
