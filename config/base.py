@@ -17,7 +17,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'nested_admin',
+    # 'nested_admin',
     'tailwind',
     'import_export',
     'widget_tweaks',
