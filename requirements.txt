@@ -14,4 +14,5 @@ django-tailwind>=3.8.0
 django-admin-sortable2==2.2.3
 # django-jazzmin==3.0.1
 django-polymorphic
+setuptools
 # git+https://github.com/jazzband/django-polymorphic.git@v4.0.0a#egg=django-polymorphic
