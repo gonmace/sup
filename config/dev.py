@@ -17,6 +17,7 @@ MIDDLEWARE += [
     "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -39,4 +40,4 @@ CSRF_COOKIE_SECURE = False
 
 CSRF_USE_SESSIONS = False
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'https://8c5c-189-28-71-245.ngrok-free.app']

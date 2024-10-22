@@ -27,7 +27,8 @@ CARGO = [
     ('PRE', 'Prevencionista'),
     ('ADM', 'Administrador'),
     ('CLI', 'Cliente'),
-    ('SEG', 'Seguimiento')
+    ('SEG', 'Seguimiento'),
+    ('CTT', 'Contratista'),
 ]
 
 

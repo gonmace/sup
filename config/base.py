@@ -8,7 +8,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='your secret key')
 
 INSTALLED_APPS = [
-
+    'django_cotton',
+    'polymorphic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -16,6 +17,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'nested_admin',
     'tailwind',
     'import_export',
     'widget_tweaks',
@@ -25,6 +27,8 @@ INSTALLED_APPS = [
     'galeria',
     'actividades',
     'clientes',
+    # 'blocks',
+    # 'ppp',
 ]
 
 MIDDLEWARE = [
