@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='your secret key')
 
 INSTALLED_APPS = [
-    'django_cotton',
+    # 'django_cotton',
     'polymorphic',
     'django.contrib.admin',
     'django.contrib.auth',
