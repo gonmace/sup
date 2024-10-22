@@ -5,10 +5,11 @@ from galeria.models import Imagen, Comentario
 from main.models import Contratista, Sitio
 import json
 from django.http import JsonResponse
-from collections import defaultdict
+# from collections import defaultdict
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
+from django.db.models import Max
 
 MESES_ES = {
     1: 'enero',
@@ -60,8 +61,8 @@ def home(request):
     # Utilizamos el manager para obtener los sitios
     sitios = Sitio.objects.for_user_profile(user_profile)
 
-    # Utilizamos el manager para obtener los contratistas
-    contratistas = Contratista.objects.for_sitios(sitios)
+    # Filtrar los contratistas que están asociados con los sitios seleccionados
+    contratistas = Contratista.objects.filter(sitio__in=sitios).distinct()
 
     sitios_data = []
     for sitio in sitios:
@@ -103,50 +104,71 @@ def home(request):
 def get_site_data(request):
     site_id = request.GET.get('site_id')
     sitio = Sitio.objects.get(id=site_id)
-    images = Imagen.objects.latest_for_sitio(site_id)
-    comments = Comentario.objects.latest_for_sitio(site_id)
-
-    progreso = Progreso.objects.get_active_for_sitio(site_id)
-    progreso_data = None
+    images = Imagen.objects.filter(sitio__id=site_id)
+    comments = Comentario.objects.filter(sitio__id=site_id)
     progreso_gral = []
 
-    if progreso:
-        detalles = DetalleProgreso.objects.for_progreso(progreso)
-        progreso_data = [{
-            'actividad': detalle.actividad_grupo.actividad.nombre,
-            'ponderacion': detalle.actividad_grupo.ponderacion,
-            'avance': detalle.porcentaje,
-        } for detalle in detalles]
+    try:
+        progreso = Progreso.objects.get(progreso__proyecto__id=site_id)
+        # Verificar si el progreso está activado
+        if not progreso.activar:
+            progreso_data = None
+        else:
+            detalles = DetalleProgreso.objects.filter(
+                progreso=progreso, mostrar=True).select_related(
+                    'actividad_grupo', 'actividad_grupo__actividad')
+            progreso_data = [{
+                'actividad': detalle.actividad_grupo.actividad.nombre,
+                # 'grupo': detalle.actividad_grupo.grupo.nombre,
+                'ponderacion': detalle.actividad_grupo.ponderacion,
+                'avance': detalle.porcentaje,
+            } for detalle in detalles]
 
-        progreso_gral.append({
-            'fecha_inicio': (
-                progreso.fecha_inicio.strftime('%Y-%m-%d')
-                if progreso.fecha_inicio else ''
-                ),
-            'fecha_final': (
-                progreso.fecha_final.strftime('%Y-%m-%d')
+            # Agregar información de fechas
+            progreso_gral.append({
+                'fecha_inicio': progreso.fecha_inicio.strftime('%Y-%m-%d')
+                if progreso.fecha_inicio else '',
+
+                'fecha_final': progreso.fecha_final.strftime('%Y-%m-%d')
                 if progreso.fecha_final else ''
-                )
-        })
+            })
 
-    images_data = [{
+    except Progreso.DoesNotExist:
+        progreso_data = None
+
+    latest_image_date = images.aggregate(
+        Max('fecha_carga'))['fecha_carga__max']
+    latest_date_images_str = latest_image_date.strftime('%d-%m-%Y')
+
+    latest_comment_date = comments.aggregate(
+        Max('fecha_carga'))['fecha_carga__max']
+    latest_date_comment_str = format_fecha(latest_comment_date)
+
+    images = images.filter(
+        fecha_carga=latest_image_date
+        ) if latest_image_date else Imagen.objects.none()
+    comments = comments.filter(
+        fecha_carga=latest_comment_date
+        ) if latest_comment_date else Comentario.objects.none()
+
+    image_data = [{
         'url': image.imagen.url,
         'description': image.descripcion or '',
-        'fecha_carga': image.fecha_carga,
+        'fecha_carga': format_fecha(image.fecha_carga),
     } for image in images]
 
-    comments_data = [{
+    comment_data = [{
         'comentario': comment.comentario or '',
-        'fecha_carga': comment.fecha_carga,
-        'usuario': (
-            f"{comment.usuario.first_name} {comment.usuario.last_name}"
-            if comment.usuario else None
-            ),
+        'fecha_carga': format_fecha(comment.fecha_carga),
+        'usuario': f"{comment.usuario.first_name} {comment.usuario.last_name}"
+        if comment.usuario else None,
     } for comment in comments]
 
     return JsonResponse({
-        'images': images_data,
-        'comments': comments_data,
+        'images': image_data,
+        'latest_date_images': latest_date_images_str,
+        'comments': comment_data,
+        'latest_date_comments': latest_date_comment_str,
         'sitio': sitio_data(sitio),
         'progreso': progreso_data,
         'progreso_gral': progreso_gral
@@ -154,46 +176,45 @@ def get_site_data(request):
 
 
 def get_full_site_data(request):
-    site_id = request.GET.get('site_id')
-    images = Imagen.objects.filter(sitio__id=site_id).order_by('fecha_carga')
-    comments = Comentario.objects.filter(
-        sitio__id=site_id).order_by('fecha_carga')
+    pass
+    # site_id = request.GET.get('site_id')
+    # images = Imagen.objects.filter(
+    #     sitio__id=site_id).order_by('fecha_carga')
+    # comments = Comentario.objects.filter(
+    #     sitio__id=site_id).order_by('fecha_carga')
 
-    # Agrupar imágenes y comentarios por fecha
-    data_por_fecha = defaultdict(lambda: {'imagenes': [], 'comentarios': []})
+    # # Agrupar imágenes y comentarios por fecha
+    # data_por_fecha = defaultdict(lambda: {'imagenes': [], 'comentarios': []})
 
-    for image in images:
-        fecha = image.fecha_carga.date()
-        fecha_formateada = f"""{fecha.day} de
-        {MESES_ES[fecha.month]} de {fecha.year}"""
-        data_por_fecha[fecha_formateada]['imagenes'].append({
-            'url': image.imagen.url,
-            'description': image.descripcion or '',
-            'fecha_carga': fecha_formateada,
-        })
+    # # Agregar datos específicos de imágenes y comentarios
+    # for image in images:
+    #     fecha = image.fecha_carga.date()
+    #     data_por_fecha[fecha]['imagenes'].append({
+    #         'url': image.imagen.url,
+    #         'description': image.descripcion or '',
+    #     })
 
-    for comment in comments:
-        fecha = comment.fecha_carga.date()
-        fecha_formateada = f"""{fecha.day} de
-        {MESES_ES[fecha.month]} de {fecha.year}"""
-        data_por_fecha[fecha_formateada]['comentarios'].append({
-            'comentario': comment.comentario or '',
-            'fecha_carga': fecha_formateada,
-            'usuario': comment.usuario.username,
-        })
+    # for comment in comments:
+    #     fecha = comment.fecha_carga.date()
+    #     data_por_fecha[fecha]['comentarios'].append({
+    #         'comentario': comment.comentario or '',
+    #         'usuario': comment.usuario.username,
+    #     })
 
-    # Convertir el diccionario a una lista ordenada por fecha
-    data_ordenada = []
-    for fecha in sorted(data_por_fecha.keys()):
-        data_ordenada.append({
-            'fecha': fecha,
-            'imagenes': data_por_fecha[fecha]['imagenes'],
-            'comentarios': data_por_fecha[fecha]['comentarios'],
-        })
+    # # Función para formatear la fecha para
+    # la presentación
+    # def format_date(date):
+    #     return f"{date.day} de {MESES_ES[date.month]} de {date.year}"
 
-    return JsonResponse({
-        'data': data_ordenada,
-    })
+    # # Convertir el diccionario a una lista ordenada por fecha
+    # data_ordenada = sorted(
+    #     [{'fecha': format_date(
+    # fecha), 'imagenes': data['imagenes'],
+    # 'comentarios': data['comentarios']}
+    #      for fecha, data in data_por_fecha.items()],
+    #     key=lambda x: x['fecha']
+    # )
+    # return JsonResponse({'data': data_ordenada})
 
 
 class CustomLoginView(LoginView):

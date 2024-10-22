@@ -11,6 +11,7 @@ class SitioManager(models.Manager):
 
 
 class ContratistaManager(models.Manager):
-    def for_sitios(self, sitios):
-        # Filtrar los contratistas asociados con los sitios
-        return self.filter(sitio__in=sitios).distinct()
+    pass
+    # def for_sitios(self, sitios):
+    #     # Filtrar los contratistas asociados con los sitios
+    #     return self.filter(sitio__in=sitios).distinct()

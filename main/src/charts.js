@@ -100,6 +100,7 @@ export function chartProgreso(actividades) {
 
         var myChart = echarts.init(chartGauge);
         var option;
+        var isSmallScreen = window.innerWidth < 768;
 
         option = {
             tooltip: {
@@ -120,9 +121,12 @@ export function chartProgreso(actividades) {
                             color: '#00d400' // Cambia el color del puntero a verde
                         }
                     },
+                    axisLabel: {
+                        fontSize: isSmallScreen ? 8 : 14 // Ajusta el tamaño de la fuente de los números en la escala del gauge
+                    },
                     detail: {
                         valueAnimation: true,
-                        offsetCenter: [0, '75%'], // Mueve el valor 20 px hacia abajo
+                        offsetCenter: [0, '80%'],
                         formatter: function (value) {
                             return Math.round(value) + '%';
                         }
@@ -170,10 +174,10 @@ export function diasTranscurridos(progresoGral) {
         let fechaFinal;
 
         let h2_div = document.createElement("h2");
-        h2_div.classList.add("text-lg");
+        h2_div.classList.add("lg:text-lg", "text-base");
 
         let p_div = document.createElement("p");
-        p_div.classList.add("text-9xl");
+        p_div.classList.add("lg:text-9xl", "text-7xl");
         p_div.setAttribute("id", "dias");
 
         if (progresoGral[0].fecha_final) {

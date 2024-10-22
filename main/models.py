@@ -14,7 +14,7 @@ ESTADO_CHOICES = [
 class Contratista(models.Model):
     name = models.CharField("Contratista", max_length=20)
     cod = models.CharField("Codigo", max_length=3, help_text="3 Caracteres")
-    
+
     objects = ContratistaManager()
 
     def __str__(self):

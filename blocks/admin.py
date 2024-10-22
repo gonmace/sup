@@ -32,4 +32,3 @@ class BloqueInline(StackedPolymorphicInline):
 class ProyectoAdmin(PolymorphicInlineSupportMixin, admin.ModelAdmin):
     inlines = [BloqueInline]
     list_display = ('titulo',)
-

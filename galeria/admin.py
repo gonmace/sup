@@ -4,9 +4,11 @@ from django.utils.html import format_html
 
 
 class ImageAdmin(admin.ModelAdmin):
-    list_display = ('sitio', 'pic_tag', 'fecha_carga',  'descripcion', )
-    list_editable = ('descripcion', 'fecha_carga',)
-    search_fields = ('galeria__sitio', 'fecha_carga')
+    list_display = (
+        'sitio', 'pic_tag', 'fecha_carga',  'descripcion', 'usuario'
+        )
+    list_editable = ('descripcion', 'fecha_carga', 'usuario')
+    search_fields = ('sitio__sitio', 'fecha_carga')
 
     def pic_tag(self, obj):
         return format_html(

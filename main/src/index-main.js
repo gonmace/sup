@@ -45,15 +45,19 @@ function initCarousel() {
 function updateSite(data) {
     
     var images = data.images;
-    var latestDate = data.latest_date;
+    var latestDateImages = data.latest_date_images;
     var comments = data.comments;
+    var latestDateComments = data.latest_date_comments;
     titulo.innerHTML = data.sitio.sitio;
     nombre.innerHTML = data.sitio.nombre;
     cod_id.innerHTML = `Código Cliente: <span class="font-bold">${data.sitio.cod_id}</span>`;
+    
     altura.innerHTML = `Altura: <span class="font-bold">${data.sitio.altura} metros</span>`;
+    
     contratista.innerHTML = data.sitio.contratista ?
         `Contratista: <span class="font-bold">${data.sitio.contratista}</span>` :
         "";
+    
     
     let lat = data.sitio.lat.toFixed(6);
     let lon = data.sitio.lon.toFixed(6);
@@ -77,22 +81,40 @@ function updateSite(data) {
         vacio.classList.add('skeleton', 'contenedor', 'w-full', 'h-full', 'flex', 'flex-col', 'justify-center', 'px-2');
         vacio.innerHTML = '<p>No hay imágenes disponibles para este sitio.</p>';
         carousel.appendChild(vacio);
-        carousel.classList.toggle('cursor-pointer');
+        carousel.classList.remove('cursor-pointer');
     }
 
 
     if (images.length > 0) {
         images.forEach(function (image, index) {
             var carouselItem = document.createElement('div');
-            carouselItem.classList.add('carousel-item', 'w-full', 'flex', 'flex-col', 'justify-center');
+            carouselItem.classList.add('carousel-item', 'w-full', 'relative');
 
             var imgElement = document.createElement('img');
             imgElement.src = image.url;
             imgElement.alt = image.description;
-            imgElement.classList.add('contenedor', 'mb-2');
+            imgElement.classList.add('contenedor');
             carouselItem.appendChild(imgElement);
+
+            // Crear contenedor para el texto de fecha
+            var dateContainer = document.createElement('div');
+            dateContainer.classList.add(
+                'absolute',
+                'bottom-0',
+                'right-0',
+                'p-2',
+                'bg-black',
+                'bg-opacity-50',
+                'text-white',
+                'rounded-tl-lg',
+                'rounded-br-lg'
+            );
+
+            dateContainer.textContent = latestDateImages; // Asegúrate de que 'image.date' tiene el dato correcto
+            carouselItem.appendChild(dateContainer);
+
             carousel.appendChild(carouselItem);
-            carousel.classList.toggle('cursor-pointer');
+            carousel.classList.add('cursor-pointer');
         });
         initCarousel();
     }
@@ -107,7 +129,7 @@ function updateSite(data) {
         var autorElement = document.createElement('p');
 
         fecha.classList.add('absolute', 'top-1');
-        fecha.innerHTML = latestDate ? latestDate : "";
+        fecha.innerHTML = latestDateComments ? latestDateComments : "";
 
         commentElement.classList.add('text-lg');
         commentElement.innerHTML = comment.comentario;

@@ -48,7 +48,7 @@ Uses gunicorn + Redis.
     docker-compose exec sup-dj python manage.py createsuperuser --settings=config.prod
 
 
-    docker-compose exec sup-dj python manage.py dumpdata > datos.json
+    docker-compose exec sup-dj python manage.py dumpdata > datos.json --indent=2
     scp -P 38 gonzalo@75.119.135.38:/home/gonzalo/Django/sup/datos.json .
     python manage.py loaddata datos.json
 

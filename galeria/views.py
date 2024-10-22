@@ -56,38 +56,49 @@ def fileupload(request):
 def display_images_comments(request, site_id):
     # Obtener el sitio o mostrar un 404 si no existe
     sitio = get_object_or_404(Sitio, id=site_id)
-    imagenes = Imagen.objects.filter(sitio=sitio).annotate(fecha=Trunc(
-        'fecha_carga',
-        'day',
-        output_field=DateField())).order_by('-fecha')
+    # Obtener fechas truncadas y ordenadas de imágenes y comentarios
+    imagenes = Imagen.objects.filter(sitio=sitio).annotate(
+        fecha=Trunc('fecha_carga', 'day', output_field=DateField())
+    ).order_by('-fecha')
 
-    comentarios = Comentario.objects.filter(sitio=sitio).annotate(fecha=Trunc(
-        'fecha_carga',
-        'day',
-        output_field=DateField())).order_by('-fecha')
+    comentarios = Comentario.objects.filter(sitio=sitio).annotate(
+        fecha=Trunc('fecha_carga', 'day', output_field=DateField())
+    ).order_by('-fecha')
 
-    items_por_fecha = OrderedDict()
+    # Obtener todas las fechas únicas de imágenes y comentarios
+    fechas_imagenes = imagenes.values_list('fecha', flat=True).distinct()
+    fechas_comentarios = comentarios.values_list('fecha', flat=True).distinct()
 
-    # Combinar imágenes y comentarios en la misma estructura
-    for item in list(imagenes) + list(comentarios):
-        items_por_fecha.setdefault(
-            item.fecha, {'imagenes': [], 'comentarios': []})
-        if isinstance(item, Imagen):
-            items_por_fecha[item.fecha]['imagenes'].append(item)
-        elif isinstance(item, Comentario):
-            # Corrección para acceder al primer UserProfile si existe
-            user_profile = item.usuario.userprofile_set.first()
-            es_prevencionista = (
-                user_profile.cargo == 'PRE' if user_profile else False
-                )
-            comentario_info = {
-                'comentario': item.comentario,
-                'usuario': f"{item.usuario.first_name} \
-                    {item.usuario.last_name}",
-                'fecha': item.fecha,
-                'es_prevencionista': es_prevencionista,
-            }
-            items_por_fecha[item.fecha]['comentarios'].append(comentario_info)
+    # Unificar y ordenar fechas
+    fechas_unicas = sorted(
+        set(fechas_imagenes) | set(fechas_comentarios), reverse=True
+        )
+
+    items_por_fecha = OrderedDict(
+        (
+            fecha,
+            {'imagenes': [], 'comentarios': []}) for fecha in fechas_unicas
+        )
+
+    # Llenar el diccionario con imágenes y comentarios
+    for imagen in imagenes:
+        items_por_fecha[imagen.fecha]['imagenes'].append(imagen)
+
+    for comentario in comentarios:
+        user_profile = comentario.usuario.userprofile_set.first()
+        es_prevencionista = (
+            user_profile.cargo == 'PRE' if user_profile else False
+            )
+        comentario_info = {
+            'comentario': comentario.comentario,
+            'usuario': f"{comentario.usuario.first_name}\
+                {comentario.usuario.last_name}",
+            'fecha': comentario.fecha,
+            'es_prevencionista': es_prevencionista,
+        }
+        items_por_fecha[comentario.fecha]['comentarios'].append(
+            comentario_info
+            )
 
     context = {
         'sitio': sitio,
