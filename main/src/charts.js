@@ -177,7 +177,7 @@ export function diasTranscurridos(progresoGral) {
         h2_div.classList.add("lg:text-lg", "text-base");
 
         let p_div = document.createElement("p");
-        p_div.classList.add("lg:text-9xl", "text-7xl");
+        p_div.classList.add("lg:text-8xl", "text-6xl");
         p_div.setAttribute("id", "dias");
 
         if (progresoGral[0].fecha_final) {

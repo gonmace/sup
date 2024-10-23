@@ -60,8 +60,14 @@ function updateSite(data) {
     titulo.innerHTML = data.sitio.sitio;
     nombre.innerHTML = data.sitio.nombre;
 
-    cod_id.innerHTML = `Código Cliente: <span class="font-bold">${data.sitio.cod_id}</span>`;
-    altura.innerHTML = `Altura: <span class="font-bold">${data.sitio.altura} metros</span>`;
+    data.sitio.cod_id == '---' ?
+        cod_id.innerHTML = `Código Cliente: <span class="font-bold">${data.sitio.cod_id}</span>`:
+        cod_id.innerHTML = "";
+
+    data.sitio.altura ?
+        altura.innerHTML = `Altura: <span class="font-bold">${data.sitio.altura} metros</span>`:
+        altura.innerHTML = "";
+
     contratista.innerHTML = data.sitio.contratista ?
         `Contratista: <span class="font-bold">${data.sitio.contratista}</span>` :
         "";
