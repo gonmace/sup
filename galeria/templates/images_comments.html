@@ -22,7 +22,7 @@
     {% endwith %}
     
     <!-- Mostrar imágenes de ese día -->
-    <div class="columns-3 gap-4 m-4">    
+    <div class="columns-2 md:columns-3 gap-4 m-4">    
     {% for imagen in items.imagenes %}
         <img class="h-auto max-w-full contenedor mb-4" src="{{ imagen.imagen.url }}" alt="{{ imagen.descripcion }}" >
     {% endfor %}
