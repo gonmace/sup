@@ -3679,6 +3679,266 @@
   }
 },
 {
+  "model": "admin.logentry",
+  "pk": 284,
+  "fields": {
+    "action_time": "2024-10-22T23:47:14.409Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "15",
+    "object_repr": "Retiro Cobertura Vegetal",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 285,
+  "fields": {
+    "action_time": "2024-10-22T23:47:47.137Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "16",
+    "object_repr": "Nivelación Sitio",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 286,
+  "fields": {
+    "action_time": "2024-10-22T23:49:42.145Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "17",
+    "object_repr": "Portón Exterior",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 287,
+  "fields": {
+    "action_time": "2024-10-22T23:50:24.103Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "18",
+    "object_repr": "Instalación de geotextil con antiherbicida",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 288,
+  "fields": {
+    "action_time": "2024-10-22T23:51:09.730Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "19",
+    "object_repr": "Colocación de ripio 3/4\" - 1\"",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 289,
+  "fields": {
+    "action_time": "2024-10-22T23:51:22.734Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "20",
+    "object_repr": "Losa de generadores",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 290,
+  "fields": {
+    "action_time": "2024-10-22T23:51:40.690Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "21",
+    "object_repr": "Acometida electrica",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 291,
+  "fields": {
+    "action_time": "2024-10-22T23:52:03.445Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "22",
+    "object_repr": "Pilastra",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 292,
+  "fields": {
+    "action_time": "2024-10-22T23:52:23.741Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "23",
+    "object_repr": "Ductos eléctricos",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 293,
+  "fields": {
+    "action_time": "2024-10-22T23:52:39.512Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "24",
+    "object_repr": "Cableado",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 294,
+  "fields": {
+    "action_time": "2024-10-22T23:53:07.247Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "25",
+    "object_repr": "Instalación tablero eléctrico",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 295,
+  "fields": {
+    "action_time": "2024-10-22T23:53:23.814Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "26",
+    "object_repr": "Drenaje pluvial",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 296,
+  "fields": {
+    "action_time": "2024-10-22T23:53:41.853Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "27",
+    "object_repr": "Camino de acceso",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 297,
+  "fields": {
+    "action_time": "2024-10-22T23:54:03.069Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "28",
+    "object_repr": "Otros (limpieza, retiro de escombros, señalización)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 298,
+  "fields": {
+    "action_time": "2024-10-22T23:54:23.926Z",
+    "user": 1,
+    "content_type": 14,
+    "object_id": "2",
+    "object_repr": "PTI-SX",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}, {\"added\": {\"name\": \"actividad grupo\", \"object\": \"Instalaci\\u00f3n de Faenas\"}}, {\"added\": {\"name\": \"actividad grupo\", \"object\": \"Retiro Cobertura Vegetal\"}}, {\"added\": {\"name\": \"actividad grupo\", \"object\": \"Nivelaci\\u00f3n Sitio\"}}, {\"added\": {\"name\": \"actividad grupo\", \"object\": \"Cierre perimetral\"}}, {\"added\": {\"name\": \"actividad grupo\", \"object\": \"Port\\u00f3n Exterior\"}}, {\"added\": {\"name\": \"actividad grupo\", \"object\": \"Instalaci\\u00f3n de geotextil con antiherbicida\"}}, {\"added\": {\"name\": \"actividad grupo\", \"object\": \"Colocaci\\u00f3n de ripio 3/4\\\" - 1\\\"\"}}, {\"added\": {\"name\": \"actividad grupo\", \"object\": \"Losa de generadores\"}}, {\"added\": {\"name\": \"actividad grupo\", \"object\": \"Acometida electrica\"}}, {\"added\": {\"name\": \"actividad grupo\", \"object\": \"Pilastra\"}}, {\"added\": {\"name\": \"actividad grupo\", \"object\": \"Ductos el\\u00e9ctricos\"}}, {\"added\": {\"name\": \"actividad grupo\", \"object\": \"Cableado\"}}, {\"added\": {\"name\": \"actividad grupo\", \"object\": \"Instalaci\\u00f3n tablero el\\u00e9ctrico\"}}, {\"added\": {\"name\": \"actividad grupo\", \"object\": \"Drenaje pluvial\"}}, {\"added\": {\"name\": \"actividad grupo\", \"object\": \"Camino de acceso\"}}, {\"added\": {\"name\": \"actividad grupo\", \"object\": \"Otros (limpieza, retiro de escombros, se\\u00f1alizaci\\u00f3n)\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 299,
+  "fields": {
+    "action_time": "2024-10-22T23:54:53.645Z",
+    "user": 1,
+    "content_type": 16,
+    "object_id": "7",
+    "object_repr": "AR-BA-1210 ---> PTI-SX",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 300,
+  "fields": {
+    "action_time": "2024-10-22T23:55:29.506Z",
+    "user": 1,
+    "content_type": 17,
+    "object_id": "7",
+    "object_repr": "AR-BA-1210",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"name\": \"Detalle de Progreso\", \"object\": \"Grupo PTI-SX             | Ponderacio\\u0301n: 5.0                 | Completado: 100.0% \", \"fields\": [\"Avance %\"]}}, {\"changed\": {\"name\": \"Detalle de Progreso\", \"object\": \"Grupo PTI-SX             | Ponderacio\\u0301n: 5.0                 | Completado: 100.0% \", \"fields\": [\"Avance %\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 301,
+  "fields": {
+    "action_time": "2024-10-22T23:56:19.224Z",
+    "user": 1,
+    "content_type": 17,
+    "object_id": "7",
+    "object_repr": "AR-BA-1210",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Fecha inicio\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 302,
+  "fields": {
+    "action_time": "2024-10-22T23:57:21.123Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "18",
+    "object_repr": "Geotextil con antiherbicida",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Nombre\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 303,
+  "fields": {
+    "action_time": "2024-10-22T23:57:40.592Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "28",
+    "object_repr": "Otros (limpieza, señalización)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Nombre\"]}}]"
+  }
+},
+{
   "model": "auth.permission",
   "pk": 1,
   "fields": {
@@ -4655,7 +4915,7 @@
   "pk": 11,
   "fields": {
     "password": "pbkdf2_sha256$870000$I0KCActn1gCCsSN0w7PNJo$wRVsJsVFCQ0/6wISIe/92i0ZFr3YpZeCPB9uNfzEjVE=",
-    "last_login": null,
+    "last_login": "2024-10-22T22:17:46.954Z",
     "is_superuser": false,
     "username": "carias",
     "first_name": "Christian",
@@ -4930,6 +5190,14 @@
   "fields": {
     "session_data": ".eJxVjDsOwjAQBe_iGlmOY68dSnrOED17NziAHCmfCnF3iJQC2jcz76V6bGvpt0XmfmR1Vo1Rp98xIT-k7oTvqLdJ56mu85j0ruiDLvo6sTwvh_t3ULCUb23AJiGgReOIus7bbByDu-CjtI4cKLpExooM0rJN5GOOcBT80ESCen8AAG031g:1t1Se3:cSCi-fsB4DFhEJhBN9zcNNKpzsuTHEHAh417s8mb7co",
     "expire_date": "2024-10-31T15:42:35.903Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "ejodnm3qcvhm325eoqbnm82peqnvd9y3",
+  "fields": {
+    "session_data": ".eJxVjDsOwkAMBe-yNVp5yX4p6XOGyI5tNoASKZ8KcXeIlALaNzPvZTrc1tpti8zdwOZinDOn35Gwf8i4E77jeJtsP43rPJDdFXvQxbYTy_N6uH8HFZf6rTOVwi5AKiFGJvDEoghAWXvnozbJaSA9-8IFUJqQ1EVQAfEaUsjm_QEIGjgU:1t3NCE:Eb17sgTf9Z0a0klDYEmoLJjW6b67pCO-hPXvXgNBMug",
+    "expire_date": "2024-11-05T22:17:46.959Z"
   }
 },
 {
@@ -8871,6 +9139,270 @@
   }
 },
 {
+  "model": "galeria.imagen",
+  "pk": 301,
+  "fields": {
+    "sitio": 105,
+    "imagen": "imagenes/IMG-20241022-WA0037.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 6
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 302,
+  "fields": {
+    "sitio": 105,
+    "imagen": "imagenes/IMG-20241022-WA0036.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 6
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 303,
+  "fields": {
+    "sitio": 105,
+    "imagen": "imagenes/IMG-20241022-WA0035.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 6
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 304,
+  "fields": {
+    "sitio": 105,
+    "imagen": "imagenes/IMG-20241022-WA0034.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 6
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 305,
+  "fields": {
+    "sitio": 105,
+    "imagen": "imagenes/IMG-20241022-WA0033.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 6
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 306,
+  "fields": {
+    "sitio": 105,
+    "imagen": "imagenes/IMG-20241022-WA0032.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 6
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 307,
+  "fields": {
+    "sitio": 105,
+    "imagen": "imagenes/IMG-20241022-WA0031.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 6
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 308,
+  "fields": {
+    "sitio": 105,
+    "imagen": "imagenes/IMG-20241022-WA0030.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 6
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 309,
+  "fields": {
+    "sitio": 105,
+    "imagen": "imagenes/IMG-20241022-WA0029.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 6
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 310,
+  "fields": {
+    "sitio": 105,
+    "imagen": "imagenes/IMG-20241022-WA0027.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 6
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 311,
+  "fields": {
+    "sitio": 105,
+    "imagen": "imagenes/IMG-20241022-WA0028.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 6
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 312,
+  "fields": {
+    "sitio": 112,
+    "imagen": "imagenes/20241016_115801000_iOS.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-20",
+    "usuario": 11
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 313,
+  "fields": {
+    "sitio": 112,
+    "imagen": "imagenes/20241016_120843020_iOS.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-20",
+    "usuario": 11
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 314,
+  "fields": {
+    "sitio": 112,
+    "imagen": "imagenes/20241016_151354000_iOS.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-20",
+    "usuario": 11
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 315,
+  "fields": {
+    "sitio": 112,
+    "imagen": "imagenes/20241016_115801000_iOS_AgTcF57.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 11
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 316,
+  "fields": {
+    "sitio": 112,
+    "imagen": "imagenes/20241016_120843020_iOS_DcPB6QC.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 11
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 317,
+  "fields": {
+    "sitio": 112,
+    "imagen": "imagenes/20241016_151354000_iOS_WimwVO0.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 11
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 318,
+  "fields": {
+    "sitio": 112,
+    "imagen": "imagenes/20241016_155648000_iOS.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 11
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 319,
+  "fields": {
+    "sitio": 112,
+    "imagen": "imagenes/20241016_173755540_iOS.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 11
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 320,
+  "fields": {
+    "sitio": 112,
+    "imagen": "imagenes/Imagen_de_WhatsApp_2024-10-22_a_las_19.34.54_1322febc.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 11
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 321,
+  "fields": {
+    "sitio": 112,
+    "imagen": "imagenes/Imagen_de_WhatsApp_2024-10-22_a_las_19.34.54_a13721a6.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 11
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 322,
+  "fields": {
+    "sitio": 112,
+    "imagen": "imagenes/Imagen_de_WhatsApp_2024-10-22_a_las_19.34.54_b536f339.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 11
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 323,
+  "fields": {
+    "sitio": 112,
+    "imagen": "imagenes/Imagen_de_WhatsApp_2024-10-22_a_las_19.34.54_cd9196de.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 11
+  }
+},
+{
+  "model": "galeria.imagen",
+  "pk": 324,
+  "fields": {
+    "sitio": 112,
+    "imagen": "imagenes/Imagen_de_WhatsApp_2024-10-22_a_las_19.34.54_ed7d44f8.jpg",
+    "descripcion": null,
+    "fecha_carga": "2024-10-22",
+    "usuario": 11
+  }
+},
+{
   "model": "galeria.comentario",
   "pk": 1,
   "fields": {
@@ -9361,6 +9893,46 @@
   }
 },
 {
+  "model": "galeria.comentario",
+  "pk": 53,
+  "fields": {
+    "sitio": 105,
+    "comentario": "• Trabajando en el cerco de la torre.\r\n• Tablero instalado, radier terminado, trabajando en la escalerilla.",
+    "fecha_carga": "2024-10-22",
+    "usuario": 6
+  }
+},
+{
+  "model": "galeria.comentario",
+  "pk": 54,
+  "fields": {
+    "sitio": 112,
+    "comentario": "Limpieza Terreno",
+    "fecha_carga": "2024-10-20",
+    "usuario": 11
+  }
+},
+{
+  "model": "galeria.comentario",
+  "pk": 55,
+  "fields": {
+    "sitio": 112,
+    "comentario": "Limpieza Terreno",
+    "fecha_carga": "2024-10-22",
+    "usuario": 11
+  }
+},
+{
+  "model": "galeria.comentario",
+  "pk": 56,
+  "fields": {
+    "sitio": 112,
+    "comentario": "Nivelación Terreno",
+    "fecha_carga": "2024-10-22",
+    "usuario": 11
+  }
+},
+{
   "model": "actividades.actividad",
   "pk": 1,
   "fields": {
@@ -9473,10 +10045,129 @@
   }
 },
 {
+  "model": "actividades.actividad",
+  "pk": 15,
+  "fields": {
+    "nombre": "Retiro Cobertura Vegetal",
+    "descripcion": "SX"
+  }
+},
+{
+  "model": "actividades.actividad",
+  "pk": 16,
+  "fields": {
+    "nombre": "Nivelación Sitio",
+    "descripcion": "SX"
+  }
+},
+{
+  "model": "actividades.actividad",
+  "pk": 17,
+  "fields": {
+    "nombre": "Portón Exterior",
+    "descripcion": "SX"
+  }
+},
+{
+  "model": "actividades.actividad",
+  "pk": 18,
+  "fields": {
+    "nombre": "Geotextil con antiherbicida",
+    "descripcion": "SX"
+  }
+},
+{
+  "model": "actividades.actividad",
+  "pk": 19,
+  "fields": {
+    "nombre": "Colocación de ripio 3/4\" - 1\"",
+    "descripcion": "SX"
+  }
+},
+{
+  "model": "actividades.actividad",
+  "pk": 20,
+  "fields": {
+    "nombre": "Losa de generadores",
+    "descripcion": "SX"
+  }
+},
+{
+  "model": "actividades.actividad",
+  "pk": 21,
+  "fields": {
+    "nombre": "Acometida electrica",
+    "descripcion": "SX"
+  }
+},
+{
+  "model": "actividades.actividad",
+  "pk": 22,
+  "fields": {
+    "nombre": "Pilastra",
+    "descripcion": "SX"
+  }
+},
+{
+  "model": "actividades.actividad",
+  "pk": 23,
+  "fields": {
+    "nombre": "Ductos eléctricos",
+    "descripcion": "SX"
+  }
+},
+{
+  "model": "actividades.actividad",
+  "pk": 24,
+  "fields": {
+    "nombre": "Cableado",
+    "descripcion": "SX"
+  }
+},
+{
+  "model": "actividades.actividad",
+  "pk": 25,
+  "fields": {
+    "nombre": "Instalación tablero eléctrico",
+    "descripcion": "SX"
+  }
+},
+{
+  "model": "actividades.actividad",
+  "pk": 26,
+  "fields": {
+    "nombre": "Drenaje pluvial",
+    "descripcion": "SX"
+  }
+},
+{
+  "model": "actividades.actividad",
+  "pk": 27,
+  "fields": {
+    "nombre": "Camino de acceso",
+    "descripcion": "SX"
+  }
+},
+{
+  "model": "actividades.actividad",
+  "pk": 28,
+  "fields": {
+    "nombre": "Otros (limpieza, señalización)",
+    "descripcion": "SX"
+  }
+},
+{
   "model": "actividades.grupoactividades",
   "pk": 1,
   "fields": {
     "nombre": "PTI Base Torres"
+  }
+},
+{
+  "model": "actividades.grupoactividades",
+  "pk": 2,
+  "fields": {
+    "nombre": "PTI-SX"
   }
 },
 {
@@ -9620,6 +10311,166 @@
   }
 },
 {
+  "model": "actividades.actividadgrupo",
+  "pk": 15,
+  "fields": {
+    "actividad": 1,
+    "grupo": 2,
+    "ponderacion": 5.0,
+    "order": 1
+  }
+},
+{
+  "model": "actividades.actividadgrupo",
+  "pk": 16,
+  "fields": {
+    "actividad": 15,
+    "grupo": 2,
+    "ponderacion": 5.0,
+    "order": 2
+  }
+},
+{
+  "model": "actividades.actividadgrupo",
+  "pk": 17,
+  "fields": {
+    "actividad": 16,
+    "grupo": 2,
+    "ponderacion": 10.0,
+    "order": 3
+  }
+},
+{
+  "model": "actividades.actividadgrupo",
+  "pk": 18,
+  "fields": {
+    "actividad": 9,
+    "grupo": 2,
+    "ponderacion": 10.0,
+    "order": 4
+  }
+},
+{
+  "model": "actividades.actividadgrupo",
+  "pk": 19,
+  "fields": {
+    "actividad": 17,
+    "grupo": 2,
+    "ponderacion": 5.0,
+    "order": 5
+  }
+},
+{
+  "model": "actividades.actividadgrupo",
+  "pk": 20,
+  "fields": {
+    "actividad": 18,
+    "grupo": 2,
+    "ponderacion": 10.0,
+    "order": 6
+  }
+},
+{
+  "model": "actividades.actividadgrupo",
+  "pk": 21,
+  "fields": {
+    "actividad": 19,
+    "grupo": 2,
+    "ponderacion": 5.0,
+    "order": 7
+  }
+},
+{
+  "model": "actividades.actividadgrupo",
+  "pk": 22,
+  "fields": {
+    "actividad": 20,
+    "grupo": 2,
+    "ponderacion": 5.0,
+    "order": 8
+  }
+},
+{
+  "model": "actividades.actividadgrupo",
+  "pk": 23,
+  "fields": {
+    "actividad": 21,
+    "grupo": 2,
+    "ponderacion": 5.0,
+    "order": 9
+  }
+},
+{
+  "model": "actividades.actividadgrupo",
+  "pk": 24,
+  "fields": {
+    "actividad": 22,
+    "grupo": 2,
+    "ponderacion": 5.0,
+    "order": 10
+  }
+},
+{
+  "model": "actividades.actividadgrupo",
+  "pk": 25,
+  "fields": {
+    "actividad": 23,
+    "grupo": 2,
+    "ponderacion": 5.0,
+    "order": 11
+  }
+},
+{
+  "model": "actividades.actividadgrupo",
+  "pk": 26,
+  "fields": {
+    "actividad": 24,
+    "grupo": 2,
+    "ponderacion": 5.0,
+    "order": 12
+  }
+},
+{
+  "model": "actividades.actividadgrupo",
+  "pk": 27,
+  "fields": {
+    "actividad": 25,
+    "grupo": 2,
+    "ponderacion": 5.0,
+    "order": 13
+  }
+},
+{
+  "model": "actividades.actividadgrupo",
+  "pk": 28,
+  "fields": {
+    "actividad": 26,
+    "grupo": 2,
+    "ponderacion": 5.0,
+    "order": 14
+  }
+},
+{
+  "model": "actividades.actividadgrupo",
+  "pk": 29,
+  "fields": {
+    "actividad": 27,
+    "grupo": 2,
+    "ponderacion": 5.0,
+    "order": 15
+  }
+},
+{
+  "model": "actividades.actividadgrupo",
+  "pk": 30,
+  "fields": {
+    "actividad": 28,
+    "grupo": 2,
+    "ponderacion": 5.0,
+    "order": 16
+  }
+},
+{
   "model": "actividades.proyectoactividad",
   "pk": 1,
   "fields": {
@@ -9671,6 +10522,15 @@
     "proyecto": 103,
     "grupo": 1,
     "fecha_creacion": "2024-10-16T22:25:33.428Z"
+  }
+},
+{
+  "model": "actividades.proyectoactividad",
+  "pk": 7,
+  "fields": {
+    "proyecto": 112,
+    "grupo": 2,
+    "fecha_creacion": "2024-10-22T23:54:53.593Z"
   }
 },
 {
@@ -9731,6 +10591,16 @@
     "activar": true,
     "fecha_inicio": "2024-08-29",
     "fecha_final": "2024-10-02"
+  }
+},
+{
+  "model": "actividades.progreso",
+  "pk": 7,
+  "fields": {
+    "progreso": 7,
+    "activar": true,
+    "fecha_inicio": "2024-10-14",
+    "fecha_final": null
   }
 },
 {
@@ -10600,6 +11470,182 @@
     "porcentaje": 100.0,
     "mostrar": true,
     "order": 0
+  }
+},
+{
+  "model": "actividades.detalleprogreso",
+  "pk": 85,
+  "fields": {
+    "progreso": 7,
+    "actividad_grupo": 15,
+    "porcentaje": 100.0,
+    "mostrar": true,
+    "order": 1
+  }
+},
+{
+  "model": "actividades.detalleprogreso",
+  "pk": 86,
+  "fields": {
+    "progreso": 7,
+    "actividad_grupo": 16,
+    "porcentaje": 100.0,
+    "mostrar": true,
+    "order": 2
+  }
+},
+{
+  "model": "actividades.detalleprogreso",
+  "pk": 87,
+  "fields": {
+    "progreso": 7,
+    "actividad_grupo": 17,
+    "porcentaje": 0.0,
+    "mostrar": true,
+    "order": 3
+  }
+},
+{
+  "model": "actividades.detalleprogreso",
+  "pk": 88,
+  "fields": {
+    "progreso": 7,
+    "actividad_grupo": 18,
+    "porcentaje": 0.0,
+    "mostrar": true,
+    "order": 4
+  }
+},
+{
+  "model": "actividades.detalleprogreso",
+  "pk": 89,
+  "fields": {
+    "progreso": 7,
+    "actividad_grupo": 19,
+    "porcentaje": 0.0,
+    "mostrar": true,
+    "order": 5
+  }
+},
+{
+  "model": "actividades.detalleprogreso",
+  "pk": 90,
+  "fields": {
+    "progreso": 7,
+    "actividad_grupo": 20,
+    "porcentaje": 0.0,
+    "mostrar": true,
+    "order": 6
+  }
+},
+{
+  "model": "actividades.detalleprogreso",
+  "pk": 91,
+  "fields": {
+    "progreso": 7,
+    "actividad_grupo": 21,
+    "porcentaje": 0.0,
+    "mostrar": true,
+    "order": 7
+  }
+},
+{
+  "model": "actividades.detalleprogreso",
+  "pk": 92,
+  "fields": {
+    "progreso": 7,
+    "actividad_grupo": 22,
+    "porcentaje": 0.0,
+    "mostrar": true,
+    "order": 8
+  }
+},
+{
+  "model": "actividades.detalleprogreso",
+  "pk": 93,
+  "fields": {
+    "progreso": 7,
+    "actividad_grupo": 23,
+    "porcentaje": 0.0,
+    "mostrar": true,
+    "order": 9
+  }
+},
+{
+  "model": "actividades.detalleprogreso",
+  "pk": 94,
+  "fields": {
+    "progreso": 7,
+    "actividad_grupo": 24,
+    "porcentaje": 0.0,
+    "mostrar": true,
+    "order": 10
+  }
+},
+{
+  "model": "actividades.detalleprogreso",
+  "pk": 95,
+  "fields": {
+    "progreso": 7,
+    "actividad_grupo": 25,
+    "porcentaje": 0.0,
+    "mostrar": true,
+    "order": 11
+  }
+},
+{
+  "model": "actividades.detalleprogreso",
+  "pk": 96,
+  "fields": {
+    "progreso": 7,
+    "actividad_grupo": 26,
+    "porcentaje": 0.0,
+    "mostrar": true,
+    "order": 12
+  }
+},
+{
+  "model": "actividades.detalleprogreso",
+  "pk": 97,
+  "fields": {
+    "progreso": 7,
+    "actividad_grupo": 27,
+    "porcentaje": 0.0,
+    "mostrar": true,
+    "order": 13
+  }
+},
+{
+  "model": "actividades.detalleprogreso",
+  "pk": 98,
+  "fields": {
+    "progreso": 7,
+    "actividad_grupo": 28,
+    "porcentaje": 0.0,
+    "mostrar": true,
+    "order": 14
+  }
+},
+{
+  "model": "actividades.detalleprogreso",
+  "pk": 99,
+  "fields": {
+    "progreso": 7,
+    "actividad_grupo": 29,
+    "porcentaje": 0.0,
+    "mostrar": true,
+    "order": 15
+  }
+},
+{
+  "model": "actividades.detalleprogreso",
+  "pk": 100,
+  "fields": {
+    "progreso": 7,
+    "actividad_grupo": 30,
+    "porcentaje": 0.0,
+    "mostrar": true,
+    "order": 16
   }
 },
 {
