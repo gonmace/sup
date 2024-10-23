@@ -17,11 +17,20 @@ const nombre = document.getElementById('nombre');
 const cod_id = document.getElementById('cod_id');
 const altura = document.getElementById('altura');
 const contratista = document.getElementById('contratista');
-const comentario = document.getElementById('comentario');
 const latitud = document.getElementById('latitud');
 const longitud = document.getElementById('longitud');
 const googleMaps = document.getElementById('googleMaps');
+const avanceID = document.getElementById('avance');
 let sitio_id;
+
+let comentario;
+if (window.innerWidth >= 1024) {
+    comentario = document.getElementById('comentario');
+    comentario.classList.toggle('hidden');
+} else {
+    comentario = document.getElementById('comentario-mobile');
+    comentario.classList.toggle('hidden');
+}
 
 function initCarousel() {
     var carousel = document.querySelector('.carousel');
@@ -50,10 +59,9 @@ function updateSite(data) {
     var latestDateComments = data.latest_date_comments;
     titulo.innerHTML = data.sitio.sitio;
     nombre.innerHTML = data.sitio.nombre;
+
     cod_id.innerHTML = `Código Cliente: <span class="font-bold">${data.sitio.cod_id}</span>`;
-    
     altura.innerHTML = `Altura: <span class="font-bold">${data.sitio.altura} metros</span>`;
-    
     contratista.innerHTML = data.sitio.contratista ?
         `Contratista: <span class="font-bold">${data.sitio.contratista}</span>` :
         "";
@@ -146,9 +154,14 @@ function updateSite(data) {
         comentario.innerHTML = "";
     }
 
+    if (data.progreso) {
+        avanceID.style.height = '16rem';
+    } else {
+        avanceID.style.height = '0';
+    }
     chartProgreso(data.progreso);
     diasTranscurridos(data.progreso_gral);
-   
+    
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -233,12 +246,14 @@ document.addEventListener("DOMContentLoaded", function () {
             fetch(`/get_site_data/?site_id=${sitio_id}`)
                 .then(response => response.json())
                 .then(data => {
+                    console.log("🚀 ~ data:", data)
                     updateSite(data);
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
         });
+                
         if (sitio.contratista) {
             marker.addTo(groupsContratista[sitio.contratista.cod]);
         }
