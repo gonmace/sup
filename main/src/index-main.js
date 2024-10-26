@@ -249,15 +249,27 @@ document.addEventListener("DOMContentLoaded", function () {
         marker.on('click', function () {
             sitio_id = this.siteId;
             // Hacer la llamada AJAX
+            // Recuperar imagenes y avance
             fetch(`/get_site_data/?site_id=${sitio_id}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("🚀 ~ data:", data)
                     updateSite(data);
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
+            // Recuperar streamfield
+            const container = document.getElementById('streamfield-container');
+            fetch(`/componentes/${sitio_id}/`)
+                .then(response => response.json())
+                .then(data => {
+                    container.innerHTML = data.html;        
+                })
+                .catch(() => {
+                    container.innerHTML = "";
+                }
+
+                );
         });
                 
         if (sitio.contratista) {

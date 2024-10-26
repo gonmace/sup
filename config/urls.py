@@ -6,11 +6,12 @@ from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
+    path('grappelli/', include('grappelli.urls')),
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
     path('imgs/', include('galeria.urls')),
-
-    # path('', include('actividades.urls')),
+    path('streamfield/', include('streamfield.urls')),
+    path('componentes/', include('componentes.urls'))
 ]
 
 if settings.DEBUG:

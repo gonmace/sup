@@ -13,8 +13,8 @@
 
 {% block content %}
   <div class="lg:container mx-auto">
-    <div class="flex flex-col md:flex-row md:gap-3 md:min-h-screen">
-      <div class="w-full md:w-5/12 lg:w-1/2 h-screen flex flex-col">
+    <div class="flex flex-col md:flex-row md:gap-3 h-screen" style="max-height: 60rem;">
+      <div class="w-full md:w-5/12 lg:w-1/2 h-full flex flex-col">
         <!-- MAPA -->
         <section id="map" class="h-3/4 md:flex-1 md:h-auto contenedor"></section>
 
@@ -74,19 +74,19 @@
         <section id="barras-Chart" class="w-full h-full -mt-3"></section>
       </section>
     </div>
+
+    <div id="streamfield-container" class="columns-2 md:columns-3 gap-4 md:gap-6 py-6"></div> 
+
   </div>
 
-  {% comment %} <div class="lg:container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 grid-rows-3 gap-2">
-    <div class="bg-yellow-100">1</div>
-    <div class="bg-yellow-200">2</div>
-    <div class="bg-yellow-300">3</div>
-    <div class="bg-yellow-400">4</div>
-    <div class="bg-yellow-500">5</div>
-    <div class="bg-yellow-600">6</div>
-    <div class="bg-yellow-700">7</div>
-    <div class="bg-yellow-800">8</div>
-    <div class="bg-yellow-900">9</div>
-  </div> {% endcomment %}
+
+
+
+  
+
+  
+  
+
 {% endblock %}
 
 {% block js %}
@@ -96,4 +96,6 @@
     const contratistas = {{ contratistas_json|safe }};
   </script>
   <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+
+
 {% endblock %}

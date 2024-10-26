@@ -104,6 +104,7 @@ def home(request):
 def get_site_data(request):
     site_id = request.GET.get('site_id')
     sitio = Sitio.objects.get(id=site_id)
+
     images = Imagen.objects.filter(sitio__id=site_id)
     comments = Comentario.objects.filter(sitio__id=site_id)
     progreso_gral = []
@@ -175,48 +176,6 @@ def get_site_data(request):
         'progreso': progreso_data,
         'progreso_gral': progreso_gral
     })
-
-
-def get_full_site_data(request):
-    pass
-    # site_id = request.GET.get('site_id')
-    # images = Imagen.objects.filter(
-    #     sitio__id=site_id).order_by('fecha_carga')
-    # comments = Comentario.objects.filter(
-    #     sitio__id=site_id).order_by('fecha_carga')
-
-    # # Agrupar imágenes y comentarios por fecha
-    # data_por_fecha = defaultdict(lambda: {'imagenes': [], 'comentarios': []})
-
-    # # Agregar datos específicos de imágenes y comentarios
-    # for image in images:
-    #     fecha = image.fecha_carga.date()
-    #     data_por_fecha[fecha]['imagenes'].append({
-    #         'url': image.imagen.url,
-    #         'description': image.descripcion or '',
-    #     })
-
-    # for comment in comments:
-    #     fecha = comment.fecha_carga.date()
-    #     data_por_fecha[fecha]['comentarios'].append({
-    #         'comentario': comment.comentario or '',
-    #         'usuario': comment.usuario.username,
-    #     })
-
-    # # Función para formatear la fecha para
-    # la presentación
-    # def format_date(date):
-    #     return f"{date.day} de {MESES_ES[date.month]} de {date.year}"
-
-    # # Convertir el diccionario a una lista ordenada por fecha
-    # data_ordenada = sorted(
-    #     [{'fecha': format_date(
-    # fecha), 'imagenes': data['imagenes'],
-    # 'comentarios': data['comentarios']}
-    #      for fecha, data in data_por_fecha.items()],
-    #     key=lambda x: x['fecha']
-    # )
-    # return JsonResponse({'data': data_ordenada})
 
 
 class CustomLoginView(LoginView):

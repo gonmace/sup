@@ -5,7 +5,9 @@ module.exports = {
         '../../main/src/index-main.js',
         '../../**/templates/*.html',  
         '!../../**/node_modules',
-        '../../**/src/*.js'
+        '../../**/src/*.js',
+        
+        '../../**/templates/**/*.html',  
     ],
     plugins: [
         require('daisyui'),
