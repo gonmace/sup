@@ -9,9 +9,9 @@ SECRET_KEY = config('SECRET_KEY', default='your secret key')
 
 INSTALLED_APPS = [
     # 'django_cotton',
-    'django.contrib.sites',
+    # 'django.contrib.sites',
     # 'crispy_forms',
-    'django_comments',
+    # 'django_comments',
     # 'fluent_comments',
 
     'django.contrib.admin',
@@ -25,7 +25,6 @@ INSTALLED_APPS = [
     'import_export',
     'widget_tweaks',
     'adminsortable2',
-    # 'polymorphic',
 
     'streamblocks',
     'streamfield',
