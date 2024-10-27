@@ -1,0 +1,19 @@
+{% if options.display %}
+
+<div class="w-full flex flex-col justify-center items-center">
+    <h5 class="mb-3">{{ block_content.title }}</h5>
+    <div
+    class="radial-progress border-4
+    {% if block_content.color == 'rojo' %} bg-red-500 text-white border-red-500 {% endif %}
+    {% if block_content.color == 'amarillo' %} bg-yellow-400 border-yellow-400 {% endif %}
+    {% if block_content.color == 'verde' %} bg-green-400 border-green-400 {% endif %}
+    {% if block_content.color == 'gris' %} bg-gray-500 text-white border-gray-500 {% endif %}
+    {% if block_content.color == 'azul' %} bg-blue-400 text-white border-blue-400 {% endif %}
+    bg-yellow-500 text-white border-yellow-500 "
+    style="--value:{{ block_content.progress }};"
+    role="progressbar">
+    {{ block_content.progress }}
+  </div>
+</div>
+
+{% endif %}

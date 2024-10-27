@@ -5,21 +5,30 @@
         {% if block_content.border == 'rojo' %}border-red-500 {% endif %}
         {% if block_content.border == 'amarillo' %} border-yellow-400 {% endif %}
         {% if block_content.border == 'verde' %} border-green-400 {% endif %}
+        {% if block_content.border == 'gris' %} border-gray-500 {% endif %}
+        {% if block_content.border == 'azul' %} border-blue-400 {% endif %}
     ">
         
         {% if block_content.title %}
-            <h5 class="font-semibold pb-2">{{ block_content.title|safe }}:</h5>
+            <h4 class="font-semibold pb-2 text-center">{{ block_content.title|safe }}</h4>
             {{block_content.border}}
         {% endif %}
 
         {{ block_content.text|safe }}
 
-        {% comment %} {% if block_content.user_show %}
+        {% if block_content.user_show %}
             <p class="absolute italic bottom-1 right-2 text-gray-600">
                 {{ block_content.user.first_name|safe }} {{ block_content.user.last_name|safe }}
             </p>        
-        {% endif %} {% endcomment %}
+        {% endif %}
+        
+        {% if block_content.date %}
+            <p class="absolute top-0 left-1 text-gray-600">
+                {{ block_content.date|date:"d-m-Y" }}
+            </p>            
+        {% endif %}
             
+        
     </div>
 
 {% endif %}

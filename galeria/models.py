@@ -53,3 +53,18 @@ class Comentario(models.Model):
             else self.comentario
         )
         return f"{self.sitio.sitio} - {comentario_truncado}"
+
+
+class Icon(models.Model):
+    name = models.CharField("Nombre del Icono", max_length=20, unique=True)
+    icon = models.TextField(
+        "Icono",
+        help_text="Codigo SVG https://icon-sets.iconify.design/"
+        )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Icono"
+        verbose_name_plural = "Iconos"

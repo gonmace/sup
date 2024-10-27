@@ -1,31 +1,24 @@
-<!--imagewithtext.html-->
+<!-- imagewithtext.html -->
+{% if options.display %}
 
+  <div class="card-body border-4  
+        {% if block_content.border == 'rojo' %}border-red-500 {% endif %}
+        {% if block_content.border == 'amarillo' %} border-yellow-400 {% endif %}
+        {% if block_content.border == 'verde' %} border-green-400 {% endif %}
+        {% if block_content.border == 'gris' %} border-gray-500 {% endif %}
+        {% if block_content.border == 'azul' %} border-blue-400 {% endif %}
+">
+    <figure class="relative contenedor">
+      <img src="{{ block_content.image.url }}" alt="Shoes" />
+      {% if block_content.date %}
+        <p class="absolute bottom-0 right-0 text-white bg-black bg-opacity-50">{{ block_content.date|date:'d-m-Y' }}</p>
+      {% endif %}
+    </figure>
 
-<ul class="image-with-text-block">
-    {% for block in block_content %}
-    <li>
-        <img class="w-12 h-12" src="{{ block.image.url }}" alt="">
-        <p class="bg-yellow-500">{{ block.text }}</p>
-    </li>
-    {% endfor %}
-</ul> 
-
-{% comment %} {% if options.display %}
-
-    <div class="card card-compact bg-base-100 w-96 shadow-xl">
-        <figure>
-        <img
-            src="{{ block.image.url }}"
-            alt="" />
-        </figure>
-        <div class="card-body">
-        {% if block_content.title %}
-            <h2 class="card-title">{{ block_content.title|safe }}</h2>
-        {% endif %}
-
-        <p>{{ block_content.text|safe }}</p>
-
-        </div>
+    <div class="card-body text-center relative">
+      <h2 class="card-title">{{ block_content.title }}</h2>
+      <p>{{ block_content.text }}</p>
     </div>
+  </div>
 
-{% endif %} {% endcomment %}
+{% endif %}

@@ -1,25 +1,30 @@
-# # streamblocks/admin.py
+# admin.py
+from django.contrib import admin
+from streamfield.fields import StreamFieldWidget
+from .models import (
+    Commments,
+    ProyectoComponentes,
+    MessageWithIcon,
+    RadialProgress,
+    Text,
+    ImageWithText,
+    OpenUrl
+    )
 
-# from django.contrib import admin
-# from streamfield.admin import StreamBlocksAdmin
 
-# from streamblocks.models import Text
+@admin.register(ProyectoComponentes)
+class PageAdmin(admin.ModelAdmin):
 
-# admin.site.unregister(Text)
-
-
-# @admin.register(Text)
-# class RichTextBlockAdmin(StreamBlocksAdmin, admin.ModelAdmin):
-#     pass
-
-# from django.contrib import admin
-# from .models import Text
-
-# class TextAdmin(admin.ModelAdmin):
-#     def save_model(self, request, obj, form, change):
-#         if not obj.pk:  # Si el objeto es nuevo
-# (no tiene una clave primaria todavía)
-#             obj.user = request.user  # Asigna el usuario actual
-#         super().save_model(request, obj, form, change)
-
-# admin.site.register(Text, TextAdmin)
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        if obj and obj.id == 1:
+            form.base_fields['stream'].widget = StreamFieldWidget(
+                attrs={'model_list': [
+                    Text,
+                    ImageWithText,
+                    OpenUrl,
+                    MessageWithIcon,
+                    RadialProgress,
+                    Commments
+                    ]})
+        return form

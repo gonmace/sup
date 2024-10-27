@@ -1,0 +1,13 @@
+<!--openurl.html-->
+{% if options.display %}
+
+<div class="bg-base-100 !w-full">
+  <div class="card-body">
+    <p>{{ block_content.text }}</p>
+    <div class="card-actions justify-end">
+      <a href="{{ block_content.url }}" target="_blank" class="btn  btn-xs btn-outline btn-accent text-white px-10">Abrir</a>
+    </div>
+  </div>
+</div>
+
+{% endif %}

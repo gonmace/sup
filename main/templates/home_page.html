@@ -3,7 +3,7 @@
 
 {% block css %}
   {% comment %}https://github.com/ismail9k/neomorphism{% endcomment %}
-  <link rel="stylesheet" href="{% static 'css/neomorphism.css' %}" />
+  {% comment %} <link rel="stylesheet" href="{% static 'css/neomorphism.css' %}" /> {% endcomment %}
   {% tailwind_css %}
 {% endblock %}
 
@@ -36,7 +36,6 @@
 
         <section class="flex-1">
           <div class="flex flex-col md:flex-row h-full">
-
             <div class="h-full w-full p-1 flex items-center justify-center">
               <div id="images-container" class="carousel h-72 contenedor"></div>
             </div>
@@ -75,18 +74,32 @@
       </section>
     </div>
 
-    <div id="streamfield-container" class="columns-2 md:columns-3 gap-4 md:gap-6 py-6"></div> 
-
+    <div id="streamfield-container" class="columns-2 md:columns-3 gap-4 md:gap-6 py-6"></div>
   </div>
 
+  <!-- You can open the modal using ID.showModal() method -->
+  {% comment %} <label for="modal_sitios" class="btn">open modal</label> {% endcomment %}
 
-
-
+  <input type="checkbox" id="modal_sitios" class="modal-toggle" />
+  <div class="modal z-[1500]" role="dialog">
+    <div class="modal-box w-11/12 max-w-5xl">
+      <table class="table table-zebra table-xs table-pin-rows table-pin-cols">
+        <thead>
+          <tr>
+            <th>Proyecto/Sitio</th>
+            <td>Cod_Cliente</td>
+            <td>Nombre</td>
+            <td>Estado</td>
+            <td>Contratista</td>
+            <td>Supervisor/ITO</td>
+          </tr>
+        </thead>
+        <tbody id="sitios-table-body" class="bg-yellow-200"></tbody>
+      </table>
+    </div>
+    <label class="modal-backdrop" for="modal_sitios">Close</label>
+  </div>
   
-
-  
-  
-
 {% endblock %}
 
 {% block js %}
@@ -96,6 +109,4 @@
     const contratistas = {{ contratistas_json|safe }};
   </script>
   <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
-
-
 {% endblock %}

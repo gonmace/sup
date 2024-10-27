@@ -6,6 +6,7 @@ import "leaflet.markercluster";
 import 'leaflet.markercluster.layersupport';
 import "leaflet.control.layers.tree";
 import "leaflet.control.layers.tree/L.Control.Layers.Tree.css";
+import "leaflet-control-custom";
 
 import { yellowIcon, redIcon, greenIcon, blueIcon, grayIcon, nullIcon } from './data/icons.js';
 import { osm, osm_dark, ewi } from './data/tiles.js';
@@ -52,7 +53,7 @@ function initCarousel() {
 
 
 function updateSite(data) {
-    
+
     var images = data.images;
     var latestDateImages = data.latest_date_images;
     var comments = data.comments;
@@ -61,18 +62,18 @@ function updateSite(data) {
     nombre.innerHTML = data.sitio.nombre;
 
     data.sitio.cod_id == '---' ?
-        cod_id.innerHTML = `Código Cliente: <span class="font-bold">${data.sitio.cod_id}</span>`:
+        cod_id.innerHTML = `Código Cliente: <span class="font-bold">${data.sitio.cod_id}</span>` :
         cod_id.innerHTML = "";
 
     data.sitio.altura ?
-        altura.innerHTML = `Altura: <span class="font-bold">${data.sitio.altura} metros</span>`:
+        altura.innerHTML = `Altura: <span class="font-bold">${data.sitio.altura} metros</span>` :
         altura.innerHTML = "";
 
     contratista.innerHTML = data.sitio.contratista ?
         `Contratista: <span class="font-bold">${data.sitio.contratista}</span>` :
         "";
-    
-    
+
+
     let lat = data.sitio.lat.toFixed(6);
     let lon = data.sitio.lon.toFixed(6);
     latitud.innerHTML = `Latitud: <span class="font-bold">${lat}</span>`;
@@ -83,7 +84,7 @@ function updateSite(data) {
     googleMaps.classList.remove('hidden');
 
     let mapUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
-    
+
     googleMaps.addEventListener('click', function () {
         // Redirigir al usuario a la URL de Google Maps
         window.open(mapUrl, '_blank'); // Abre Google Maps en una nueva pestaña
@@ -167,16 +168,74 @@ function updateSite(data) {
     }
     chartProgreso(data.progreso);
     diasTranscurridos(data.progreso_gral);
-    
+
+}
+
+function fetchData(sitio_id) {
+    fetch(`/get_site_data/?site_id=${sitio_id}`)
+        .then(response => response.json())
+        .then(data => {
+            updateSite(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+    const container = document.getElementById('streamfield-container');
+    fetch(`/componentes/${sitio_id}`)
+        .then(response => response.json())
+        .then(data => {
+            container.innerHTML = data.html;
+        })
+        .catch(() => {
+            container.innerHTML = "";
+        });
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+
+    console.log(sitios);
+
+    // Mostrar lo sitios en una tabla
+    const tbody = document.getElementById('sitios-table-body');
+
+    sitios.forEach((sitio) => {
+        const row = tbody.insertRow();
+        row.style.cursor = 'pointer';
+        row.insertCell().textContent = sitio.sitio;
+        row.insertCell().textContent = sitio.cod_id;
+        row.insertCell().textContent = sitio.nombre;
+        row.insertCell().textContent = sitio.estado;
+        row.insertCell().textContent = sitio.contratista.cod
+        row.insertCell().textContent = sitio.ito
+
+
+        // Agregar evento de clic a la fila para ejecutar las funciones
+        row.addEventListener('click', function () {
+            document.getElementById('modal_sitios').checked = false;
+
+            fetchData(sitio.id);
+
+            var newLatLng = new L.LatLng(sitio.lat, sitio.lon);
+            var zoomLevel = 11;
+
+            map.flyTo(newLatLng, zoomLevel, {
+                animate: true,
+                duration: 3 
+            });
+            
+
+        });
+
+    });
+
 
     carousel.addEventListener('click', function () {
         const primerHijo = carousel.firstElementChild;
         if (primerHijo && !primerHijo.classList.contains('skeleton')) {
             window.location.href = `imgs/${sitio_id}`;
         }
+
     });
 
     // Opacidad para el mapa
@@ -190,17 +249,40 @@ document.addEventListener("DOMContentLoaded", function () {
         let totalLon = sitios.reduce((sum, sitio) => sum + (sitio.lon || 0), 0);
         let promedioLat = totalLat / sitios.length;
         let promedioLon = totalLon / sitios.length;
-        mapCenter =  [promedioLat, promedioLon]
+        mapCenter = [promedioLat, promedioLon]
     } else {
         mapCenter = [localStorage.lat, localStorage.lon];
     }
-    
 
     const map = L.map('map', {
         zoomControl: false,
         center: mapCenter,
         zoom: mapZoomLevel
     });
+
+    L.control.custom({
+        position: 'bottomright',
+        content : `<div class="h-10 w-10">
+         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+	                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5" d="M3 15h18M3 9h18M9 21V3m6 18V3M5.4 3h13.2A2.4 2.4 0 0 1 21 5.4v13.2a2.4 2.4 0 0 1-2.4 2.4H5.4A2.4 2.4 0 0 1 3 18.6V5.4A2.4 2.4 0 0 1 5.4 3" />
+                    </svg>
+                    </div>`,
+        classes : 'w-15 h-15',
+        style   :
+        {
+            margin: '10px',
+            padding: '0px 0 0 0',
+            cursor: 'pointer',
+        },
+        events:
+        {
+            click: function(data)
+            {
+                document.getElementById('modal_sitios').checked = true;
+            },
+        }
+    })
+    .addTo(map);
 
     let groupASG = L.layerGroup(), /*amarillo*/
         groupEJE = L.layerGroup(), /* verde */
@@ -217,7 +299,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     sitios.forEach(sitio => {
-        let marker;        
+        let marker;
         switch (sitio.estado) {
             case 'ASG':
                 marker = L.marker([sitio.lat, sitio.lon], { icon: yellowIcon }).bindPopup(sitio.sitio);
@@ -244,34 +326,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 marker.addTo(groupNULL);
                 break;
         }
-    
+
         marker.siteId = sitio.id;
         marker.on('click', function () {
             sitio_id = this.siteId;
             // Hacer la llamada AJAX
             // Recuperar imagenes y avance
-            fetch(`/get_site_data/?site_id=${sitio_id}`)
-                .then(response => response.json())
-                .then(data => {
-                    updateSite(data);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            // Recuperar streamfield
-            const container = document.getElementById('streamfield-container');
-            fetch(`/componentes/${sitio_id}/`)
-                .then(response => response.json())
-                .then(data => {
-                    container.innerHTML = data.html;        
-                })
-                .catch(() => {
-                    container.innerHTML = "";
-                }
-
-                );
+            fetchData(sitio_id);
         });
-                
+
         if (sitio.contratista) {
             marker.addTo(groupsContratista[sitio.contratista.cod]);
         }
@@ -353,7 +416,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var centro = map.getCenter();
         localStorage.lat = centro.lat;
         localStorage.lon = centro.lng;
-      });
+    });
 
 
 });

@@ -1,0 +1,27 @@
+<!--richtext.html-->
+{% if options.display %}
+    
+<div class="message-block border-4 py-2 px-4 flex flex-col justify-center text-left relative !overflow-visible">
+    {% if block_content.icon %}
+        <div class="absolute border-2  -top-3 -right-3 p-2 w-12 h-12 rounded-full bg-yellow-400
+        {% if block_content.color_icon == 'rojo' %}bg-red-500 text-white border-white {% endif %}
+        {% if block_content.color_icon == 'amarillo' %} bg-yellow-400 border-black {% endif %}
+        {% if block_content.color_icon == 'verde' %} bg-green-400 border-black {% endif %}
+        {% if block_content.color_icon == 'gris' %} bg-gray-500 text-white border-white {% endif %}
+        {% if block_content.color_icon == 'azul' %} bg-blue-400 text-white border-white {% endif %}
+        ">
+            {{ block_content.icon.icon|safe }}
+        </div>            
+    {% endif %}    
+
+    {{ block_content.message|safe }}
+
+    {% if block_content.date %}
+        <p class="absolute -bottom-1 left-1 text-gray-600">
+            {{ block_content.date|date:"d-m-Y" }}
+        </p>            
+    {% endif %}
+</div>
+
+
+{% endif %}

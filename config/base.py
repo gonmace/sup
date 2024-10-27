@@ -9,6 +9,11 @@ SECRET_KEY = config('SECRET_KEY', default='your secret key')
 
 INSTALLED_APPS = [
     # 'django_cotton',
+    'django.contrib.sites',
+    # 'crispy_forms',
+    'django_comments',
+    # 'fluent_comments',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -20,10 +25,11 @@ INSTALLED_APPS = [
     'import_export',
     'widget_tweaks',
     'adminsortable2',
-    'polymorphic',
+    # 'polymorphic',
 
     'streamblocks',
     'streamfield',
+
     'main',
     'galeria',
     'actividades',
@@ -31,6 +37,12 @@ INSTALLED_APPS = [
     'componentes',
 
 ]
+
+SITE_ID = 1
+
+# CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+# COMMENTS_APP = 'fluent_comments'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -40,6 +52,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'streamblocks.middleware.RequestMiddleware',
 ]
 
 # X_FRAME_OPTIONS = "SAMEORIGIN"

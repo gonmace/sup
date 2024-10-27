@@ -11,7 +11,8 @@ urlpatterns = [
     path('', include('main.urls')),
     path('imgs/', include('galeria.urls')),
     path('streamfield/', include('streamfield.urls')),
-    path('componentes/', include('componentes.urls'))
+    path('componentes/', include('streamblocks.urls')),
+    path('comments/', include('django_comments.urls')),
 ]
 
 if settings.DEBUG:
