@@ -36,6 +36,8 @@ class DetalleProgresoInline(SortableTabularInline):
     model = DetalleProgreso
     extra = 0
     max_num = 0
+    fields = ['actividad_grupo', 'porcentaje', 'mostrar', 'fecha']
+    readonly_fields = ['actividad_grupo', 'fecha']
 
 
 class ProgresoAdmin(SortableAdminBase, admin.ModelAdmin):
