@@ -120,7 +120,7 @@ class DetalleProgreso(models.Model):
     porcentaje = models.FloatField("Avance %", default=0.0)
     mostrar = models.BooleanField("Agregar", default=True)
     order = models.PositiveIntegerField(default=0)
-    fecha_actualizacion = models.DateField(
+    fecha_actualizacion = models.DateTimeField(
         "Fecha de Actualización", auto_now=True)
 
     objects = DetalleProgresoManager()
