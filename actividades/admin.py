@@ -1,4 +1,6 @@
 from django.contrib import admin
+
+from clientes.models import UserProfile
 from .models import (
     Actividad,
     DetalleProgreso,
@@ -42,6 +44,14 @@ class ProgresoAdmin(SortableAdminBase, admin.ModelAdmin):
     inlines = [
         DetalleProgresoInline,
     ]
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        # Asegurarse de usar la instancia correcta de UserProfile
+        user_profile = UserProfile.objects.get(user=request.user)
+        return qs.filter(progreso__proyecto__ito=user_profile)
 
 
 admin.site.register(Progreso, ProgresoAdmin)

@@ -1,5 +1,7 @@
 
 from django.contrib import admin
+
+from clientes.models import UserProfile
 from .models import Imagen, Comentario, Icon
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
@@ -20,10 +22,34 @@ class ImageAdmin(admin.ModelAdmin):
 
     pic_tag.short_description = 'Imagen'
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        # Asumiendo que UserProfile es una extensión de User 
+        # y que cada usuario tiene un UserProfile asociado
+        user_profile = UserProfile.objects.get(user=request.user)
+        return qs.filter(sitio__ito=user_profile)
+
 
 admin.site.register(Imagen, ImageAdmin)
 
-admin.site.register(Comentario)
+
+class ComentarioAdmin(admin.ModelAdmin):
+    list_display = ('sitio', 'comentario', 'fecha_carga', 'usuario')
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        # Asumiendo que UserProfile es una extensión de User
+        # y que cada usuario tiene un UserProfile asociado
+        user_profile = UserProfile.objects.get(user=request.user)
+        return qs.filter(sitio__ito=user_profile)
+
+
+admin.site.register(Comentario, ComentarioAdmin)
+# admin.site.register(Comentario)
 
 
 class IconAdmin(admin.ModelAdmin):
