@@ -13,10 +13,10 @@
 
 {% block content %}
   <div class="lg:container mx-auto">
-    <div class="flex flex-col md:flex-row md:gap-3 h-screen" style="max-height: 60rem;">
-      <div class="w-full md:w-5/12 lg:w-1/2 h-full flex flex-col">
+    <div class="flex flex-col md:flex-row md:gap-3" style="max-height: 60rem;">
+      <div class="h-screen w-full md:w-5/12 lg:w-1/2 flex flex-col">
         <!-- MAPA -->
-        <section id="map" class="h-3/4 md:flex-1 md:h-auto contenedor"></section>
+        <section id="map" class="h-4/5 min-h-96 md:flex-1 md:h-auto contenedor"></section>
 
         <!-- AVANCE Y DIAS -->
         <section id="avance" class="w-full flex overflow-hidden transition-all duration-500 h-0">
@@ -28,7 +28,7 @@
         </section>
       </div>
 
-      <section class="w-full text-center flex flex-col">
+      <section class="w-full text-center flex flex-col bg-stone-200">
         <div class="pb-3">
           <h1 id="titulo"></h1>
           <h3 id="nombre" class="!mt-1"></h3>
@@ -72,17 +72,17 @@
         <div id="comentario-mobile" class="mt-4 p-3 py-9 mx-auto max-w-md w-11/12 bg-gray-200 hidden"></div>
         <section id="barras-Chart" class="w-full h-full -mt-3"></section>
       </section>
+      <div id="streamfield-mobile" class="bg-stone-200 columns-2 md:columns-3 gap-4 md:gap-6 py-6"></div>
     </div>
-
-    <div id="streamfield-container" class="columns-2 md:columns-3 gap-4 md:gap-6 py-6"></div>
   </div>
+  <div id="streamfield" class="bg-stone-200 mx-auto container columns-2 md:columns-3 gap-4 md:gap-6 py-6"></div>
 
   <!-- You can open the modal using ID.showModal() method -->
   {% comment %} <label for="modal_sitios" class="btn">open modal</label> {% endcomment %}
 
   <input type="checkbox" id="modal_sitios" class="modal-toggle" />
   <div class="modal z-[1500]" role="dialog">
-    <div class="modal-box w-11/12 max-w-5xl">
+    <div class="modal-box w-full lg:w-11/12 max-w-5xl">
       <table class="table table-zebra table-xs table-pin-rows table-pin-cols">
         <thead>
           <tr>
@@ -99,7 +99,6 @@
     </div>
     <label class="modal-backdrop" for="modal_sitios">Close</label>
   </div>
-  
 {% endblock %}
 
 {% block js %}

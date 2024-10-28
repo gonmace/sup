@@ -24,6 +24,7 @@ const googleMaps = document.getElementById('googleMaps');
 const avanceID = document.getElementById('avance');
 let sitio_id;
 
+let streamer;
 let comentario;
 if (window.innerWidth >= 1024) {
     comentario = document.getElementById('comentario');
@@ -31,6 +32,12 @@ if (window.innerWidth >= 1024) {
 } else {
     comentario = document.getElementById('comentario-mobile');
     comentario.classList.toggle('hidden');
+}
+
+if (window.innerWidth >= 768) {
+    streamer = document.getElementById('streamfield');
+} else {
+    streamer = document.getElementById('streamfield-mobile');
 }
 
 function initCarousel() {
@@ -181,14 +188,13 @@ function fetchData(sitio_id) {
             console.error('Error:', error);
         });
 
-    const container = document.getElementById('streamfield-container');
     fetch(`/componentes/${sitio_id}`)
         .then(response => response.json())
         .then(data => {
-            container.innerHTML = data.html;
+            streamer.innerHTML = data.html;
         })
         .catch(() => {
-            container.innerHTML = "";
+            streamer.innerHTML = "";
         });
 }
 
