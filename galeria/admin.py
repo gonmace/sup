@@ -13,8 +13,9 @@ class ImageAdmin(admin.ModelAdmin):
     search_fields = ('sitio__sitio', 'fecha_carga')
 
     def pic_tag(self, obj):
+        webp_url = obj.imagen.url.rsplit('.', 1)[0] + '.webp'
         return format_html(
-            '<img src="{}" style="max-height: 100px;">'.format(obj.imagen.url)
+            '<img src="{}" style="max-height: 100px;">'.format(webp_url)
             )
 
     pic_tag.short_description = 'Imagen'

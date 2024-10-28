@@ -114,6 +114,7 @@ function updateSite(data) {
 
             var imgElement = document.createElement('img');
             imgElement.src = image.url;
+            imgElement.src = imgElement.src.replace(/\.\w+$/, '.webp');
             imgElement.alt = image.description;
             imgElement.classList.add('contenedor');
             carouselItem.appendChild(imgElement);

@@ -3,6 +3,7 @@ from django.utils import timezone
 from main.models import Sitio
 from django.conf import settings
 from .managers import ImagenManager, ComentarioManager
+from PIL import Image
 
 
 class Imagen(models.Model):
@@ -24,6 +25,17 @@ class Imagen(models.Model):
 
     def __str__(self):
         return f"{self.sitio.sitio} - {self.fecha_carga}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # Primero guardamos la imagen original
+        self.convert_to_webp()  # Luego convertimos y guardamos la versión WebP
+
+    def convert_to_webp(self):
+        if self.imagen:
+            original_path = self.imagen.path
+            img = Image.open(original_path)
+            webp_path = f"{original_path.rsplit('.', 1)[0]}.webp"
+            img.save(webp_path, "WEBP", quality=40)
 
     class Meta:
         verbose_name = "Imagen"
