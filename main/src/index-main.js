@@ -59,6 +59,7 @@ function initCarousel() {
 }
 
 
+
 function updateSite(data) {
 
     var images = data.images;
@@ -106,6 +107,20 @@ function updateSite(data) {
         carousel.classList.remove('cursor-pointer');
     }
 
+    function supportsWebP(callback) {
+        var testImage = new Image();
+        testImage.onload = function () {
+            // La imagen se ha cargado, el navegador soporta WebP
+            callback(true);
+        };
+        testImage.onerror = function () {
+            // La imagen no se ha cargado, el navegador no soporta WebP
+            callback(false);
+        };
+        // Una imagen WebP muy pequeña en base64
+        testImage.src = 'data:image/webp;base64,UklGRi4AAABXRUJQVlA4TCEAAAAvAUAAEB8wAiMw' +
+            'AgSSNtse/cXjxyCCmrYNWPwmHRH9jwMA';
+    }
 
     if (images.length > 0) {
         images.forEach(function (image, index) {
@@ -114,7 +129,16 @@ function updateSite(data) {
 
             var imgElement = document.createElement('img');
             imgElement.src = image.url;
-            imgElement.src = imgElement.src.replace(/\.\w+$/, '.webp');
+            // Uso de la función para ajustar la lógica de carga de imágenes
+            supportsWebP(function (supported) {
+                if (supported) {
+                    console.log('Este navegador soporta WebP!');
+                    imgElement.src = imgElement.src.replace(/\.\w+$/, '.webp');
+                } else {
+                    console.log('Este navegador NO soporta WebP.');
+                    // Aquí puedes colocar la lógica para cargar imágenes en otro formato
+                }
+            });
             imgElement.alt = image.description;
             imgElement.classList.add('contenedor');
             carouselItem.appendChild(imgElement);
@@ -228,9 +252,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             map.flyTo(newLatLng, zoomLevel, {
                 animate: true,
-                duration: 3 
+                duration: 3
             });
-            
+
 
         });
 
@@ -269,13 +293,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     L.control.custom({
         position: 'bottomright',
-        content : `<div class="h-10 w-10">
+        content: `<div class="h-10 w-10">
          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 	                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5" d="M3 15h18M3 9h18M9 21V3m6 18V3M5.4 3h13.2A2.4 2.4 0 0 1 21 5.4v13.2a2.4 2.4 0 0 1-2.4 2.4H5.4A2.4 2.4 0 0 1 3 18.6V5.4A2.4 2.4 0 0 1 5.4 3" />
                     </svg>
                     </div>`,
-        classes : 'w-15 h-15',
-        style   :
+        classes: 'w-15 h-15',
+        style:
         {
             margin: '10px',
             padding: '0px 0 0 0',
@@ -283,13 +307,12 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         events:
         {
-            click: function(data)
-            {
+            click: function (data) {
                 document.getElementById('modal_sitios').checked = true;
             },
         }
     })
-    .addTo(map);
+        .addTo(map);
 
     let groupASG = L.layerGroup(), /*amarillo*/
         groupEJE = L.layerGroup(), /* verde */
