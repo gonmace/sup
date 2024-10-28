@@ -36,10 +36,25 @@ class DetalleProgresoInline(SortableTabularInline):
     model = DetalleProgreso
     extra = 0
     max_num = 0
+    fields = (
+        'actividad_grupo',
+        'porcentaje',
+        'mostrar',
+        'fecha_actualizacion'
+        )
+    readonly_fields = ('id', 'fecha_actualizacion', 'actividad_grupo')
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        # Asegurarse de usar la instancia correcta de UserProfile
+        user_profile = UserProfile.objects.get(user=request.user)
+        return qs.filter(progreso__proyecto__ito=user_profile)
 
 
 class ProgresoAdmin(SortableAdminBase, admin.ModelAdmin):
-    list_display = ('progreso', 'activar')
+    list_display = ('progreso', 'activar', )
     list_editable = ('activar',)
     inlines = [
         DetalleProgresoInline,

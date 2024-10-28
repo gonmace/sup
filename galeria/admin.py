@@ -26,7 +26,7 @@ class ImageAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
-        # Asumiendo que UserProfile es una extensión de User 
+        # Asumiendo que UserProfile es una extensión de User
         # y que cada usuario tiene un UserProfile asociado
         user_profile = UserProfile.objects.get(user=request.user)
         return qs.filter(sitio__ito=user_profile)
