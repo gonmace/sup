@@ -55,7 +55,7 @@ function initCarousel() {
         items[currentIndex].classList.add('hidden');
         currentIndex = (currentIndex + 1) % items.length;
         items[currentIndex].classList.remove('hidden');
-    }, 3000);
+    }, 3500);
 }
 
 
