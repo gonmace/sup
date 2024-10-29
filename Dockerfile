@@ -13,6 +13,8 @@ RUN apt-get update \
     
 RUN pip install --upgrade pip
 
+RUN pip install uvicorn
+
 WORKDIR /app
 
 COPY requirements.txt /app/
