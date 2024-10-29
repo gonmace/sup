@@ -33,7 +33,11 @@ CARGO = [
 
 
 class UserProfile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='profile'
+        )
     cargo = models.CharField("Cargo", max_length=3, choices=CARGO)
     proyectos = models.ManyToManyField(Proyecto, verbose_name="Proyectos")
 

@@ -1,15 +1,18 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from actividades.models import DetalleProgreso, Progreso
 from clientes.models import UserProfile
 from galeria.models import Imagen, Comentario
-from main.models import Contratista, Sitio
+from main.models import Chat, Contratista, Mensaje, Sitio
 import json
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 # from collections import defaultdict
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.db.models import Max
+from .forms import MensajeForm
+from django.utils.timezone import localtime
+
 
 MESES_ES = {
     1: 'enero',
@@ -55,19 +58,43 @@ def sitio_data(sitio):
 
 @login_required(login_url='login/')
 def home(request):
-    # Obtenemos el perfil del usuario autenticado
     user_profile = UserProfile.objects.get(user=request.user)
-
-    # Utilizamos el manager para obtener los sitios
+    user_id = request.user.id
     sitios = Sitio.objects.for_user_profile(user_profile)
-
-    # Filtrar los contratistas que están asociados con los sitios seleccionados
     contratistas = Contratista.objects.filter(sitio__in=sitios).distinct()
 
-    sitios_data = []
-    for sitio in sitios:
-        # Obtenemos los datos del sitio
-        sitio_data = {
+    form = MensajeForm()  # Inicializar el formulario para solicitudes GET
+
+    if request.method == 'POST':
+        form = MensajeForm(request.POST)
+        if form.is_valid():
+            sitio_id = form.cleaned_data['sitio_id']
+            sitio = Sitio.objects.get(pk=sitio_id)
+            chat, created = Chat.objects.get_or_create(sitio=sitio)
+
+            mensaje = form.save(commit=False)
+            mensaje.chat = chat
+            mensaje.usuario = request.user.profile
+            mensaje.save()
+
+            # dentro de tu vista, en la parte que maneja la solicitud POST y AJAX
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                response_data = {
+                    'message': 'Mensaje enviado con éxito',
+                    'data': {
+                        'mensaje_id': mensaje.id,
+                        'texto': mensaje.mensaje,
+                        'usuario_id': request.user.id,
+                        'usuario_nombre': request.user.get_full_name(),  # Ajusta según cómo quieras mostrar el nombre
+                        'timestamp': localtime().strftime('%d-%m-%Y %H:%M')  # Formato de la fecha y hora
+                    }
+                }
+                return JsonResponse(response_data, status=200)
+
+    context = {
+        'user_id': user_id,
+        'form': form,
+        'sitios_json': json.dumps([{
             'id': sitio.id,
             'sitio': sitio.sitio,
             'cod_id': sitio.cod_id,
@@ -79,24 +106,10 @@ def home(request):
                 'name': sitio.contratista.name,
                 'cod': sitio.contratista.cod
             } if sitio.contratista else None,
-
-            'ito': f"{sitio.ito.user.first_name} {sitio.ito.user.last_name}"
-            if sitio.ito else None,
-
+            'ito': f"{sitio.ito.user.first_name} {sitio.ito.user.last_name}" if sitio.ito else None,
             'estado': sitio.estado
-        }
-
-        sitios_data.append(sitio_data)
-
-    sitios_json = json.dumps(sitios_data)
-
-    # Obtener una lista simple de códigos de contratistas
-    contratistas_cod_list = list(contratistas.values_list('cod', flat=True))
-    contratistas_json = json.dumps(contratistas_cod_list)
-
-    context = {
-        'sitios_json': sitios_json,
-        'contratistas_json': contratistas_json
+        } for sitio in sitios]),
+        'contratistas_json': json.dumps(list(contratistas.values_list('cod', flat=True)))
     }
     return render(request, 'home_page.html', context)
 
@@ -104,7 +117,6 @@ def home(request):
 def get_site_data(request):
     site_id = request.GET.get('site_id')
     sitio = Sitio.objects.get(id=site_id)
-
     images = Imagen.objects.filter(sitio__id=site_id)
     comments = Comentario.objects.filter(sitio__id=site_id)
     progreso_gral = []
@@ -183,3 +195,36 @@ class CustomLoginView(LoginView):
     # Redirige a los usuarios ya autenticados
     redirect_authenticated_user = True
     next_page = reverse_lazy('main:home_page')
+
+
+def get_chats(request, site_id, cant):
+    # Obteniendo los mensajes y ordenándolos por fecha y hora
+    if cant == 0:
+        # Si cant es 0, obtenemos todos los mensajes sin limitar la cantidad
+        mensajes = Mensaje.objects.filter(
+            chat__sitio_id=site_id).order_by('-datetime')
+    else:
+        # Si cant es un número positivo,
+        # limitamos la consulta a ese número de mensajes
+        mensajes = Mensaje.objects.filter(
+            chat__sitio_id=site_id).order_by('-datetime')[:cant]
+
+    # Preparando la lista de mensajes con la información del usuario
+    mensajes_data = [
+        {
+            "id": mensaje.id,
+            "mensaje": mensaje.mensaje,
+            "datetime": mensaje.datetime.strftime("%d-%m-%Y %H:%M"),
+
+            "usuario_id": mensaje.usuario.user.id
+            if mensaje.usuario and mensaje.usuario.user else None,
+
+            "usuario_nombre": mensaje.usuario.user.get_full_name()
+            if mensaje.usuario and mensaje.usuario.user else "Anónimo"
+        }
+        for mensaje in mensajes
+    ]
+
+    # Serializando la lista a JSON
+    data = json.dumps(mensajes_data)
+    return HttpResponse(data, content_type="application/json")

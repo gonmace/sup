@@ -9,6 +9,6 @@ done
 echo "PostgreSQL está listo"
 
 # Ejecutar Gunicorn después de que PostgreSQL esté listo
-exec gunicorn config.wsgi:application --bind 0.0.0.0:8000
+exec uvicorn config.asgi:application --host 0.0.0.0 --port 8000
 
 exec "$@"

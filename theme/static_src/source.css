@@ -87,3 +87,14 @@
   @apply contenedor min-h-32 max-h-80 mb-2 md:mb-6;
 }
 
+.globo-chat {
+  @apply w-10 h-10 flex justify-center items-center rounded-full;
+}
+
+.chat-me {
+  @apply chat-bubble bg-yellow-200 text-black;
+}
+
+.chat-them {
+  @apply chat-bubble bg-gray-200 text-black;
+}

@@ -61,3 +61,25 @@ class Sitio(models.Model):
 
     class Meta:
         ordering = ['sitio']
+
+
+class Chat(models.Model):
+    sitio = models.OneToOneField(
+        Sitio, on_delete=models.CASCADE, related_name='chat'
+        )
+    activar = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.sitio}"
+
+
+class Mensaje(models.Model):
+    chat = models.ForeignKey(
+        Chat, on_delete=models.CASCADE, related_name='mensajes')
+    usuario = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE, related_name='mensajes')
+    mensaje = models.CharField("Mensaje", max_length=500)
+    datetime = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.usuario.user.username}: {self.mensaje[:40]}"

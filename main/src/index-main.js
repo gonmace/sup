@@ -200,10 +200,159 @@ function updateSite(data) {
     }
     chartProgreso(data.progreso);
     diasTranscurridos(data.progreso_gral);
+}
 
+
+function createMessageHTML(
+    usuario_id,
+    usuario_nombre,
+    datetime,
+    mensaje
+) {
+    const nombres = usuario_nombre.split(' ');
+    const iniciales = nombres.map(nombre => nombre.charAt(0).toUpperCase()).join('');
+    const inicialNombre = nombres[0].charAt(0).toUpperCase() + '.';
+    const inicialNombreYApellido = nombres.length > 1 ? inicialNombre + ' ' + nombres[1] : inicialNombre;
+
+    const backgroundColorClass = usuario_id === usuarioID ? 'bg-red-500' : 'bg-yellow-500';
+    const chatClass = usuario_id === usuarioID ? 'chat-me' : 'chat-them';
+    return `
+        <div class="chat-image">
+            <div class="${backgroundColorClass} globo-chat">
+                <p class="text-white text-sm">${iniciales}</p>
+            </div>
+        </div>
+        <div class="chat-header">
+            ${inicialNombreYApellido}
+            <time class="text-xs opacity-50">${datetime}</time>
+        </div>
+        <div class="${chatClass}">${mensaje}</div>
+    `;
+}
+
+function fetchChats(sitio_id, usuarioID, limite = 3, divID = 'mensajes') {
+    fetch(`/get_chats/${sitio_id}/${limite}`)
+        .then(response => response.text())  // Usa .text() para asegurarte de obtener la cadena cruda
+        .then(text => {
+            const data = JSON.parse(text);  // Parsea la cadena manualmente
+
+            const messagesContainer = document.getElementById(divID);
+            messagesContainer.innerHTML = '';  // Limpia el contenedor antes de agregar nuevos mensajes
+            data.reverse().forEach(item => {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('chat');
+                if (item.usuario_id === usuarioID) {
+                    messageElement.classList.add('chat-end', 'relative');
+                } else {
+                    messageElement.classList.add('chat-start');
+                }
+
+                messageElement.innerHTML = createMessageHTML(
+                    item.usuario_id,
+                    item.usuario_nombre,
+                    item.datetime,
+                    item.mensaje
+                );
+                // Añadir el atributo de datos que contiene el ID del item
+                messageElement.dataset.itemId = item.id;
+
+                messagesContainer.appendChild(messageElement);
+
+
+            });
+            setTimeout(() => {
+                messagesContainer.parentElement.scrollTo({
+                    top: messagesContainer.parentElement.scrollHeight,
+                    behavior: 'smooth' // Añade un desplazamiento suave
+                });
+            }, 500); // Ajusta este tiempo si es necesario
+            if (limite !== 0) {
+                if (messagesContainer.lastChild.classList.contains('chat-end')) {
+                    messagesContainer.lastChild.classList.add('mr-12');
+                    // Crear el botón
+                    const button = document.createElement('button');
+                    button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+	                                        <path fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m18 9l-.84 8.398c-.127 1.273-.19 1.909-.48 2.39a2.5 2.5 0 0 1-1.075.973C15.098 21 14.46 21 13.18 21h-2.36c-1.279 0-1.918 0-2.425-.24a2.5 2.5 0 0 1-1.076-.973c-.288-.48-.352-1.116-.48-2.389L6 9m7.5 6.5v-5m-3 5v-5m-6-4h4.615m0 0l.386-2.672c.112-.486.516-.828.98-.828h3.038c.464 0 .867.342.98.828l.386 2.672m-5.77 0h5.77m0 0H19.5" />
+                                        </svg>`;
+                    button.classList.add('absolute', '-right-12', 'bottom-4', 'w-10', 'btn', 'rounded-full', '!p-1', 'bg-base-100'); 
+                    messagesContainer.lastChild.appendChild(button);
+                    
+                    
+                }
+
+
+
+            }
+        })
+        .catch(error => console.error("Error loading chats:", error));
 }
 
 function fetchData(sitio_id) {
+
+    const form = document.getElementById('message-form');
+    const messagesContainer = document.getElementById('mensajes');
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const url = form.action; // Asegúrate de que la acción del formulario apunte a la URL correcta
+
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (result.errors) {
+                    // Aquí debes manejar y mostrar los errores
+                    console.error('Errores:', result.errors);
+                } else {
+                    console.log('Mensaje enviado con éxito:', result.message);
+                    // Eliminar el primer hijo si existe
+                    if (messagesContainer.firstChild) {
+                        messagesContainer.removeChild(messagesContainer.firstChild);
+                    }
+                    // Aquí agregas el nuevo mensaje al contenedor
+                    const newMessage = document.createElement('div');
+                    newMessage.classList.add('chat', 'chat-end', 'relative');
+
+                    newMessage.innerHTML = createMessageHTML(
+                        result.data.usuario_id,
+                        result.data.usuario_nombre,
+                        result.data.timestamp,
+                        result.data.texto
+                    );
+
+                    messagesContainer.appendChild(newMessage);
+                    // Asegúrate de desplazarte hacia el nuevo mensaje
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    form.reset();  // Opcional: limpia el formulario después de enviar
+
+                }
+            })
+            .catch(error => {
+                console.error('Error al enviar el formulario:', error);
+            });
+    });
+
+
+    var expandButton = document.getElementById('expand-chat');
+    // Agrega el listener de eventos
+    expandButton.addEventListener('click', async () => {
+        await fetchChats(sitio_id, usuarioID, 0, 'chat-all');
+        document.getElementById('modal_chat').checked = true;
+        document.getElementById('id_sitio_id').value = sitio_id;
+        // expandButton.classList.add('hidden');
+
+    });
+
+    // Agregar sitio id al formulario para el CHAT
+    document.getElementById('id_sitio_id').value = sitio_id;
+
     fetch(`/get_site_data/?site_id=${sitio_id}`)
         .then(response => response.json())
         .then(data => {
@@ -221,11 +370,13 @@ function fetchData(sitio_id) {
         .catch(() => {
             streamer.innerHTML = "";
         });
+
+    fetchChats(sitio_id, usuarioID, 3);
+
 }
 
-document.addEventListener("DOMContentLoaded", function () {
 
-    console.log(sitios);
+document.addEventListener("DOMContentLoaded", function () {
 
     // Mostrar lo sitios en una tabla
     const tbody = document.getElementById('sitios-table-body');
