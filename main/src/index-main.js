@@ -23,9 +23,8 @@ const longitud = document.getElementById('longitud');
 const googleMaps = document.getElementById('googleMaps');
 const avanceID = document.getElementById('avance');
 let sitio_id;
-
 let chatNumero;
-
+const lineasChat = 3;
 let comentario = document.getElementById('comentario');
 let streamer = document.getElementById('streamfield');
 let section = streamer.querySelector('section');
@@ -225,7 +224,7 @@ function createMessageHTML(
     `;
 }
 
-function fetchChats(sitio_id, usuarioID, limite = 3, divID = 'mensajes') {
+function fetchChats(sitio_id, usuarioID, limite = lineasChat, divID = 'mensajes') {
     fetch(`/get_chats/${sitio_id}/${limite}`)
         .then(response => response.text()) 
         .then(resp => {
@@ -400,7 +399,7 @@ function fetchData(sitio_id) {
 
         });
 
-    fetchChats(sitio_id, usuarioID, 3);
+    fetchChats(sitio_id, usuarioID, lineasChat);
 
 }
 
@@ -438,7 +437,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log('Handling message:', message);
         if (message.chat == chatNumero) {
             console.log("Atualizando Chat...");
-            fetchChats(sitio_id, usuarioID, 3);
+            fetchChats(sitio_id, usuarioID, lineasChat);
         }
 
 
