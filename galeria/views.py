@@ -10,45 +10,77 @@ from collections import OrderedDict
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
+import os
+from PIL import Image
+
+
+def convert_to_webp(image):
+    if image.imagen:
+        original_path = image.imagen.path
+        webp_path = f"{original_path.rsplit('.', 1)[0]}.webp"
+
+        # Comprobar si el archivo WebP ya existe
+        if not os.path.exists(webp_path):
+            img = Image.open(original_path)
+            img.save(webp_path, "WEBP", quality=50)
+            return f'Guardada WebP: {webp_path}'
+        else:
+            return f'Archivo WebP ya existe: {webp_path}'
 
 
 @login_required(login_url='login/')
 def fileupload(request):
-
     if request.method == 'POST':
         form = ImagesForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
             sitio = form.cleaned_data['sitio']
             comentario_texto = form.cleaned_data['comentario']
             fecha_carga = form.cleaned_data['fecha_carga']
-            # Obtener todas las imágenes
             imagenes = request.FILES.getlist('imagenes')
 
-            imagenes_a_crear = [
-                Imagen(imagen=image, sitio=sitio,
-                       fecha_carga=fecha_carga,
-                       usuario=request.user) for image in imagenes
-                ]
+            nombres_de_archivos = []
+            imagenes_a_crear = []
+            for image in imagenes:
+                nueva_imagen = Imagen(
+                    imagen=image,
+                    sitio=sitio,
+                    fecha_carga=fecha_carga,
+                    usuario=request.user
+                )
+                imagenes_a_crear.append(nueva_imagen)
 
             # Usar bulk_create para mejorar la eficiencia
             Imagen.objects.bulk_create(imagenes_a_crear)
 
+            # Ahora iterar sobre las imágenes guardadas para obtener solo
+            # los nombres finales
+            for imagen in imagenes_a_crear:
+                # Actualiza el objeto para obtener
+                # datos como el nombre de archivo final
+                imagen.refresh_from_db()
+                result = convert_to_webp(imagen)
+                messages.info(request, result)
+
             # Crear y guardar el comentario si existe alguno
-            if comentario_texto:  # Si hay algún comentario para guardar
+            if comentario_texto:
                 Comentario.objects.create(
                     sitio=sitio,
                     comentario=comentario_texto,
                     fecha_carga=fecha_carga,
                     usuario=request.user
-                    )
+                )
 
             # Añadir un mensaje de éxito
             messages.success(request, "Imágenes cargadas correctamente.")
-            return redirect('main:home_page')  # Redirigir a la página de éxito
+
+            # Imprimir nombres de archivos para revisión
+            print("Nombres de los archivos guardados:", nombres_de_archivos)
+
+            return redirect('main:home_page')
         else:
-            messages.error(request,
-                           """Se encontraron errores en el formulario,
-                           por favor corrígelos.""")
+            messages.error(
+                request, "Se encontraron errores en el formulario,\
+                    por favor corrígelos.")
             return render(request, "cargar.html", {'form': form})
     else:
         form = ImagesForm(user=request.user)
