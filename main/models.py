@@ -23,14 +23,13 @@ class Contratista(models.Model):
 
 class Sitio(models.Model):
     sitio = models.CharField("Codigo Sitio", max_length=10,  null=True)
-    cod_id = models.CharField("Codigo Cliente", max_length=10)
+    cod_id = models.CharField(
+        "Codigo Cliente", max_length=10, blank=True, null=True)
     nombre = models.CharField(max_length=100, blank=True)
     altura = models.IntegerField("Altura", blank=True, null=True)
     contratista = models.ForeignKey(
         Contratista,
         on_delete=models.CASCADE,
-        blank=True,
-        null=True
         )
     lat = models.FloatField("Latitud", max_length=11)
     lon = models.FloatField("Longitud", max_length=11)
