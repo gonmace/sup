@@ -1,11 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from actividades.models import DetalleProgreso, Progreso
 from clientes.models import UserProfile
 from galeria.models import Imagen, Comentario
 from main.models import Chat, Contratista, Mensaje, Sitio
 import json
 from django.http import HttpResponse, JsonResponse
-# from collections import defaultdict
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
@@ -77,7 +76,8 @@ def home(request):
             mensaje.usuario = request.user.profile
             mensaje.save()
 
-            # dentro de tu vista, en la parte que maneja la solicitud POST y AJAX
+            # dentro de tu vista, en la parte que maneja
+            # la solicitud POST y AJAX
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 response_data = {
                     'message': 'Mensaje enviado con éxito',
@@ -85,8 +85,8 @@ def home(request):
                         'mensaje_id': mensaje.id,
                         'texto': mensaje.mensaje,
                         'usuario_id': request.user.id,
-                        'usuario_nombre': request.user.get_full_name(),  # Ajusta según cómo quieras mostrar el nombre
-                        'timestamp': localtime().strftime('%d-%m-%Y %H:%M')  # Formato de la fecha y hora
+                        'usuario_nombre': request.user.get_full_name(),
+                        'timestamp': localtime().strftime('%d-%m-%Y %H:%M')
                     }
                 }
                 return JsonResponse(response_data, status=200)
@@ -106,10 +106,14 @@ def home(request):
                 'name': sitio.contratista.name,
                 'cod': sitio.contratista.cod
             } if sitio.contratista else None,
-            'ito': f"{sitio.ito.user.first_name} {sitio.ito.user.last_name}" if sitio.ito else None,
+
+            'ito': f"{sitio.ito.user.first_name} {sitio.ito.user.last_name}"
+            if sitio.ito else None,
+
             'estado': sitio.estado
         } for sitio in sitios]),
-        'contratistas_json': json.dumps(list(contratistas.values_list('cod', flat=True)))
+        'contratistas_json': json.dumps(
+            list(contratistas.values_list('cod', flat=True)))
     }
     return render(request, 'home_page.html', context)
 
@@ -213,6 +217,7 @@ def get_chats(request, site_id, cant):
     mensajes_data = [
         {
             "id": mensaje.id,
+            "chat_id": mensaje.chat.id,
             "mensaje": mensaje.mensaje,
             "datetime": mensaje.datetime.strftime("%d-%m-%Y %H:%M"),
 
@@ -228,3 +233,10 @@ def get_chats(request, site_id, cant):
     # Serializando la lista a JSON
     data = json.dumps(mensajes_data)
     return HttpResponse(data, content_type="application/json")
+
+
+def delete_chat(request, chat_id, item_id):
+    chat = Chat.objects.get(id=chat_id)
+    item = chat.mensajes.get(id=item_id)
+    item.delete()
+    return JsonResponse({"message": "Chat eliminado con exito..."})

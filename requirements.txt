@@ -1,5 +1,5 @@
 Django>=4.2
-gunicorn>=20.1.0
+# gunicorn>=20.1.0
 psycopg2-binary
 django-redis>=5.2.0
 celery>=5.2.7 
@@ -16,4 +16,6 @@ django-admin-sortable2==2.2.3
 # django-polymorphic
 setuptools
 django-streamfield==2.3.0
-# git+https://github.com/jazzband/django-polymorphic.git@v4.0.0a#egg=django-polymorphic
+
+channels==4.1.0
+channels-redis==4.2.0

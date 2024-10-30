@@ -11,5 +11,8 @@ urlpatterns = [
     path('get_chats/<int:site_id>/<int:cant>',
          views.get_chats,
          name='get_chats'),
+    path('delete_chat/<int:chat_id>/<int:item_id>',
+         views.delete_chat,
+         name='delete_chat'),
 
 ]

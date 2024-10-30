@@ -13,7 +13,7 @@ RUN apt-get update \
     
 RUN pip install --upgrade pip
 
-RUN pip install uvicorn
+RUN pip install 'uvicorn[standard]'
 
 WORKDIR /app
 

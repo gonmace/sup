@@ -63,28 +63,12 @@
     7px 7px 9px #fbfbfb;
 }
 
-/* .contenedor {
-  overflow: hidden;
-  border-spacing: 0;
-  border-collapse: separate;
-  border-radius: 16px;
-  overflow: hidden;
-  color: #0f172a;
-  background-color: white;
-  -webkit-box-shadow: 4px 4px 8px rgba(15, 23, 42, 0.3), -4px -4px 8px rgba(255, 255, 255, 0.5), inset 1px 1px 1px rgba(224, 234, 249, 0.5);
-  box-shadow: 4px 4px 8px rgba(15, 23, 42, 0.3), -4px -4px 8px rgba(255, 255, 255, 0.5), inset 1px 1px 1px rgba(224, 234, 249, 0.5);
-} */
-
 .contenedor {
   @apply overflow-hidden border-separate border-spacing-0 rounded-lg text-slate-900 bg-white shadow-[4px_4px_8px_rgba(15,23,42,0.3),-4px_-4px_8px_rgba(255,255,255,0.5),inset_1px_1px_1px_rgba(224,234,249,0.5)]
 }
 
-#streamfield > * {
-  @apply contenedor min-h-32 max-h-80 mb-2 md:mb-6;
-}
-
-#streamfield-mobile > * {
-  @apply contenedor min-h-32 max-h-80 mb-2 md:mb-6;
+#streamfield > div {
+  @apply contenedor h-32 max-h-80;
 }
 
 .globo-chat {

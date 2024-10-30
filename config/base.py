@@ -25,11 +25,12 @@ INSTALLED_APPS = [
     'import_export',
     'widget_tweaks',
     'adminsortable2',
+    'channels',
 
     'streamblocks',
     'streamfield',
 
-    'main',
+    'main.apps.MainConfig',
     'galeria',
     'actividades',
     'clientes',
@@ -37,11 +38,11 @@ INSTALLED_APPS = [
 
 ]
 
-SITE_ID = 1
+# SITE_ID = 1
 
-# CRISPY_TEMPLATE_PACK = 'bootstrap3'
+# # CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-# COMMENTS_APP = 'fluent_comments'
+# # COMMENTS_APP = 'fluent_comments'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -147,3 +148,14 @@ STREAMFIELD_BLOCK_OPTIONS = {
         "default": True
     }
 }
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)],
+        },
+    },
+}
+
+ASGI_APPLICATION = 'config.asgidev.application'

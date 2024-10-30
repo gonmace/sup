@@ -24,26 +24,17 @@ const googleMaps = document.getElementById('googleMaps');
 const avanceID = document.getElementById('avance');
 let sitio_id;
 
-let streamer;
-let comentario;
-if (window.innerWidth >= 1024) {
-    comentario = document.getElementById('comentario');
-    comentario.classList.toggle('hidden');
-} else {
-    comentario = document.getElementById('comentario-mobile');
-    comentario.classList.toggle('hidden');
-}
+let chatNumero;
 
-if (window.innerWidth >= 768) {
-    streamer = document.getElementById('streamfield');
-} else {
-    streamer = document.getElementById('streamfield-mobile');
-}
+let comentario = document.getElementById('comentario');
+let streamer = document.getElementById('streamfield');
+let section = streamer.querySelector('section');
 
 function initCarousel() {
     var carousel = document.querySelector('.carousel');
     var items = carousel.querySelectorAll('.carousel-item');
     var currentIndex = 0;
+
     // Ocultar todos los elementos excepto el primero
     items.forEach(function (item, index) {
         if (index !== 0) {
@@ -61,7 +52,11 @@ function initCarousel() {
 
 
 function updateSite(data) {
+    console.log("Recibiendo datos al seleccionar un sitio...");
+    sitio_id = data.sitio.id;
+    console.log("🚀 ~ updateSite ~ sitio_id:", sitio_id)
 
+    // Datos de imagen y comentarios
     var images = data.images;
     var latestDateImages = data.latest_date_images;
     var comments = data.comments;
@@ -232,9 +227,20 @@ function createMessageHTML(
 
 function fetchChats(sitio_id, usuarioID, limite = 3, divID = 'mensajes') {
     fetch(`/get_chats/${sitio_id}/${limite}`)
-        .then(response => response.text())  // Usa .text() para asegurarte de obtener la cadena cruda
-        .then(text => {
-            const data = JSON.parse(text);  // Parsea la cadena manualmente
+        .then(response => response.text()) 
+        .then(resp => {
+            const data = JSON.parse(resp);   
+            // Verifica si data es una lista vacía
+            if (data.length === 0) {
+                console.log("Chat vacio...");
+                if (!section.classList.contains('hidden')) {
+                    section.classList.add('hidden'); 
+                }
+                return;
+            }
+            section.classList.remove('hidden'); 
+            chatNumero = data[0].chat_id;
+            console.log("Recibiendo datos del chat....");
 
             const messagesContainer = document.getElementById(divID);
             messagesContainer.innerHTML = '';  // Limpia el contenedor antes de agregar nuevos mensajes
@@ -266,31 +272,55 @@ function fetchChats(sitio_id, usuarioID, limite = 3, divID = 'mensajes') {
                     behavior: 'smooth' // Añade un desplazamiento suave
                 });
             }, 500); // Ajusta este tiempo si es necesario
+            // Si es 0, abre el modelo de chat
             if (limite !== 0) {
                 if (messagesContainer.lastChild.classList.contains('chat-end')) {
-                    messagesContainer.lastChild.classList.add('mr-12');
+                    messagesContainer.lastChild.classList.add('mr-10');
                     // Crear el botón
-                    const button = document.createElement('button');
-                    button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-	                                        <path fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m18 9l-.84 8.398c-.127 1.273-.19 1.909-.48 2.39a2.5 2.5 0 0 1-1.075.973C15.098 21 14.46 21 13.18 21h-2.36c-1.279 0-1.918 0-2.425-.24a2.5 2.5 0 0 1-1.076-.973c-.288-.48-.352-1.116-.48-2.389L6 9m7.5 6.5v-5m-3 5v-5m-6-4h4.615m0 0l.386-2.672c.112-.486.516-.828.98-.828h3.038c.464 0 .867.342.98.828l.386 2.672m-5.77 0h5.77m0 0H19.5" />
+                    const botonBorrarChat = document.createElement('button');
+                    botonBorrarChat.innerHTML = `<svg viewBox="0 0 48 48">
+	                                        <path fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M18.424 10.538A2 2 0 0 1 19.788 10H42a2 2 0 0 1 2 2v24a2 2 0 0 1-2 2H19.788a2 2 0 0 1-1.364-.538L4 24zM36 19L26 29m0-10l10 10" />
                                         </svg>`;
-                    button.classList.add('absolute', '-right-12', 'bottom-4', 'w-10', 'btn', 'rounded-full', '!p-1', 'bg-base-100'); 
-                    messagesContainer.lastChild.appendChild(button);
-                    
-                    
+                    botonBorrarChat.classList.add('absolute', '-right-12', 'bottom-0', 'w-10', 'btn', 'border-0', '!p-1', 'bg-base-100');
+                    messagesContainer.lastChild.appendChild(botonBorrarChat);
+
+                    // Agregar el evento de clic al botón
+                    botonBorrarChat.addEventListener('click', () => {
+                        const itemId = messagesContainer.lastChild.dataset.itemId;
+                        console.log("🚀 itemId:", itemId)
+                        console.log("🚀 ChatId:", chatNumero)
+                        fetch(`/delete_chat/${chatNumero}/${itemId}`, {
+                            method: 'GET'
+                        })
+                            .then(response => response.json())
+                            .then(result => {
+                                if (result.errors) {
+                                    // Aquí debes manejar y mostrar los errores
+                                    console.error('Errores:', result.errors);
+                                } else {
+                                    console.log('Mensaje: ', result.message);
+                                    // TODO Revisar se actualiza el contenedor con websocket
+
+                                }
+                            })
+                    });
+
+
                 }
-
-
-
             }
         })
-        .catch(error => console.error("Error loading chats:", error));
+        .catch(error => () => {
+            console.error("Error loading chats:", error)
+        });
+
 }
+
+
 
 function fetchData(sitio_id) {
 
     const form = document.getElementById('message-form');
-    const messagesContainer = document.getElementById('mensajes');
+    // const messagesContainer = document.getElementById('mensajes');
 
     form.addEventListener('submit', function (event) {
         event.preventDefault();
@@ -312,24 +342,7 @@ function fetchData(sitio_id) {
                     console.error('Errores:', result.errors);
                 } else {
                     console.log('Mensaje enviado con éxito:', result.message);
-                    // Eliminar el primer hijo si existe
-                    if (messagesContainer.firstChild) {
-                        messagesContainer.removeChild(messagesContainer.firstChild);
-                    }
-                    // Aquí agregas el nuevo mensaje al contenedor
-                    const newMessage = document.createElement('div');
-                    newMessage.classList.add('chat', 'chat-end', 'relative');
-
-                    newMessage.innerHTML = createMessageHTML(
-                        result.data.usuario_id,
-                        result.data.usuario_nombre,
-                        result.data.timestamp,
-                        result.data.texto
-                    );
-
-                    messagesContainer.appendChild(newMessage);
-                    // Asegúrate de desplazarte hacia el nuevo mensaje
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    // TODO Revisar se actualiza el contenedor con websocket
                     form.reset();  // Opcional: limpia el formulario después de enviar
 
                 }
@@ -346,7 +359,7 @@ function fetchData(sitio_id) {
         await fetchChats(sitio_id, usuarioID, 0, 'chat-all');
         document.getElementById('modal_chat').checked = true;
         document.getElementById('id_sitio_id').value = sitio_id;
-        // expandButton.classList.add('hidden');
+
 
     });
 
@@ -365,10 +378,26 @@ function fetchData(sitio_id) {
     fetch(`/componentes/${sitio_id}`)
         .then(response => response.json())
         .then(data => {
-            streamer.innerHTML = data.html;
+            const div = document.createElement('div'); // Crear un nuevo div para recibir el contenido
+            div.innerHTML = data.html;                // Insertar el HTML recibido
+
+            // Mantener el primer hijo y reemplazar el resto
+            while (streamer.children.length > 1) {
+                streamer.removeChild(streamer.lastChild); // Elimina todos los hijos excepto el primero
+            }
+
+            // Añadir el nuevo contenido
+            while (div.firstChild) {
+                streamer.appendChild(div.firstChild); // Añade los nuevos nodos uno por uno
+            }
         })
+
         .catch(() => {
-            streamer.innerHTML = "";
+            // Si hay un error, asegúrate de dejar el primer hijo y quitar el resto
+            while (streamfield.children.length > 1) {
+                streamfield.removeChild(streamfield.lastChild);
+            }
+
         });
 
     fetchChats(sitio_id, usuarioID, 3);
@@ -377,6 +406,56 @@ function fetchData(sitio_id) {
 
 
 document.addEventListener("DOMContentLoaded", function () {
+    // Inicializar WebSocket
+    // WEBSOCKET
+    const hostname = window.location.hostname;
+    const wsProtocol = (window.location.protocol === 'https:') ? 'wss' : 'ws';
+    const wsPort = (hostname === 'localhost') ? ':8000' : ''; // No usar puerto en producción
+    const wsPath = '/ws/mensajes/';
+    const wsUrl = `${wsProtocol}://${hostname}${wsPort}${wsPath}`;
+
+    const ws = new WebSocket(wsUrl);
+
+    ws.onopen = function () {
+        console.log('WebSocket connection established.');
+    };
+
+    ws.onerror = function (error) {
+        console.error('WebSocket error:', error);
+    };
+
+    ws.onmessage = function (e) {
+        console.log('Received:', e.data);
+        const data = JSON.parse(e.data);
+        // Activar función dependiendo del mensaje
+        if (data.message) {
+            handleMessage(data.message);
+        }
+    };
+
+    function handleMessage(message) {
+        // Aquí puedes añadir cualquier lógica que desees ejecutar en el cliente
+        console.log('Handling message:', message);
+        if (message.chat == chatNumero) {
+            console.log("Atualizando Chat...");
+            fetchChats(sitio_id, usuarioID, 3);
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Mostrar lo sitios en una tabla
     const tbody = document.getElementById('sitios-table-body');
@@ -599,5 +678,8 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.lon = centro.lng;
     });
 
-
+    // FIXME
+    console.log("Llego al final");
+    fetchData(112);
+    // FIXME
 });

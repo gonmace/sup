@@ -1,20 +1,18 @@
 {% extends 'base.html' %}
-{% load static tailwind_tags widget_tweaks %}
+{% load static tailwind_tags %}
 
 {% block css %}
-  {% comment %}https://github.com/ismail9k/neomorphism{% endcomment %}
-  {% comment %} <link rel="stylesheet" href="{% static 'css/neomorphism.css' %}" /> {% endcomment %}
   {% tailwind_css %}
 {% endblock %}
 
 {% block body_class %}
-  bg-stone-200
+  bg-stone-200 min-h-screen
 {% endblock %}
 
 {% block content %}
   <div class="lg:container mx-auto">
-    <div class="flex flex-col md:flex-row md:gap-3" style="max-height: 60rem;">
-      <div class="h-screen w-full md:w-5/12 lg:w-1/2 flex flex-col">
+    <div class="flex flex-col md:flex-row md:gap-3 md:max-h-[60rem]">
+      <div class="max-h-screen w-full md:w-5/12 lg:w-1/2 flex flex-col">
         <!-- MAPA -->
         <section id="map" class="h-4/5 min-h-96 md:flex-1 md:h-auto contenedor"></section>
 
@@ -22,13 +20,14 @@
         <section id="avance" class="w-full flex overflow-hidden transition-all duration-500 h-0">
           <div id="avance-Chart" class="h-64 w-1/2 md:w-2/3"></div>
 
-          <div class="h-full w-1/2 md:w-1/3 flex items-center justify-center">
+          <div class="h-full w-1/2 md:w-1/3 flex items-center justify-center ">
             <div id="avance-Dias" class="flex flex-col items-center justify-center text-center"></div>
           </div>
         </section>
       </div>
 
-      <section class="w-full text-center flex flex-col bg-stone-200">
+      <!-- IMAGENES Y DATOS -->
+      <section class="w-full text-center flex flex-col bg-stone-200 md:min-h-[35rem]">
         <div class="pb-3">
           <h1 id="titulo"></h1>
           <h3 id="nombre" class="!mt-1"></h3>
@@ -64,53 +63,84 @@
 
                   <div></div>
                 </div>
-                <div id="comentario" class="mt-2 p-3 py-9 bg-gray-200 hidden"></div>
+                <div id="comentario" class="mt-2 px-3 py-9 mx-auto lg:max-w-md w-11/12 bg-gray-200"></div>
               </div>
             </div>
           </div>
         </section>
-        <div id="comentario-mobile" class="mt-4 p-3 py-9 mx-auto max-w-md w-11/12 bg-gray-200 hidden"></div>
-        <section id="barras-Chart" class="w-full h-full -mt-3"></section>
+        {% comment %} <div id="comentario-mobile" class="mt-4 p-3 py-9 bg-gray-200 hidden"></div> {% endcomment %}
+        <section id="barras-Chart" class="w-full h-auto pb-6"></section>
       </section>
-      <div id="streamfield-mobile" class="bg-stone-200 columns-2 md:columns-3 gap-4 md:gap-6 py-6"></div>
     </div>
   </div>
-  <div id="streamfield" class="bg-stone-200 mx-auto container columns-2 md:columns-3 gap-4 md:gap-6 py-6"></div>
 
-  <section class="w-1/2 mx-auto bg-white contenedor">
-    <div id="mensajes" class="px-2"></div>
-    <div class="flex items-center mx-auto">
-      <form method="post" id="message-form" class="flex items-center flex-grow">
-        {% csrf_token %}
-        {% render_field form.mensaje class='input input-md input-bordered input-secondary flex-grow' placeholder='Escribe tu mensaje aquí...' %}
-        <!-- Botón de envío estilizado con DaisyUI -->
-        <button type="submit" class="btn btn-md w-12 bg-secondary p-2 -ml-2">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path fill="white" fill-rule="evenodd" d="M3.291 3.309a.75.75 0 0 0-.976.996l3.093 6.945H13a.75.75 0 0 1 0 1.5H5.408l-3.093 6.945a.75.75 0 0 0 .976.996l19-8a.75.75 0 0 0 0-1.382z" clip-rule="evenodd" />
+  <div id="streamfield" class=" bg-stone-200 mx-auto px-1 container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 sm:gap-4 md:gap-6 py-6">
+    <!-- AQUI ES EL CHAT -->
+    <section class="col-span-2 md:col-span-2 w-full h-full contenedor">
+      <!-- Primer hijo ocupa dos columnas en móvil y una columna en tablet/desktop -->
+      <div id="mensajes" class="px-2"></div>
+      <!-- FORM CHAT PARA EL FORMULARIO DEL CHAT -->
+      {% include 'form_chat.html' %}
+    </section>
+    <!-- AQUI TERMINA EL CHAT -->
+  </div>
+
+  {% comment %} <section class="w-1/2 mx-auto bg-white contenedor">
+    <div id="mensajes" class="px-2">
+      <!-- FIXME -->
+      <div class="chat chat-start" data-item-id="75">
+        <div class="chat-image">
+          <div class="bg-yellow-500 globo-chat">
+            <p class="text-white text-sm">CA</p>
+          </div>
+        </div>
+        <div class="chat-header">
+          C. Arias
+          <time class="text-xs opacity-50">29-10-2024 19:12</time>
+        </div>
+        <div class="chat-them">12121212</div>
+      </div>
+      <div class="chat chat-end relative" data-item-id="80">
+        <div class="chat-image">
+          <div class="bg-red-500 globo-chat">
+            <p class="text-white text-sm">GM</p>
+          </div>
+        </div>
+        <div class="chat-header">
+          G. Martinez
+          <time class="text-xs opacity-50">29-10-2024 20:01</time>
+        </div>
+        <div class="chat-me">10</div>
+      </div>
+      <div class="chat chat-end relative mr-10" data-item-id="92">
+        <div class="chat-image">
+          <div class="bg-red-500 globo-chat">
+            <p class="text-white text-sm">GM</p>
+          </div>
+        </div>
+        <div class="chat-header">
+          G. Martinez
+          <time class="text-xs opacity-50">29-10-2024 22:16</time>
+        </div>
+        <div class="chat-me">10</div>
+        <button class="absolute -right-12 bottom-0 w-10 btn border-0 !p-1 bg-base-100">
+          <svg viewBox="0 0 48 48">
+            <path fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M18.424 10.538A2 2 0 0 1 19.788 10H42a2 2 0 0 1 2 2v24a2 2 0 0 1-2 2H19.788a2 2 0 0 1-1.364-.538L4 24zM36 19L26 29m0-10l10 10"></path>
           </svg>
         </button>
-        <!-- Campo 'sitio_id' oculto -->
-        {% render_field form.sitio_id %}
-      </form>
-      <button id="expand-chat" class="btn bg-base-100 w-16">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path fill="black" fill-rule="evenodd" d="M21.392 21.392a1 1 0 0 0 0-1.414l-7.985-7.986a1 1 0 1 0-1.414 1.414l7.985 7.986a1 1 0 0 0 1.414 0" clip-rule="evenodd" />
-          <path fill="black" fill-rule="evenodd" d="M21.685 20.685a1 1 0 0 1-1 1h-4.242a1 1 0 1 1 0-2h3.242v-3.242a1 1 0 1 1 2 0zM2.614 2.614a1 1 0 0 1 1.415 0l8.379 8.378a1 1 0 0 1-1.415 1.415L2.614 4.028a1 1 0 0 1 0-1.414" clip-rule="evenodd" />
-          <path fill="black" fill-rule="evenodd" d="M3.322 2.322a1 1 0 0 0-1 1v4.242a1 1 0 1 0 2 0V4.322h3.242a1 1 0 0 0 0-2zm-.708 19.07a1 1 0 0 1 0-1.414l8.879-8.878a1 1 0 0 1 1.414 1.414L4.03 21.392a1 1 0 0 1-1.415 0Z" clip-rule="evenodd" />
-          <path fill="black" fill-rule="evenodd" d="M2.321 20.685a1 1 0 0 0 1 1h4.243a1 1 0 1 0 0-2H4.32v-3.242a1 1 0 1 0-2 0zM21.392 2.614a1 1 0 0 0-1.414 0L11.493 11.1a1 1 0 1 0 1.414 1.414l8.485-8.486a1 1 0 0 0 0-1.414" clip-rule="evenodd" />
-          <path fill="black" fill-rule="evenodd" d="M20.685 2.322a1 1 0 0 1 1 1v4.242a1 1 0 1 1-2 0V4.322h-3.243a1 1 0 0 1 0-2z" clip-rule="evenodd" />
-        </svg>
-      </button>
+      </div>
+      <!-- FIXME -->
     </div>
-  </section>
+
+    <!-- FORM CHAT PARA EL FORMULARIO DEL CHAT -->
+    {% include 'form_chat.html' %}
+  </section> {% endcomment %}
 
   <!-- MODAL SITIOS -->
   {% include 'modal_sitios.html' %}
 
   <!-- MODAL CHAT -->
   {% include 'modal_chat.html' %}
-
-
 {% endblock %}
 
 {% block js %}
