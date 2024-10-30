@@ -71,6 +71,7 @@ class ChatAdmin(admin.ModelAdmin):
         'activar',
     )
     list_editable = ('activar',)
+    list_display_links = ('sitio', )
     inlines = [MensajeInline]
 
 
