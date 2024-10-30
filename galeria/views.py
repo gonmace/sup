@@ -87,7 +87,7 @@ def display_images_comments(request, site_id):
         items_por_fecha[imagen.fecha]['imagenes'].append(imagen)
 
     for comentario in comentarios:
-        user_profile = comentario.usuario.userprofile_set.first()
+        user_profile = comentario.usuario.profile
         es_prevencionista = (
             user_profile.cargo == 'PRE' if user_profile else False
             )
