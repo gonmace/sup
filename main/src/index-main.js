@@ -461,10 +461,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const tbody = document.getElementById('sitios-table-body');
 
     sitios.forEach((sitio) => {
-        console.log("================");
-        console.log(sitio);
-        console.log("================");
-        
         const row = tbody.insertRow();
         row.style.cursor = 'pointer';
         row.insertCell().textContent = sitio.sitio;

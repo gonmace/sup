@@ -36,7 +36,7 @@ class ImagesForm(forms.ModelForm):
         # Asegurarnos de que el usuario se pase correctamente
         if user:
             try:
-                user_profile = user.userprofile_set.first()
+                user_profile = user.profile
 
                 if user_profile and user_profile.cargo == 'SUP':
                     self.fields['sitio'].queryset = Sitio.objects.filter(
