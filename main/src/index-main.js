@@ -51,6 +51,7 @@ function initCarousel() {
 
 
 function updateSite(data) {
+    
     console.log("Recibiendo datos al seleccionar un sitio...");
     sitio_id = data.sitio.id;
     console.log("🚀 ~ updateSite ~ sitio_id:", sitio_id)
@@ -81,8 +82,6 @@ function updateSite(data) {
     latitud.innerHTML = `Latitud: <span class="font-bold">${lat}</span>`;
     longitud.innerHTML = `Longitud: <span class="font-bold">${lon}</span>`;
 
-    carousel.innerHTML = '';
-
     googleMaps.classList.remove('hidden');
 
     let mapUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
@@ -92,10 +91,11 @@ function updateSite(data) {
         window.open(mapUrl, '_blank'); // Abre Google Maps en una nueva pestaña
     });
 
+carousel.innerHTML = '';
 
-    if (images.length === 0 && comments.length === 0) {
+    if (images.length === 0 ) {
         var vacio = document.createElement('div');
-        vacio.classList.add('skeleton', 'contenedor', 'w-full', 'h-full', 'flex', 'flex-col', 'justify-center', 'px-2');
+        vacio.classList.add('skeleton', 'w-full', 'h-full', 'flex', 'flex-col', 'justify-center', 'px-2');
         vacio.innerHTML = '<p>No hay imágenes disponibles para este sitio.</p>';
         carousel.appendChild(vacio);
         carousel.classList.remove('cursor-pointer');
@@ -118,8 +118,10 @@ function updateSite(data) {
 
     if (images.length > 0) {
         images.forEach(function (image, index) {
-            var carouselItem = document.createElement('div');
-            carouselItem.classList.add('carousel-item', 'w-full', 'relative');
+            var carouselDiv = document.createElement('div');
+            carouselDiv.classList.add('flex', 'justify-center', 'items-center', 'h-full');
+            var carouseItem = document.createElement('div');
+            carouseItem.classList.add('carousel-item', 'relative', 'flex', 'h-full', 'items-center');
 
             var imgElement = document.createElement('img');
             imgElement.src = image.url;
@@ -134,8 +136,8 @@ function updateSite(data) {
                 }
             });
             imgElement.alt = image.description;
-            imgElement.classList.add('contenedor');
-            carouselItem.appendChild(imgElement);
+            imgElement.classList.add('h-full', 'object-contain');
+            carouseItem.appendChild(imgElement);
 
             // Crear contenedor para el texto de fecha
             var dateContainer = document.createElement('div');
@@ -151,10 +153,12 @@ function updateSite(data) {
                 'rounded-br-lg'
             );
 
-            dateContainer.textContent = latestDateImages; // Asegúrate de que 'image.date' tiene el dato correcto
-            carouselItem.appendChild(dateContainer);
 
-            carousel.appendChild(carouselItem);
+            dateContainer.textContent = latestDateImages; // Asegúrate de que 'image.date' tiene el dato correcto
+            carouseItem.appendChild(dateContainer);
+            carouselDiv.appendChild(carouseItem);
+
+            carousel.appendChild(carouselDiv);
             carousel.classList.add('cursor-pointer');
         });
         initCarousel();
@@ -192,6 +196,12 @@ function updateSite(data) {
     } else {
         avanceID.style.height = '0';
     }
+
+    // if (data.progreso_gral) {
+    //     avanceID.style.height = '0rem';
+    // } else {
+    //     avanceID.style.height = '0';
+    // }
     chartProgreso(data.progreso);
     diasTranscurridos(data.progreso_gral);
 }
@@ -317,6 +327,16 @@ function fetchChats(sitio_id, usuarioID, limite = lineasChat, divID = 'mensajes'
 
 
 function fetchData(sitio_id) {
+    // primero borrar los chart de echarts para que se pueda actualizar cuando se cambioe de sitio
+    let chartBarras = document.getElementById('barras-Chart'); 
+    chartBarras.innerHTML = '';
+    chartBarras.removeAttribute('_echarts_instance_');
+    chartBarras.removeAttribute('style');
+
+    let chartGauge = document.getElementById('avance-Chart');
+    chartGauge.innerHTML = '';
+    chartGauge.removeAttribute('_echarts_instance_');
+    chartGauge.removeAttribute('style');
 
     const form = document.getElementById('message-form');
     // const messagesContainer = document.getElementById('mensajes');
@@ -677,4 +697,5 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.lon = centro.lng;
     });
 
+    fetchData(115)
 });

@@ -2,7 +2,6 @@
 from django.contrib import admin
 from streamfield.fields import StreamFieldWidget
 from .models import (
-    Commments,
     ProyectoComponentes,
     MessageWithIcon,
     RadialProgress,
@@ -25,6 +24,5 @@ class PageAdmin(admin.ModelAdmin):
                     OpenUrl,
                     MessageWithIcon,
                     RadialProgress,
-                    Commments
                     ]})
         return form

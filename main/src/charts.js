@@ -16,13 +16,15 @@ import { CountUp } from 'countup.js';
 
 export function chartProgreso(actividades) {
 
-    const chartBarras = document.getElementById('barras-Chart');
     const chartGauge = document.getElementById('avance-Chart');
+
+    const chartBarras = document.getElementById('barras-Chart');
+    
 
     if (actividades) {
 
-        chartBarras.style.height = `${1.4 * actividades.length + 8}rem`;
-
+        chartBarras.style.height = `${1.4 * actividades.length + 10}rem`;
+        
         // Calcular la suma total de las ponderaciones
         const totalPonderacion = actividades.reduce((sum, actividad) => sum + actividad.ponderacion, 0);
 
@@ -145,18 +147,6 @@ export function chartProgreso(actividades) {
 
         //  DIAS TRANSCURRIDOS
         let fechaInicio = new Date();
-    }
-
-    else {
-        chartBarras.innerHTML = '';
-        // Elimina el atributo _echarts_instance_
-        chartBarras.removeAttribute('_echarts_instance_');
-        // Elimina el atributo style
-        chartBarras.removeAttribute('style');
-
-        chartGauge.innerHTML = '';
-        chartGauge.removeAttribute('_echarts_instance_');
-        chartGauge.removeAttribute('style');
     }
 
 }

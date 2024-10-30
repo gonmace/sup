@@ -71,16 +71,23 @@ class ImageWithText(models.Model):
 
     class Meta:
         verbose_name = "Imagen con Texto"
-        # verbose_name_plural = "Imagenes con Texto"
+        verbose_name_plural = "Imagenes con Texto"
+        
 
 
 class OpenUrl(models.Model):
     url = models.URLField()
     text = models.CharField(max_length=100, blank=True, null=True)
+    url2 = models.URLField(blank=True, null=True)
+    text2 = models.CharField(max_length=100, blank=True, null=True)
+    url3 = models.URLField(blank=True, null=True)
+    text3 = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return self.text
+        return f"{self.text} | {self.text2} | {self.text3}"
 
+    verbose_name = "Enlace a Archivo"
+    verbose_name_plural = "Enlaces a Archivos"
 
 class MessageWithIcon(models.Model):
     icon = models.ForeignKey(
@@ -98,6 +105,8 @@ class MessageWithIcon(models.Model):
         )
     date = models.DateField(default=timezone.now, editable=True)
 
+    verbose_name = "Mensaje con Icono"
+    verbose_name_plural = "Mensajes con Icono"
 
 class RadialProgress(models.Model):
     title = models.CharField("Titulo", max_length=100, blank=True, null=True)
@@ -113,10 +122,8 @@ class RadialProgress(models.Model):
         null=True
         )
 
-
-class Commments(models.Model):
-    pass
-
+    verbose_name = "Medidor de avance"
+    verbose_name_plural = "Medidores de avance"
 
 STREAMBLOCKS_MODELS = [
     Text,
@@ -124,7 +131,6 @@ STREAMBLOCKS_MODELS = [
     OpenUrl,
     MessageWithIcon,
     RadialProgress,
-    Commments
 ]
 
 
@@ -141,7 +147,6 @@ class ProyectoComponentes(models.Model):
             OpenUrl,
             MessageWithIcon,
             RadialProgress,
-            Commments
         ],
         verbose_name="Componentes",
         )

@@ -68,7 +68,7 @@
 }
 
 #streamfield > div {
-  @apply contenedor min-h-32 max-h-96 h-fit overflow-y-auto;
+  @apply contenedor min-h-32 max-h-96 h-fit overflow-y-auto mb-4;
 }
 
 .globo-chat {
@@ -82,3 +82,4 @@
 .chat-them {
   @apply chat-bubble bg-gray-200 text-black;
 }
+

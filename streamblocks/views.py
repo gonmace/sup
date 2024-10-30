@@ -9,11 +9,6 @@ def render_streamfield(request, sitio_pk):
     proyecto = get_object_or_404(
         ProyectoComponentes, sitio__pk=sitio_pk
         )
-    # # Asignar el usuario si el proyecto no tiene uno asociado
-    # if proyecto.user is None:
-    #     proyecto.user = request.user
-    #     proyecto.save()
-
     stream_html = render_to_string(
         'proyecto_componentes.html', {
             'proyecto': proyecto,
