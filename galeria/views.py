@@ -14,8 +14,7 @@ from django.urls import reverse_lazy
 
 @login_required(login_url='login/')
 def fileupload(request):
-    print("Usuario:", request.user)  # Verifica que el usuario esté autenticado
-    print("Perfil de Usuario:", request.user.profile)  # Verifica acceso al perfil
+
     if request.method == 'POST':
         form = ImagesForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
@@ -24,6 +23,7 @@ def fileupload(request):
             fecha_carga = form.cleaned_data['fecha_carga']
             # Obtener todas las imágenes
             imagenes = request.FILES.getlist('imagenes')
+
             imagenes_a_crear = [
                 Imagen(imagen=image, sitio=sitio,
                        fecha_carga=fecha_carga,

@@ -4,6 +4,7 @@ import os
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = config('SECRET_KEY', default='your secret key')
 
@@ -38,7 +39,7 @@ INSTALLED_APPS = [
 
 ]
 
-# SITE_ID = 1
+SITE_ID = 1
 
 # # CRISPY_TEMPLATE_PACK = 'bootstrap3'
 

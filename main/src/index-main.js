@@ -124,16 +124,16 @@ function updateSite(data) {
 
             var imgElement = document.createElement('img');
             imgElement.src = image.url;
-            // Uso de la función para ajustar la lógica de carga de imágenes
-            supportsWebP(function (supported) {
-                if (supported) {
-                    console.log('Este navegador soporta WebP!');
-                    imgElement.src = imgElement.src.replace(/\.\w+$/, '.webp');
-                } else {
-                    console.log('Este navegador NO soporta WebP.');
-                    // Aquí puedes colocar la lógica para cargar imágenes en otro formato
-                }
-            });
+            // FIXME Uso de la función para ajustar la lógica de carga de imágenes
+            // supportsWebP(function (supported) {
+            //     if (supported) {
+            //         console.log('Este navegador soporta WebP!');
+            //         imgElement.src = imgElement.src.replace(/\.\w+$/, '.webp');
+            //     } else {
+            //         console.log('Este navegador NO soporta WebP.');
+            //         // Aquí puedes colocar la lógica para cargar imágenes en otro formato
+            //     }
+            // });
             imgElement.alt = image.description;
             imgElement.classList.add('contenedor');
             carouselItem.appendChild(imgElement);
