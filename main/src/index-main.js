@@ -341,35 +341,40 @@ function fetchData(sitio_id) {
     const form = document.getElementById('message-form');
     // const messagesContainer = document.getElementById('mensajes');
 
-    form.addEventListener('submit', function (event) {
-        event.preventDefault();
+    if (form) {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
 
-        const formData = new FormData(form);
-        const url = form.action; // Asegúrate de que la acción del formulario apunte a la URL correcta
+            const formData = new FormData(form);
+            const url = form.action;
 
-        fetch(url, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-            .then(response => response.json())
-            .then(result => {
-                if (result.errors) {
-                    // Aquí debes manejar y mostrar los errores
-                    console.error('Errores:', result.errors);
-                } else {
-                    console.log('Mensaje enviado con éxito:', result.message);
-                    // TODO Revisar se actualiza el contenedor con websocket
-                    form.reset();  // Opcional: limpia el formulario después de enviar
-
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
                 }
             })
-            .catch(error => {
-                console.error('Error al enviar el formulario:', error);
-            });
-    });
+                .then(response => response.json())
+                .then(result => {
+                    if (result.errors) {
+                        console.error('Errores:', result.errors);
+                    } else {
+                        console.log('Mensaje enviado con éxito:', result.message);
+                        form.reset();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al enviar el formulario:', error);
+                });
+        });
+    } else {
+        console.error('El formulario no se encontró en el DOM.');
+    }
+
+
+
+
 
 
     var expandButton = document.getElementById('expand-chat');
