@@ -72,7 +72,6 @@ class ImageWithText(models.Model):
     class Meta:
         verbose_name = "Imagen con Texto"
         verbose_name_plural = "Imagenes con Texto"
-        
 
 
 class OpenUrl(models.Model):
@@ -88,6 +87,7 @@ class OpenUrl(models.Model):
 
     verbose_name = "Enlace a Archivo"
     verbose_name_plural = "Enlaces a Archivos"
+
 
 class MessageWithIcon(models.Model):
     icon = models.ForeignKey(
@@ -108,6 +108,7 @@ class MessageWithIcon(models.Model):
     verbose_name = "Mensaje con Icono"
     verbose_name_plural = "Mensajes con Icono"
 
+
 class RadialProgress(models.Model):
     title = models.CharField("Titulo", max_length=100, blank=True, null=True)
     progress = models.IntegerField("Porcentaje", default=0, validators=[
@@ -124,6 +125,7 @@ class RadialProgress(models.Model):
 
     verbose_name = "Medidor de avance"
     verbose_name_plural = "Medidores de avance"
+
 
 STREAMBLOCKS_MODELS = [
     Text,

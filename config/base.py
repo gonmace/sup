@@ -1,7 +1,8 @@
 from decouple import config
 from pathlib import Path
 import os
-
+import firebase_admin
+from firebase_admin import credentials
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,6 +28,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'adminsortable2',
     'channels',
+    'fcm_django',
 
     'streamblocks',
     'streamfield',
@@ -35,7 +37,8 @@ INSTALLED_APPS = [
     'galeria',
     'actividades',
     'clientes',
-    'componentes',
+    # 'componentes',
+    'notificaciones.apps.NotificacionesConfig',
 
 ]
 
@@ -55,6 +58,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'streamblocks.middleware.RequestMiddleware',
+    'notificaciones.middleware.UserMiddleware',
 ]
 
 # X_FRAME_OPTIONS = "SAMEORIGIN"
@@ -165,4 +169,31 @@ LOGGING = {
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
     },
+}
+
+FIREBASE_CREDENTIALS_PATH = os.path.join(
+    BASE_DIR, 'redlinegs-b0c63-firebase-adminsdk-6z95o-ea2d567d14.json'
+    )
+
+
+# Inicializa la app de Firebase si no se ha inicializado ya
+if not firebase_admin._apps:
+    cred = credentials.Certificate(FIREBASE_CREDENTIALS_PATH)
+    firebase_admin.initialize_app(cred)
+
+FCM_DJANGO_SETTINGS = {
+    # an instance of firebase_admin.App to be used
+    # as default for all fcm-django requests
+    # default: None (the default Firebase app)
+    # "DEFAULT_FIREBASE_APP": None,
+    # default: _('FCM Django')
+    # "APP_VERBOSE_NAME": "[string for AppConfig's verbose_name]",
+    # true if you want to have only one active device per
+    # registered user at a time
+    # default: False
+    "ONE_DEVICE_PER_USER": False,
+    # devices to which notifications cannot be sent,
+    # are deleted upon receiving error response from FCM
+    # default: False
+    # "DELETE_INACTIVE_DEVICES": True/False,
 }

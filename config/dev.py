@@ -40,7 +40,7 @@ CSRF_COOKIE_SECURE = False
 
 CSRF_USE_SESSIONS = False
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'https://8c5c-189-28-71-245.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'https://dcfb-189-28-76-62.ngrok-free.app']
 
 CHANNEL_LAYERS = {
     'default': {
@@ -52,3 +52,4 @@ CHANNEL_LAYERS = {
 }
 
 ASGI_APPLICATION = 'config.asgidev.application'
+

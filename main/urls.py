@@ -13,6 +13,5 @@ urlpatterns = [
          name='get_chats'),
     path('delete_chat/<int:chat_id>/<int:item_id>',
          views.delete_chat,
-         name='delete_chat'),
-
+         name='delete_chat')
 ]

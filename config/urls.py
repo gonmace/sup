@@ -12,7 +12,7 @@ urlpatterns = [
     path('imgs/', include('galeria.urls')),
     path('streamfield/', include('streamfield.urls')),
     path('componentes/', include('streamblocks.urls')),
-    # path('comments/', include('django_comments.urls')),
+    path('', include('notificaciones.urls')),
 ]
 
 if settings.DEBUG:

@@ -3,7 +3,6 @@ from actividades.models import DetalleProgreso, Progreso
 from clientes.models import UserProfile
 from galeria.models import Imagen, Comentario
 from main.models import Chat, Contratista, Mensaje, Sitio
-import json
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
@@ -11,6 +10,7 @@ from django.urls import reverse_lazy
 from django.db.models import Max
 from .forms import MensajeForm
 from django.utils.timezone import localtime
+import json
 
 
 MESES_ES = {

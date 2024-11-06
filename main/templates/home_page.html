@@ -1,8 +1,18 @@
 {% extends 'base.html' %}
 {% load static tailwind_tags %}
 
+{% block meta %}
+{% endblock %}
+
 {% block css %}
   {% tailwind_css %}
+{% endblock %}
+
+{% block javascript_top %}
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
+  <script type="text/javascript" src="{% static 'js/notificaciones.js' %}"></script>
 {% endblock %}
 
 {% block body_class %}
@@ -12,7 +22,6 @@
 {% block content %}
   <div class="lg:container mx-auto">
     <div class="flex flex-col md:flex-row md:gap-3">
-
       <div class="md:max-h-screen w-full md:w-5/12 lg:w-1/2 flex flex-col">
         <!-- MAPA -->
         <section id="map" class="md:flex-1 h-4/5 min-h-96 contenedor"></section>
@@ -67,14 +76,12 @@
         </section>
         <section id="barras-Chart" class="w-full pb-6"></section>
       </section>
-      
     </div>
   </div>
 
-<div id="streamfield" class="bg-stone-200 mx-auto px-1 container columns-1 sm:columns-2 lg:columns-3 sm:gap-4 md:gap-6 py-6">
-
-  <!-- AQUI ES EL CHAT -->
-  <section class="w-full max-h-72 contenedor mb-4 border-4 border-gray-500 hidden" style="break-inside: avoid;">
+  <div id="streamfield" class="bg-stone-200 mx-auto px-1 container columns-1 sm:columns-2 lg:columns-3 sm:gap-4 md:gap-6 py-6">
+    <!-- AQUI ES EL CHAT -->
+    <section class="w-full max-h-72 contenedor mb-4 border-4 border-gray-500 hidden" style="break-inside: avoid;">
       <!-- Primer hijo ocupa dos columnas en móvil y una columna en tablet/desktop -->
       <div id="mensajes" class="px-2"></div>
       <!-- FORM CHAT PARA EL FORMULARIO DEL CHAT -->
