@@ -30,6 +30,8 @@ class Sitio(models.Model):
     contratista = models.ForeignKey(
         Contratista,
         on_delete=models.CASCADE,
+        null=True,
+        blank=True
         )
     lat = models.FloatField("Latitud", max_length=11)
     lon = models.FloatField("Longitud", max_length=11)

@@ -40,7 +40,7 @@ CSRF_COOKIE_SECURE = False
 
 CSRF_USE_SESSIONS = False
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'https://dcfb-189-28-76-62.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'https://courier-algebra-write-plots.trycloudflare.com']
 
 CHANNEL_LAYERS = {
     'default': {

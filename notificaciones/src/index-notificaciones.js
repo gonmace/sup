@@ -1,29 +1,24 @@
-Notification.requestPermission()
+// Initialize Firebase
+if (!firebase.apps.length) {
+    firebase.initializeApp({
+        apiKey: "AIzaSyD1JVEEfALYm7AewLXIrWdY1dKognP5Mv8",
+        authDomain: "redlinegs-b0c63.firebaseapp.com",
+        projectId: "redlinegs-b0c63",
+        storageBucket: "redlinegs-b0c63.appspot.com",
+        messagingSenderId: "977169881582",
+        appId: "1:977169881582:web:10adfc014ae57f87e756ff",
+        measurementId: "G-M3E7Y3GH3C"
+    });
+}
+
+const messaging = firebase.messaging();
 
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('firebase-messaging-sw.js')
         .then((registration) => {
             console.log('Service Worker registered with scope:', registration.scope);
 
-            // Initialize Firebase
-            if (!firebase.apps.length) {
-                firebase.initializeApp({
-                    apiKey: "AIzaSyD1JVEEfALYm7AewLXIrWdY1dKognP5Mv8",
-                    authDomain: "redlinegs-b0c63.firebaseapp.com",
-                    projectId: "redlinegs-b0c63",
-                    storageBucket: "redlinegs-b0c63.appspot.com",
-                    messagingSenderId: "977169881582",
-                    appId: "1:977169881582:web:10adfc014ae57f87e756ff",
-                    measurementId: "G-M3E7Y3GH3C"
-                });
-            }
-
-            const messaging = firebase.messaging();
             messaging.useServiceWorker(registration);
-            messaging.onMessage(function (payload) {
-                console.log(payload);
-
-            })
 
             messaging.requestPermission()
                 .then(() => {
@@ -46,6 +41,22 @@ if ('serviceWorker' in navigator) {
             console.log('Service Worker registration failed:', err);
         });
 }
+
+onMessage(messaging, (payload) =>{
+    console.log("==============");
+    console.log(payload);
+    console.log("==============");
+    
+    // let title = payload.notification.title;
+    // let options = {
+    //     body: payload.notification.body,
+    //     icon: payload.notification.icon,
+    // };
+
+    // console.log('Notification received. Title:', title, 'Body:', payload.notification.body, 'Icon:', payload.notification.icon);
+
+})
+
 
 async function getDeviceOS() {
     const userAgent = navigator.userAgent;
@@ -75,23 +86,32 @@ async function getDeviceOS() {
 // Function to save FCM token (ensure this endpoint is correctly set up)
 async function saveFcmToken(token) {
     const deviceOS = await getDeviceOS();
-    let response = await fetch('/save_token/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken')
-        },
-        body: JSON.stringify(
-            {
-                fcm_token: token,
-                device_os: deviceOS
-            }
-        )
-    });
-    if (response.ok) {
-        let re = await response.json();
-        console.log(re);
+    try {
+        const response = await fetch('/save_token/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify(
+                {
+                    fcm_token: token,
+                    device_os: deviceOS
+                }
+            )
+        })
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Error al guardar el token:', errorData.message);
+        } else {
+            const data = await response.json();
+            console.log('Respuesta del servidor:', data.message);
+        }
+    } catch (error) {
+        console.error('No se pudo guardar el token:', error);
     }
+
 }
 
 // Example function to get CSRF token from cookies

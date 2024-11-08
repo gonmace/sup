@@ -32,9 +32,11 @@ def save_token(request):
             data = json.loads(request.body)
             token = data.get('fcm_token')
             device_OS = data.get('device_os')
+            existe = FCMDevice.objects.filter(
+                registration_id=token, active=True).exists()
 
             # Almacena el token asociado al usuario autenticado
-            if token:
+            if token and not existe:
                 device, created = FCMDevice.objects.get_or_create(
                     registration_id=token,
                     defaults={
@@ -54,7 +56,7 @@ def save_token(request):
                 return JsonResponse({'message': 'Token guardado exitosamente'})
             else:
                 return JsonResponse(
-                    {'message': 'Token no proporcionado'}, status=400)
+                    {'message': 'Token existente'}, status=400)
         else:
             return JsonResponse({'message': 'Método no permitido'}, status=405)
     except json.JSONDecodeError:

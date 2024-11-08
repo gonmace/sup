@@ -195,5 +195,5 @@ FCM_DJANGO_SETTINGS = {
     # devices to which notifications cannot be sent,
     # are deleted upon receiving error response from FCM
     # default: False
-    # "DELETE_INACTIVE_DEVICES": True/False,
+    "DELETE_INACTIVE_DEVICES": True,
 }
