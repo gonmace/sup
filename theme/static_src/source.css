@@ -72,8 +72,12 @@
   @apply overflow-hidden border-separate border-spacing-0 rounded-lg text-slate-900 bg-white shadow-[4px_4px_8px_rgba(15,23,42,0.3),-4px_-4px_8px_rgba(255,255,255,0.5),inset_1px_1px_1px_rgba(224,234,249,0.5)]
 }
 
+#streamfield {
+  @apply py-8;
+}
+
 #streamfield > div {
-  @apply contenedor min-h-32 max-h-96 h-fit overflow-y-auto mb-4;
+  @apply contenedor min-h-32 max-h-96 h-fit;
 }
 
 .globo-chat {
