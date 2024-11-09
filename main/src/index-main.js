@@ -495,7 +495,7 @@ document.addEventListener("DOMContentLoaded", function () {
         row.insertCell().textContent = sitio.cod_id;
         row.insertCell().textContent = sitio.nombre;
         row.insertCell().textContent = sitio.estado;
-        row.insertCell().textContent = sitio.contratista.cod
+        row.insertCell().textContent = sitio.contratista?.cod || '';
         row.insertCell().textContent = sitio.ito
 
 
