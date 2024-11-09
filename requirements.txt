@@ -20,3 +20,5 @@ django-streamfield==2.3.0
 channels==4.1.0
 channels-redis==4.2.0
 uvicorn==0.32.0
+
+django-tracking2==0.5.1
