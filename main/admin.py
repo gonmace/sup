@@ -7,6 +7,7 @@ from .models import Chat, Contratista, Mensaje, Operador, Sitio, UserProfile
 
 admin.site.register(Operador)
 
+
 class SitiosResource(resources.ModelResource):
     sitio = fields.Field(column_name='Site ID', attribute='sitio')
     cod_id = fields.Field(column_name='Client ID', attribute='cod_id')

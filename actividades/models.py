@@ -121,7 +121,8 @@ class DetalleProgreso(models.Model):
     mostrar = models.BooleanField("Agregar", default=True)
     order = models.PositiveIntegerField(default=0)
     fecha = models.DateTimeField(
-        "Fecha de Actualización", auto_now=True
+        "Fecha de Actualización", auto_now=True,
+        blank=True, null=True
         )
     objects = DetalleProgresoManager()
 

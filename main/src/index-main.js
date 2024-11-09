@@ -127,26 +127,25 @@ function updateSite(data) {
     }
 
     if (images.length > 0) {
-         // Crear una lista de promesas para cargar todas las imágenes
-         const imagePromises = images.map(async (image) => {
+        images.forEach((image) => {
             const imgElement = document.createElement('img');
             imgElement.src = image.url;
-
+    
+            // Verifica si el navegador soporta WebP y ajusta la URL de la imagen
             supportsWebP(function (supported) {
                 if (supported) {
                     console.log('Este navegador soporta WebP!');
                     imgElement.src = imgElement.src.replace(/\.\w+$/, '.webp');
                 } else {
                     console.log('Este navegador NO soporta WebP.');
-                    // Aquí puedes colocar la lógica para cargar imágenes en otro formato
+                    // Aquí puedes agregar lógica adicional para otro formato si lo deseas
                 }
             });
-
-
+    
             imgElement.alt = image.description;
             imgElement.classList.add('object-cover');
             carousel.appendChild(imgElement);
-
+    
             // Crear contenedor para el texto de fecha
             const dateContainer = document.createElement('div');
             dateContainer.classList.add(
@@ -159,17 +158,14 @@ function updateSite(data) {
                 'rounded-tl-lg',
                 'rounded-br-lg'
             );
-
+    
             dateContainer.textContent = latestDateImages;
             carousel.appendChild(dateContainer);
             carousel.classList.add('cursor-pointer');
         });
-
-        // Esperar a que todas las promesas de las imágenes se resuelvan
-        Promise.all(imagePromises).then(() => {
-            initCarousel();
-        });
-
+    
+        // Llama a initCarousel después de agregar todas las imágenes
+        initCarousel();
     }
 
     // Mostrar comentarios
