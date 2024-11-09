@@ -534,7 +534,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Opacidad para el mapa
     const opacidad = 1;
 
-    let mapZoomLevel = isNaN(localStorage.theZoom) ? 5 : localStorage.theZoom;
+    let mapZoomLevel = isNaN(localStorage.theZoom) ? 3 : localStorage.theZoom;
 
     let mapCenter;
     if (!localStorage.lat) {
