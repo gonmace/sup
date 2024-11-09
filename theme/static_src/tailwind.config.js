@@ -2,12 +2,12 @@ module.exports = {
     content: [
         '../../templates/*.html',
         '../../templates/**/*.html', 
-        '../../main/src/index-main.js',
         '../../**/templates/*.html',  
         '!../../**/node_modules',
         '../../**/src/*.js',
-        
-        '../../**/templates/**/*.html',  
+        '../../main/src/index-main.js',
+        '../../**/templates/**/*.html',
+        '../../**/src/**/*.js'  
     ],
     plugins: [
         require('daisyui'),

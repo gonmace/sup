@@ -27,6 +27,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'adminsortable2',
     'channels',
+    # 'user_visit',
+    'tracking',
 
     'streamblocks',
     'streamfield',
@@ -47,6 +49,7 @@ SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'tracking.middleware.VisitorTrackingMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -55,6 +58,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'streamblocks.middleware.RequestMiddleware',
+    # 'user_visit.middleware.UserVisitMiddleware',
 ]
 
 # X_FRAME_OPTIONS = "SAMEORIGIN"

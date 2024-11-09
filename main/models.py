@@ -2,13 +2,12 @@ from django.db import models
 from clientes.models import Proyecto, UserProfile
 from .managers import SitioManager, ContratistaManager
 
-ESTADO_CHOICES = [
-    ('ASG', 'Asignado',),
-    ('EJE', 'Ejecución'),
-    ('TER', 'Terminado'),
-    ('PTG', 'Postergado'),
-    ('CAN', 'Cancelado'),
-]
+
+class Operador(models.Model):
+    name = models.CharField("Operador", max_length=20)
+
+    def __str__(self):
+        return f"{self.name}"
 
 
 class Contratista(models.Model):
@@ -21,15 +20,32 @@ class Contratista(models.Model):
         return f"{self.cod}"
 
 
+ESTADO_CHOICES = [
+    ('ASG', 'Asignado',),
+    ('EJE', 'Ejecución'),
+    ('TER', 'Terminado'),
+    ('PTG', 'Postergado'),
+    ('CAN', 'Cancelado'),
+]
+
+
 class Sitio(models.Model):
     sitio = models.CharField("Codigo Sitio", max_length=10,  null=True)
     cod_id = models.CharField(
         "Codigo Cliente", max_length=10, blank=True, null=True)
     nombre = models.CharField(max_length=100, blank=True)
     altura = models.IntegerField("Altura", blank=True, null=True)
+    operador = models.ForeignKey(
+        Operador,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
     contratista = models.ForeignKey(
         Contratista,
         on_delete=models.CASCADE,
+        blank=True,
+        null=True
         )
     lat = models.FloatField("Latitud", max_length=11)
     lon = models.FloatField("Longitud", max_length=11)
