@@ -30,7 +30,7 @@ ESTADO_CHOICES = [
 
 
 class Sitio(models.Model):
-    sitio = models.CharField("Codigo Sitio", max_length=10,  null=True)
+    sitio = models.CharField("Codigo Sitio", max_length=12,  null=True)
     cod_id = models.CharField(
         "Codigo Cliente", max_length=10, blank=True, null=True)
     nombre = models.CharField(max_length=100, blank=True)
