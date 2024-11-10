@@ -73,11 +73,11 @@
 }
 
 #streamfield {
-  @apply py-8;
+  @apply py-2 md:py-6 px-2;
 }
 
 #streamfield > div {
-  @apply contenedor min-h-32 max-h-96 h-fit;
+  @apply contenedor min-h-32 max-h-96 h-fit mb-4 ;
 }
 
 .globo-chat {
