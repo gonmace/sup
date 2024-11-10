@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from actividades.models import DetalleProgreso, Progreso
-from clientes.models import LogoRedLine, UserProfile
+from clientes.models import UserProfile
 from galeria.models import Imagen, Comentario
 from main.models import Chat, Contratista, Mensaje, Sitio
 import json
