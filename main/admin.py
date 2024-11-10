@@ -2,8 +2,10 @@ from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources, fields
 from import_export.widgets import ForeignKeyWidget
-from .models import Chat, Contratista, Mensaje, Sitio, UserProfile
+from .models import Chat, Contratista, Mensaje, Operador, Sitio, UserProfile
 # from django.utils.dateformat import format
+
+admin.site.register(Operador)
 
 
 class SitiosResource(resources.ModelResource):
@@ -11,6 +13,7 @@ class SitiosResource(resources.ModelResource):
     cod_id = fields.Field(column_name='Client ID', attribute='cod_id')
     nombre = fields.Field(column_name='Name Site', attribute='nombre')
     altura = fields.Field(column_name='ESA Height', attribute='altura')
+    operador = fields.Field(column_name='Operator', attribute='operador')
     contratista = fields.Field(
         column_name='Partner', attribute='contratista',
         widget=ForeignKeyWidget(Contratista, 'name'))
@@ -42,14 +45,15 @@ class SitioAdmin(ImportExportModelAdmin):
         'cod_id',
         'nombre',
         'altura',
+        'operador',
         'contratista',
         'ito',
         'estado',
         'proyecto',
     )
-    list_editable = ('ito', 'contratista', 'estado', 'proyecto')
+    list_editable = ('ito', 'contratista', 'estado', 'proyecto', 'operador')
     list_display_links = ('sitio', )
-    list_filter = ('contratista', 'estado', 'proyecto', 'ito')
+    list_filter = ('contratista', 'estado', 'proyecto', 'ito', 'operador')
 
 
 admin.site.register(Sitio, SitioAdmin)

@@ -17,6 +17,7 @@ const titulo = document.getElementById('titulo');
 const nombre = document.getElementById('nombre');
 const cod_id = document.getElementById('cod_id');
 const altura = document.getElementById('altura');
+const operador = document.getElementById('operador');
 const contratista = document.getElementById('contratista');
 const latitud = document.getElementById('latitud');
 const longitud = document.getElementById('longitud');
@@ -25,13 +26,17 @@ const avanceID = document.getElementById('avance');
 let sitio_id;
 let chatNumero;
 const lineasChat = 3;
-let comentario = document.getElementById('comentario');
-let streamer = document.getElementById('streamfield');
-let section = streamer.querySelector('section');
+const comentario = document.getElementById('comentario');
+const streamer = document.getElementById('streamfield');
+const section = streamer.querySelector('section');
+
+const logo = document.getElementById('logo');
+logo.src = window.location.origin + logoURL;
+
 
 function initCarousel() {
     var carousel = document.querySelector('.carousel');
-    var items = carousel.querySelectorAll('.carousel-item');
+    var items = carousel.querySelectorAll('img');
     var currentIndex = 0;
 
     // Ocultar todos los elementos excepto el primero
@@ -51,10 +56,11 @@ function initCarousel() {
 
 
 function updateSite(data) {
-    
+
     console.log("Recibiendo datos al seleccionar un sitio...");
     sitio_id = data.sitio.id;
     console.log("🚀 ~ updateSite ~ sitio_id:", sitio_id)
+
 
     // Datos de imagen y comentarios
     var images = data.images;
@@ -63,6 +69,10 @@ function updateSite(data) {
     var latestDateComments = data.latest_date_comments;
     titulo.innerHTML = data.sitio.sitio;
     nombre.innerHTML = data.sitio.nombre;
+
+    data.sitio.operador ?
+        operador.innerHTML = `Operador: <span class="font-bold">${data.sitio.operador}</span>` :
+        operador.innerHTML = "";
 
     data.sitio.cod_id == '---' ?
         cod_id.innerHTML = `Código Cliente: <span class="font-bold">${data.sitio.cod_id}</span>` :
@@ -91,9 +101,9 @@ function updateSite(data) {
         window.open(mapUrl, '_blank'); // Abre Google Maps en una nueva pestaña
     });
 
-carousel.innerHTML = '';
+    carousel.innerHTML = '';
 
-    if (images.length === 0 ) {
+    if (images.length === 0) {
         var vacio = document.createElement('div');
         vacio.classList.add('skeleton', 'w-full', 'h-full', 'flex', 'flex-col', 'justify-center', 'px-2');
         vacio.innerHTML = '<p>No hay imágenes disponibles para este sitio.</p>';
@@ -117,50 +127,44 @@ carousel.innerHTML = '';
     }
 
     if (images.length > 0) {
-        images.forEach(function (image, index) {
-            var carouselDiv = document.createElement('div');
-            carouselDiv.classList.add('flex', 'justify-center', 'items-center', 'h-full');
-            var carouseItem = document.createElement('div');
-            carouseItem.classList.add('carousel-item', 'relative', 'flex', 'h-full', 'items-center');
-
-            var imgElement = document.createElement('img');
+        images.forEach((image) => {
+            const imgElement = document.createElement('img');
             imgElement.src = image.url;
-            // Uso de la función para ajustar la lógica de carga de imágenes
+    
+            // Verifica si el navegador soporta WebP y ajusta la URL de la imagen
             supportsWebP(function (supported) {
                 if (supported) {
                     console.log('Este navegador soporta WebP!');
                     imgElement.src = imgElement.src.replace(/\.\w+$/, '.webp');
                 } else {
                     console.log('Este navegador NO soporta WebP.');
-                    // Aquí puedes colocar la lógica para cargar imágenes en otro formato
+                    // Aquí puedes agregar lógica adicional para otro formato si lo deseas
                 }
             });
+    
             imgElement.alt = image.description;
-            imgElement.classList.add('h-full', 'object-contain');
-            carouseItem.appendChild(imgElement);
-
+            imgElement.classList.add('object-cover');
+            carousel.appendChild(imgElement);
+    
             // Crear contenedor para el texto de fecha
-            var dateContainer = document.createElement('div');
+            const dateContainer = document.createElement('div');
             dateContainer.classList.add(
                 'absolute',
                 'bottom-0',
                 'right-0',
                 'p-2',
-                'bg-black',
-                'bg-opacity-50',
+                'sombra',
                 'text-white',
                 'rounded-tl-lg',
                 'rounded-br-lg'
             );
-
-
-            dateContainer.textContent = latestDateImages; // Asegúrate de que 'image.date' tiene el dato correcto
-            carouseItem.appendChild(dateContainer);
-            carouselDiv.appendChild(carouseItem);
-
-            carousel.appendChild(carouselDiv);
+    
+            dateContainer.textContent = latestDateImages;
+            carousel.appendChild(dateContainer);
             carousel.classList.add('cursor-pointer');
         });
+    
+        // Llama a initCarousel después de agregar todas las imágenes
         initCarousel();
     }
 
@@ -236,18 +240,18 @@ function createMessageHTML(
 
 function fetchChats(sitio_id, usuarioID, limite = lineasChat, divID = 'mensajes') {
     fetch(`/get_chats/${sitio_id}/${limite}`)
-        .then(response => response.text()) 
+        .then(response => response.text())
         .then(resp => {
-            const data = JSON.parse(resp);   
+            const data = JSON.parse(resp);
             // Verifica si data es una lista vacía
             if (data.length === 0) {
                 console.log("Chat vacio...");
                 if (!section.classList.contains('hidden')) {
-                    section.classList.add('hidden'); 
+                    section.classList.add('hidden');
                 }
                 return;
             }
-            section.classList.remove('hidden'); 
+            section.classList.remove('hidden');
             chatNumero = data[0].chat_id;
             console.log("Recibiendo datos del chat....");
 
@@ -328,7 +332,7 @@ function fetchChats(sitio_id, usuarioID, limite = lineasChat, divID = 'mensajes'
 
 function fetchData(sitio_id) {
     // primero borrar los chart de echarts para que se pueda actualizar cuando se cambioe de sitio
-    let chartBarras = document.getElementById('barras-Chart'); 
+    let chartBarras = document.getElementById('barras-Chart');
     chartBarras.innerHTML = '';
     chartBarras.removeAttribute('_echarts_instance_');
     chartBarras.removeAttribute('style');
@@ -491,7 +495,7 @@ document.addEventListener("DOMContentLoaded", function () {
         row.insertCell().textContent = sitio.cod_id;
         row.insertCell().textContent = sitio.nombre;
         row.insertCell().textContent = sitio.estado;
-        row.insertCell().textContent = sitio.contratista.cod
+        row.insertCell().textContent = sitio.contratista?.cod || '';
         row.insertCell().textContent = sitio.ito
 
 
@@ -526,7 +530,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Opacidad para el mapa
     const opacidad = 1;
 
-    let mapZoomLevel = isNaN(localStorage.theZoom) ? 5 : localStorage.theZoom;
+    let mapZoomLevel = isNaN(localStorage.theZoom) ? 3 : localStorage.theZoom;
 
     let mapCenter;
     if (!localStorage.lat) {

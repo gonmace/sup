@@ -9,7 +9,8 @@ INSTALLED_APPS += [
     # "django_extensions",
     # "debug_toolbar",
     'django_browser_reload',
-    'theme'
+    'theme',
+    'django_extensions',
 ]
 
 MIDDLEWARE += [

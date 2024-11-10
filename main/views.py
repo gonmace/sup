@@ -46,6 +46,7 @@ def sitio_data(sitio):
         'cod_id': sitio.cod_id,
         'nombre': sitio.nombre,
         'altura': sitio.altura,
+        'operador': sitio.operador.name if sitio.operador else None,
         'lat': sitio.lat,
         'lon': sitio.lon,
         'contratista': sitio.contratista.name if sitio.contratista else None,
@@ -61,6 +62,13 @@ def home(request):
     user_id = request.user.id
     sitios = Sitio.objects.for_user_profile(user_profile)
     contratistas = Contratista.objects.filter(sitio__in=sitios).distinct()
+
+    cliente = user_profile.cliente
+
+    if cliente:
+        logo_url = cliente.logo_mostrar.logo.url
+    else:
+        logo_url = "/static/img/logo_Redline.png"
 
     form = MensajeForm()  # Inicializar el formulario para solicitudes GET
 
@@ -93,6 +101,7 @@ def home(request):
 
     context = {
         'user_id': user_id,
+        'logo_url': logo_url,
         'form': form,
         'sitios_json': json.dumps([{
             'id': sitio.id,
@@ -106,7 +115,6 @@ def home(request):
                 'name': sitio.contratista.name,
                 'cod': sitio.contratista.cod
             } if sitio.contratista else None,
-
             'ito': f"{sitio.ito.user.first_name} {sitio.ito.user.last_name}"
             if sitio.ito else None,
 
