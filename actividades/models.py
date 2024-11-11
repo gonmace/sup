@@ -118,7 +118,7 @@ class DetalleProgreso(models.Model):
     actividad_grupo = models.ForeignKey(
         ActividadGrupo, on_delete=models.CASCADE)
     porcentaje = models.FloatField("Avance %", default=0.0)
-    mostrar = models.BooleanField("Agregar", default=True)
+    mostrar = models.BooleanField("Incluir", default=True)
     order = models.PositiveIntegerField(default=0)
     fecha = models.DateTimeField(
         "Fecha de Actualización", auto_now=True,

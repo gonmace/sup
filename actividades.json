@@ -1,0 +1,95 @@
+
+[
+
+{
+  "model": "actividades.progreso",
+  "pk": 1,
+  "fields": {
+    "progreso": 1,
+    "activar": true,
+    "fecha_inicio": "2024-10-01",
+    "fecha_final": null
+  }
+},
+{
+  "model": "actividades.progreso",
+  "pk": 2,
+  "fields": {
+    "progreso": 2,
+    "activar": true,
+    "fecha_inicio": "2024-10-02",
+    "fecha_final": "2024-10-29"
+  }
+},
+{
+  "model": "actividades.progreso",
+  "pk": 3,
+  "fields": {
+    "progreso": 3,
+    "activar": true,
+    "fecha_inicio": "2024-09-30",
+    "fecha_final": null
+  }
+},
+{
+  "model": "actividades.progreso",
+  "pk": 4,
+  "fields": {
+    "progreso": 4,
+    "activar": true,
+    "fecha_inicio": "2024-09-30",
+    "fecha_final": "2024-10-21"
+  }
+},
+{
+  "model": "actividades.progreso",
+  "pk": 5,
+  "fields": {
+    "progreso": 5,
+    "activar": true,
+    "fecha_inicio": "2024-08-29",
+    "fecha_final": "2024-09-26"
+  }
+},
+{
+  "model": "actividades.progreso",
+  "pk": 6,
+  "fields": {
+    "progreso": 6,
+    "activar": true,
+    "fecha_inicio": "2024-08-29",
+    "fecha_final": "2024-10-02"
+  }
+},
+{
+  "model": "actividades.progreso",
+  "pk": 7,
+  "fields": {
+    "progreso": 7,
+    "activar": true,
+    "fecha_inicio": "2024-10-14",
+    "fecha_final": null
+  }
+},
+{
+  "model": "actividades.progreso",
+  "pk": 8,
+  "fields": {
+    "progreso": 8,
+    "activar": true,
+    "fecha_inicio": "2024-10-25",
+    "fecha_final": null
+  }
+},
+
+{
+  "model": "actividades.progreso",
+  "pk": 13,
+  "fields": {
+    "progreso": 13,
+    "activar": true,
+    "fecha_inicio": "2024-11-11",
+    "fecha_final": null
+  }
+}
+]

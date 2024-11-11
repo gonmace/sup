@@ -130,7 +130,7 @@ function updateSite(data) {
         images.forEach((image) => {
             const imgElement = document.createElement('img');
             imgElement.src = image.url;
-    
+            imgElement.classList.add('w-full');
             // Verifica si el navegador soporta WebP y ajusta la URL de la imagen
             supportsWebP(function (supported) {
                 if (supported) {
