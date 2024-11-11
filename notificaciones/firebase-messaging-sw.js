@@ -14,19 +14,70 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-// Maneja mensajes en segundo plano
-messaging.onBackgroundMessage(function(payload) {
-    console.log('[firebase-messaging-sw.js] Recibido mensaje en segundo plano:', payload);
+// // Maneja mensajes en segundo plano
+// messaging.onBackgroundMessage(function(payload) {
+//     console.log('[firebase-messaging-sw.js] Recibido mensaje en segundo plano:', payload);
 
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-        body: payload.notification.body,
-        icon: payload.notification.icon,
-    };
+//     const notificationTitle = payload.notification.title;
+//     const notificationOptions = {
+//         body: payload.notification.body,
+//         icon: payload.notification.icon,
+//     };
 
-    if (payload.notification) {
-        console.log('La notificación será manejada por el sistema operativo.');
-    }
-    
-    self.registration.showNotification(notificationTitle, notificationOptions);
+//     if (payload.notification) {
+//         console.log('La notificación será manejada por el sistema operativo.');
+//         return;
+//     }
+
+//     self.registration.showNotification(notificationTitle, notificationOptions);
+// });
+self.addEventListener("push", function (event) {
+    messaging.onBackgroundMessage((payload) => {
+        const {
+            data: { title, body, actionUrl, icon },
+        } = payload;
+
+        const notificationOptions = {
+            body,
+            icon,
+            data: {
+                actionUrl,
+            },
+        };
+
+        const promiseChain = new Promise((resolve) => {
+            self.registration
+                .showNotification(title, notificationOptions)
+                .then(() => resolve());
+        });
+
+        event.waitUntil(promiseChain);
+    });
 });
+
+self.addEventListener("notificationclick", (event) => {
+    const { notification } = event;
+    const {
+      data: { actionUrl },
+    } = notification;
+
+    event.notification.close();
+
+    event.waitUntil(
+      clients
+        .matchAll({ type: "window", includeUncontrolled: true })
+        .then((clientsArr) => {
+          // If a Window tab matching the targeted URL already exists, focus that;
+          const hadWindowToFocus = clientsArr.some((windowClient) => {
+            windowClient.url === actionUrl
+              ? (windowClient.focus(), true)
+              : false;
+          });
+
+          // Otherwise, open a new tab to the applicable URL and focus it.
+          if (!hadWindowToFocus) {
+            return clients.openWindow(actionUrl);
+          }
+        })
+    );
+  });

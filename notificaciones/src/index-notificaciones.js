@@ -42,20 +42,46 @@ if ('serviceWorker' in navigator) {
         });
 }
 
-onMessage(messaging, (payload) =>{
-    console.log("==============");
-    console.log(payload);
-    console.log("==============");
+const showNotification = (payload) => {
+    const {
+      // It's better to send notifications as Data Message to handle it by your own SDK
+      // See https://firebase.google.com/docs/cloud-messaging/concept-options#notifications_and_data_messages
+      data: { title, body, actionUrl, icon },
+    } = payload;
+
+    // See https://developer.mozilla.org/docs/Web/API/Notification
+    const notificationOptions = {
+      body,
+      icon,
+    };
     
-    // let title = payload.notification.title;
-    // let options = {
-    //     body: payload.notification.body,
-    //     icon: payload.notification.icon,
-    // };
+    const notification = new window.Notification(title, notificationOptions);
 
-    // console.log('Notification received. Title:', title, 'Body:', payload.notification.body, 'Icon:', payload.notification.icon);
+    notification.onclick = (event) => {
+      event.preventDefault(); // prevent the browser from focusing the Notification's tab
+      window.open(actionUrl, "_blank").focus();
+    };
+  };
 
-})
+messaging.onMessage((payload) => {
+    console.log("🚀 ~ messaging.onMessage ~ payload:", payload)
+
+    showNotification(payload);
+	
+    	// console.log("==============");
+    	// console.log(payload);
+    	// console.log("==============");
+    	
+    	// let title = payload.notification.title;
+    	// let options = {
+    	//     body: payload.notification.body,
+    	//     icon: payload.notification.icon,
+    	// };
+	
+    	// console.log('Notification received. Title:', title, 'Body:', payload.notification.body, 'Icon:', payload.notification.icon);
+	
+	
+});
 
 
 async function getDeviceOS() {

@@ -43,14 +43,12 @@ class SendNotificacionPush(models.Model):
         devices = self.usuarios.all()
         if devices.exists():
             devices.send_message(Message(
-                notification=Notification(
-                    title=self.titulo,
-                    body=self.mensaje
-                    ),
-                # webpush=WebpushConfig(
-                #     fcm_options=WebpushFCMOptions(
-                #         link="https://facebook.com")
-                #     )
+                data={
+                    'title': self.titulo,
+                    'body': self.mensaje,
+                    'icon': '/static/firebase-logo.png',
+                    'actionUrl': 'https://google.com',
+                }
             ))
         else:
             print("No hay dispositivos asociados para enviar la notificación.")

@@ -41,7 +41,7 @@ CSRF_COOKIE_SECURE = False
 
 CSRF_USE_SESSIONS = False
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'https://courier-algebra-write-plots.trycloudflare.com']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'https://findings-wisconsin-territory-briefly.trycloudflare.com']
 
 CHANNEL_LAYERS = {
     'default': {
