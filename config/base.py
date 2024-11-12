@@ -61,6 +61,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'streamblocks.middleware.RequestMiddleware',
+    'notificaciones.middleware.UserMiddleware',
 ]
 
 # X_FRAME_OPTIONS = "SAMEORIGIN"

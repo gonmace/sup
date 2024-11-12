@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from main.models import Sitio
 import datetime
 from .managers import ProgresoManager, DetalleProgresoManager
-
+from django.conf import settings
 
 class Actividad(models.Model):
     nombre = models.CharField(max_length=200)
@@ -102,6 +102,12 @@ class DetalleProgreso(models.Model):
         "Fecha de Actualización", auto_now=True,
         blank=True, null=True
         )
+    modified_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name='modified_detalleprogresos',
+        null=True,
+        on_delete=models.SET_NULL)
+
     objects = DetalleProgresoManager()
 
     def __str__(self):

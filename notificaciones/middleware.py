@@ -13,6 +13,6 @@ class UserMiddleware:
         response = self.get_response(request)
         return response
 
-
-def get_current_user():
-    return getattr(user_local, 'user', None)
+    @staticmethod
+    def get_current_user():
+        return getattr(user_local, 'user', None)

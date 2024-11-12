@@ -705,6 +705,8 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.lat = centro.lat;
         localStorage.lon = centro.lng;
     });
-
-    // fetchData(117);
+    // Recibe en la url el numero de sitio
+    if (SITIO_NUMERO) {
+        fetchData(SITIO_NUMERO);
+    }
 });

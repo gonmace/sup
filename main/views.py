@@ -61,6 +61,7 @@ def home(request):
     user_id = request.user.id
     sitios = Sitio.objects.for_user_profile(user_profile)
     contratistas = Contratista.objects.filter(sitio__in=sitios).distinct()
+    sitio_numero = request.GET.get('sitio_numero', None)
 
     cliente = user_profile.cliente
 
@@ -100,6 +101,7 @@ def home(request):
 
     context = {
         'user_id': user_id,
+        'sitio_numero': sitio_numero if sitio_numero else 'null',
         'logo_url': logo_url,
         'form': form,
         'sitios_json': json.dumps([{

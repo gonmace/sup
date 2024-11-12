@@ -14,23 +14,6 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-// // Maneja mensajes en segundo plano
-// messaging.onBackgroundMessage(function(payload) {
-//     console.log('[firebase-messaging-sw.js] Recibido mensaje en segundo plano:', payload);
-
-//     const notificationTitle = payload.notification.title;
-//     const notificationOptions = {
-//         body: payload.notification.body,
-//         icon: payload.notification.icon,
-//     };
-
-//     if (payload.notification) {
-//         console.log('La notificación será manejada por el sistema operativo.');
-//         return;
-//     }
-
-//     self.registration.showNotification(notificationTitle, notificationOptions);
-// });
 self.addEventListener("push", function (event) {
     messaging.onBackgroundMessage((payload) => {
         const {

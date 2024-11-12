@@ -55,6 +55,12 @@ CARGO = [
     ('CTT', 'Contratista'),
 ]
 
+NOTIFICACION_OPCIONES = [
+    (1, 'Cliente'),
+    (2, 'Administrador'),
+    (3, 'Equipo interno'),
+]
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(
@@ -71,10 +77,15 @@ class UserProfile(models.Model):
         blank=True,
         null=True
     )
+    tipo_notificacion = models.IntegerField(
+        choices=NOTIFICACION_OPCIONES,
+        blank=True,
+        null=True,
+    )
 
     class Meta:
-        verbose_name = "Usuario"
-        verbose_name_plural = "Usuarios"
+        verbose_name = "Perfil de Usuario"
+        verbose_name_plural = "Perfiles de Usuario"
 
     def __str__(self):
         return self.user.username

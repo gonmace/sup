@@ -51,7 +51,9 @@ CSRF_COOKIE_SECURE = False
 
 CSRF_USE_SESSIONS = False
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'https://findings-wisconsin-territory-briefly.trycloudflare.com']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'https://frequency-algorithm-zero-licence.trycloudflare.com']
+
+# DOMAIN = "http://localhost:8000"
 
 CHANNEL_LAYERS = {
     'default': {
@@ -64,3 +66,4 @@ CHANNEL_LAYERS = {
 
 ASGI_APPLICATION = 'config.asgidev.application'
 
+SITE_URL = 'http://localhost:8000'

@@ -3,30 +3,9 @@ from django.contrib.auth import get_user_model
 from fcm_django.models import FCMDevice
 from firebase_admin.messaging import (
     Message,
-    Notification,
-    WebpushConfig,
-    WebpushFCMOptions
 )
 
 User = get_user_model()
-
-NOTIFICACION_OPCIONES = [
-    (1, 'Cliene'),
-    (2, 'Administrador'),
-]
-
-
-class UsuarioNotificacion(models.Model):
-    usuario = models.ForeignKey(FCMDevice, on_delete=models.CASCADE)
-    # Usar un IntegerField para el tipo de notificación
-    tipo_notificacion = models.IntegerField(
-        choices=NOTIFICACION_OPCIONES,
-        blank=True,
-        null=True
-    )
-
-    def __str__(self):
-        return f"{self.usuario} - {self.get_tipo_notificacion_display()}"
 
 
 class SendNotificacionPush(models.Model):

@@ -10,7 +10,8 @@ class LogoRedLineAdmin(admin.ModelAdmin):
 
     def logo_thumbnail(self, obj):
         if obj.logo:
-            return mark_safe(f'<img class="sombra contenedor" src="{obj.logo.url}" style="height: 40px;">')
+            return mark_safe(f'<img class="sombra contenedor" \
+                src="{obj.logo.url}" style="height: 40px;">')
         return "-"
     logo_thumbnail.short_description = 'Logo Preview'
 
@@ -21,7 +22,8 @@ class ClienteAdmin(admin.ModelAdmin):
 
     def logo_thumbnail(self, obj):
         if obj.logo_mostrar:
-            return mark_safe(f'<img src="{obj.logo_mostrar.logo.url}" style="background-color: white; height: 25px;">')
+            return mark_safe(f'<img src="{obj.logo_mostrar.logo.url}"\
+                style="background-color: white; height: 25px;">')
         return "-"
     logo_thumbnail.short_description = 'Logo a Mostra al Cliente'
 
@@ -34,8 +36,15 @@ admin.site.register(Proyecto, ProyectoAdmin)
 
 
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'get_username', 'cliente','cargo', 'get_proyectos')
-    list_editable = ('cargo', 'cliente')
+    list_display = (
+        'user',
+        'get_username',
+        'tipo_notificacion',
+        'cliente',
+        'cargo',
+        'get_proyectos'
+        )
+    list_editable = ('cargo', 'cliente', 'tipo_notificacion')
 
     def get_username(self, obj):
         return f"{obj.user.first_name} {obj.user.last_name}"

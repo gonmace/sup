@@ -63,3 +63,5 @@ SESSION_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True
 
 ASGI_APPLICATION = 'config.asgi.application'
+
+SITE_URL = 'https://sup.tekon-rl.cl'
