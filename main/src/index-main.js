@@ -706,5 +706,5 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.lon = centro.lng;
     });
 
-    fetchData(117);
+    // fetchData(117);
 });
