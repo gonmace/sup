@@ -89,7 +89,7 @@ def fileupload(request):
 def display_images_comments(request, site_id):
     # Obtener el sitio o mostrar un 404 si no existe
     sitio = get_object_or_404(Sitio, id=site_id)
-    
+
     # Obtener fechas truncadas y ordenadas de imágenes y comentarios
     imagenes = Imagen.objects.filter(sitio=sitio).annotate(
         fecha_truncada=TruncMinute('fecha_carga')
