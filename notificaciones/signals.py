@@ -102,7 +102,8 @@ def enviar_notificacion_avance(sender, instance, created, **kwargs):
                     'title': str(sitio),
                     'body': "Progreso actualizado",
                     'icon': f"{settings.SITE_URL}/static/firebase-logo.png",
-                    'actionUrl': f"{settings.SITE_URL}/?sitio_numero={sitio_id}",
+                    'actionUrl': (f"{settings.SITE_URL}\
+                        /?sitio_numero={sitio_id}")
                 }
             ))
 
@@ -112,7 +113,8 @@ def enviar_notificacion_avance(sender, instance, created, **kwargs):
                     'title': str(sitio),
                     'body': f"Progreso actualizado por {usuario_modifico}",
                     'icon': f"{settings.SITE_URL}/static/firebase-logo.png",
-                    'actionUrl': f"{settings.SITE_URL}/?sitio_numero={sitio_id}",
+                    'actionUrl': (f"{settings.SITE_URL}\
+                        /?sitio_numero={sitio_id}")
                 }
             ))
 
