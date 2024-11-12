@@ -1,13 +1,13 @@
 // Initialize Firebase
 if (!firebase.apps.length) {
     firebase.initializeApp({
-        apiKey: import.meta.env.FIREBASE_API_KEY,
-        authDomain: import.meta.env.FIREBASE_AUTH_DOMAIN,
-        projectId: import.meta.env.FIREBASE_PROJECT_ID,
-        storageBucket: import.meta.env.FIREBASE_STORAGE_BUCKET,
-        messagingSenderId: import.meta.env.FIREBASE_MESSAGING_SENDER_ID,
-        appId: import.meta.env.FIREBASE_APP_ID,
-        measurementId: import.meta.env.FIREBASE_MEASUREMENT_ID
+        apiKey: "AIzaSyD1JVEEfALYm7AewLXIrWdY1dKognP5Mv8",
+        authDomain: "redlinegs-b0c63.firebaseapp.com",
+        projectId: "redlinegs-b0c63",
+        storageBucket: "redlinegs-b0c63.appspot.com",
+        messagingSenderId: "977169881582",
+        appId: "1:977169881582:web:10adfc014ae57f87e756ff",
+        measurementId: "G-M3E7Y3GH3C"
     });
 }
 
