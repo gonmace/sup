@@ -12,7 +12,6 @@ from .forms import MensajeForm
 from django.utils.timezone import localtime
 import json
 
-
 MESES_ES = {
     1: 'enero',
     2: 'febrero',
@@ -165,17 +164,14 @@ def get_site_data(request):
         Max('fecha_carga'))['fecha_carga__max']
     latest_date_images_str = latest_image_date.strftime('%d-%m-%Y')\
         if latest_image_date else ''
+    images = images.filter(fecha_carga__date=latest_image_date.date())
 
     latest_comment_date = comments.aggregate(
         Max('fecha_carga'))['fecha_carga__max']
     latest_date_comment_str = format_fecha(latest_comment_date)\
         if latest_comment_date else ''
-
-    images = images.filter(
-        fecha_carga=latest_image_date
-        ) if latest_image_date else Imagen.objects.none()
     comments = comments.filter(
-        fecha_carga=latest_comment_date
+        fecha_carga__date=latest_comment_date.date()
         ) if latest_comment_date else Comentario.objects.none()
 
     image_data = [{

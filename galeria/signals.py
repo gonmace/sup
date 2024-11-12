@@ -1,10 +1,18 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import Sitio, Galeria
+from main.models import Sitio, Galeria
+from django.core.management import get_commands
+
+
+def is_loading_fixtures():
+    return 'loaddata' in get_commands()
 
 
 @receiver(post_save, sender=Sitio)
 def crear_o_actualizar_galeria(sender, instance, **kwargs):
+    if is_loading_fixtures():
+        return  # No ejecutar la lógica de la señal durante `loaddata`
+
     # Construye la descripción completa usando los campos relevantes de Sitio
     descripcion_completa = f"{instance.altura} {instance.contratista}"
 

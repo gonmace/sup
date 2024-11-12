@@ -38,6 +38,7 @@ class DetalleProgresoInline(SortableTabularInline):
     max_num = 0
     fields = ['actividad_grupo', 'porcentaje', 'mostrar', 'fecha']
     readonly_fields = ['actividad_grupo', 'fecha']
+    can_delete = False
 
 
 class ProgresoAdmin(SortableAdminBase, admin.ModelAdmin):
@@ -46,6 +47,7 @@ class ProgresoAdmin(SortableAdminBase, admin.ModelAdmin):
     inlines = [
         DetalleProgresoInline,
     ]
+    ordering = ('progreso__proyecto',)
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

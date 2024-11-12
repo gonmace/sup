@@ -4,8 +4,7 @@ from main.models import Sitio
 from .forms import ImagesForm
 from .models import Imagen, Comentario
 from django.contrib import messages
-from django.db.models import DateField
-from django.db.models.functions import Trunc
+from django.db.models.functions import TruncMinute
 from collections import OrderedDict
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
@@ -90,55 +89,58 @@ def fileupload(request):
 def display_images_comments(request, site_id):
     # Obtener el sitio o mostrar un 404 si no existe
     sitio = get_object_or_404(Sitio, id=site_id)
+
     # Obtener fechas truncadas y ordenadas de imágenes y comentarios
     imagenes = Imagen.objects.filter(sitio=sitio).annotate(
-        fecha=Trunc('fecha_carga', 'day', output_field=DateField())
-    ).order_by('-fecha')
+        fecha_truncada=TruncMinute('fecha_carga')
+        ).order_by('-fecha_truncada')
 
     comentarios = Comentario.objects.filter(sitio=sitio).annotate(
-        fecha=Trunc('fecha_carga', 'day', output_field=DateField())
-    ).order_by('-fecha')
+        fecha_truncada=TruncMinute('fecha_carga')
+        ).order_by('-fecha_truncada')
 
-    # Obtener todas las fechas únicas de imágenes y comentarios
-    fechas_imagenes = imagenes.values_list('fecha', flat=True).distinct()
-    fechas_comentarios = comentarios.values_list('fecha', flat=True).distinct()
+    # Utilizar la fecha truncada directamente desde las consultas y
+    # almacenarla en el formato correcto
+    fechas_imagenes = set(imagenes.values_list('fecha_truncada', flat=True))
+    fechas_comentarios = set(comentarios.values_list(
+        'fecha_truncada', flat=True))
 
-    # Unificar y ordenar fechas
-    fechas_unicas = sorted(
-        set(fechas_imagenes) | set(fechas_comentarios), reverse=True
-        )
+    # Unificar y ordenar las fechas
+    fechas_unicas = sorted(fechas_imagenes | fechas_comentarios, reverse=True)
 
     items_por_fecha = OrderedDict(
-        (
-            fecha,
-            {'imagenes': [], 'comentarios': []}) for fecha in fechas_unicas
-        )
+        (fecha, {'imagenes': [], 'comentarios': []})
+        for fecha in fechas_unicas)
 
-    # Llenar el diccionario con imágenes y comentarios
+    # Llenar el diccionario con imágenes
     for imagen in imagenes:
-        items_por_fecha[imagen.fecha]['imagenes'].append(imagen)
+        # Aquí aseguramos que fecha_truncada ya es un objeto datetime
+        fecha_key = imagen.fecha_truncada
+        if fecha_key not in items_por_fecha:
+            items_por_fecha[fecha_key] = {'imagenes': [], 'comentarios': []}
+        items_por_fecha[fecha_key]['imagenes'].append(imagen)
 
+    # Llenar el diccionario con comentarios
     for comentario in comentarios:
+        # Similarmente, fecha_truncada debería ser un objeto datetime
+        fecha_key = comentario.fecha_truncada
+        if fecha_key not in items_por_fecha:
+            items_por_fecha[fecha_key] = {'comentarios': []}
         user_profile = comentario.usuario.profile
-        es_prevencionista = (
-            user_profile.cargo == 'PRE' if user_profile else False
-            )
+        es_prevencionista = (user_profile.cargo == 'PRE'
+                             if user_profile else False)
         comentario_info = {
             'comentario': comentario.comentario,
             'usuario': f"{comentario.usuario.first_name}\
                 {comentario.usuario.last_name}",
-            'fecha': comentario.fecha,
             'es_prevencionista': es_prevencionista,
         }
-        items_por_fecha[comentario.fecha]['comentarios'].append(
-            comentario_info
-            )
+        items_por_fecha[fecha_key]['comentarios'].append(comentario_info)
 
     context = {
         'sitio': sitio,
         'items_por_fecha': items_por_fecha,
     }
-
     return render(request, 'images_comments.html', context)
 
 

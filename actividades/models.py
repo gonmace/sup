@@ -2,8 +2,6 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from main.models import Sitio
 import datetime
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from .managers import ProgresoManager, DetalleProgresoManager
 
 
@@ -79,12 +77,6 @@ class ProyectoActividad(models.Model):
         return f"{self.proyecto} ---> {self.grupo}"
 
 
-@receiver(post_save, sender=ProyectoActividad)
-def crear_progreso(sender, instance, created, **kwargs):
-    if created:
-        Progreso.objects.create(progreso=instance)
-
-
 class Progreso(models.Model):
     progreso = models.OneToOneField(
         ProyectoActividad, on_delete=models.CASCADE)
@@ -98,27 +90,13 @@ class Progreso(models.Model):
         return f"{self.progreso.proyecto}"
 
 
-@receiver(post_save, sender=Progreso)
-def crear_detalles_progreso(sender, instance, created, **kwargs):
-    if created:
-        actividades = ActividadGrupo.objects.filter(
-            grupo=instance.progreso.grupo).order_by('order')
-        for actividad in actividades:
-            DetalleProgreso.objects.create(
-                progreso=instance,
-                actividad_grupo=actividad,
-                porcentaje=0,
-                order=actividad.order
-                )
-
-
 class DetalleProgreso(models.Model):
     progreso = models.ForeignKey(
         Progreso, on_delete=models.CASCADE, related_name='detalles')
     actividad_grupo = models.ForeignKey(
         ActividadGrupo, on_delete=models.CASCADE)
     porcentaje = models.FloatField("Avance %", default=0.0)
-    mostrar = models.BooleanField("Agregar", default=True)
+    mostrar = models.BooleanField("Incluir", default=True)
     order = models.PositiveIntegerField(default=0)
     fecha = models.DateTimeField(
         "Fecha de Actualización", auto_now=True,

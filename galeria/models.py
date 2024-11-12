@@ -14,7 +14,7 @@ class Imagen(models.Model):
         )
     imagen = models.ImageField(upload_to='imagenes/')
     descripcion = models.CharField(max_length=52, blank=True, null=True)
-    fecha_carga = models.DateField(default=timezone.now)
+    fecha_carga = models.DateTimeField(default=timezone.now)
     usuario = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -49,7 +49,7 @@ class Comentario(models.Model):
         related_name='comentarios'
         )
     comentario = models.TextField(blank=True, null=True)
-    fecha_carga = models.DateField(default=timezone.now)
+    fecha_carga = models.DateTimeField(default=timezone.now)
     usuario = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
