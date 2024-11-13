@@ -175,7 +175,7 @@ LOGGING = {
 }
 
 FIREBASE_CREDENTIALS_PATH = os.path.join(
-    BASE_DIR, 'redlinegs-b0c63-firebase-adminsdk-6z95o-ea2d567d14.json'
+    BASE_DIR, 'redlinegs-b0c63-firebase-adminsdk-6z95o-085c505941.json'
     )
 
 

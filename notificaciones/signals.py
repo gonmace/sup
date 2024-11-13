@@ -10,6 +10,7 @@ from .models import SendNotificacionPush
 from django.db.models.signals import m2m_changed
 from firebase_admin.messaging import Message
 from .middleware import UserMiddleware
+from firebase_admin import messaging
 
 
 # Reduce el comentario a 100 caracteres
@@ -56,7 +57,11 @@ def enviar_notificacion_post_save(sender, instance, created, **kwargs):
         guardado"""
     devices = instance.usuarios.all()
     if devices.exists():
-        instance.enviar_notificacion()
+        try:
+            instance.enviar_notificacion()
+        except Exception as e:
+            print(e)
+            print("Error al enviar la notificación.")
 
 
 @receiver(m2m_changed, sender=SendNotificacionPush.usuarios.through)
@@ -96,27 +101,34 @@ def enviar_notificacion_avance(sender, instance, created, **kwargs):
             user__in=usuarios_administrador
             )
 
-        if devices_cliente.exists():
-            devices_cliente.send_message(Message(
-                data={
-                    'title': str(sitio),
-                    'body': "Progreso actualizado",
-                    'icon': f"{settings.SITE_URL}/static/firebase-logo.png",
-                    'actionUrl': (f"{settings.SITE_URL}\
-                        /?sitio_numero={sitio_id}")
-                }
-            ))
+        try:
+            if devices_cliente.exists():
+                devices_cliente.send_message(Message(
+                    data={
+                        'title': str(sitio),
+                        'body': "Progreso actualizado",
+                        'icon': f"{settings.SITE_URL}/static/firebase-logo.png",
+                        'actionUrl': (f"{settings.SITE_URL}\
+                            /?sitio_numero={sitio_id}")
+                    }
+                ))
 
-        if devices_administrador.exists():
-            devices_administrador.send_message(Message(
-                data={
-                    'title': str(sitio),
-                    'body': f"Progreso actualizado por {usuario_modifico}",
-                    'icon': f"{settings.SITE_URL}/static/firebase-logo.png",
-                    'actionUrl': (f"{settings.SITE_URL}\
-                        /?sitio_numero={sitio_id}")
-                }
-            ))
+            if devices_administrador.exists():
+                devices_administrador.send_message(Message(
+                    data={
+                        'title': str(sitio),
+                        'body': f"Progreso actualizado por {usuario_modifico}",
+                        'icon': f"{settings.SITE_URL}/static/firebase-logo.png",
+                        'actionUrl': (f"{settings.SITE_URL}\
+                            /?sitio_numero={sitio_id}")
+                    }
+                ))
+        except messaging.ApiCallError as e:
+            # Puedes registrar el error o tomar alguna acción si es necesario
+            print(f"Error enviando notificación FCM: {e}")
+        except Exception as e:
+            # Captura cualquier otro tipo de error que pueda ocurrir
+            print(f"Error general al enviar notificación: {e}")
 
 
 @receiver(post_save, sender=Comentario)
@@ -148,22 +160,29 @@ def enviar_notificacion_reporte(sender, instance, created, **kwargs):
         user__in=usuarios_administrador
         )
 
-    if devices_cliente.exists():
-        devices_cliente.send_message(Message(
-            data={
-                'title': str(sitio),
-                'body': comentario,
-                'icon': f"{settings.SITE_URL}/static/firebase-logo.png",
-                'actionUrl': f"{settings.SITE_URL}/imgs/{sitio_id}/",
-            }
-        ))
+    try:
+        if devices_cliente.exists():
+            devices_cliente.send_message(Message(
+                data={
+                    'title': str(sitio),
+                    'body': comentario,
+                    'icon': f"{settings.SITE_URL}/static/firebase-logo.png",
+                    'actionUrl': f"{settings.SITE_URL}/imgs/{sitio_id}/",
+                }
+            ))
 
-    if devices_administrador.exists():
-        devices_administrador.send_message(Message(
-            data={
-                'title': str(sitio),
-                'body': f"{comentario} - {usuario_modifico}",
-                'icon': f"{settings.SITE_URL}/static/firebase-logo.png",
-                'actionUrl': f"{settings.SITE_URL}/imgs/{sitio_id}/",
-            }
-        ))
+        if devices_administrador.exists():
+            devices_administrador.send_message(Message(
+                data={
+                    'title': str(sitio),
+                    'body': f"{comentario} - {usuario_modifico}",
+                    'icon': f"{settings.SITE_URL}/static/firebase-logo.png",
+                    'actionUrl': f"{settings.SITE_URL}/imgs/{sitio_id}/",
+                }
+            ))
+    except messaging.ApiCallError as e:
+        # Puedes registrar el error o tomar alguna acción si es necesario
+        print(f"Error enviando notificación FCM: {e}")
+    except Exception as e:
+        # Captura cualquier otro tipo de error que pueda ocurrir
+        print(f"Error general al enviar notificación: {e}")

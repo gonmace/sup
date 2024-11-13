@@ -51,7 +51,7 @@ CSRF_COOKIE_SECURE = False
 
 CSRF_USE_SESSIONS = False
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'https://frequency-algorithm-zero-licence.trycloudflare.com']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'https://bookmarks-guatemala-speech-high.trycloudflare.com']
 
 # DOMAIN = "http://localhost:8000"
 

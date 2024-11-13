@@ -43,7 +43,6 @@ Uses gunicorn + Redis.
     ```sh
     docker-compose up -d --build
     docker-compose exec sup-dj python manage.py collectstatic --settings=config.prod
-    docker-compose exec sup-dj python manage.py makemigrations --settings=config.prod
     docker-compose exec sup-dj python manage.py migrate --settings=config.prod
     docker-compose exec sup-dj python manage.py createsuperuser --settings=config.prod
 
@@ -65,3 +64,5 @@ Uses gunicorn + Redis.
 
 otros
 chmod +x makevite.sh
+
+cloudflared tunnel --url localhost:8000
