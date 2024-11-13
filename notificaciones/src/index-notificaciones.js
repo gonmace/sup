@@ -49,13 +49,13 @@ const showNotification = (payload) => {
       data: { title, body, actionUrl, icon },
     } = payload;
 
-    // See https://developer.mozilla.org/docs/Web/API/Notification
-    const notificationOptions = {
-      body,
-      icon,
-    };
+    const options = {
+        body: body,
+        icon: icon,
+        data: { url: actionUrl } // Esto permite manejar el clic en la notificación
+      };
     
-    const notification = new window.Notification(title, notificationOptions);
+    const notification = new window.Notification(title, options);
 
     notification.onclick = (event) => {
       event.preventDefault(); // prevent the browser from focusing the Notification's tab
