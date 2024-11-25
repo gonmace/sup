@@ -66,3 +66,4 @@ otros
 chmod +x makevite.sh
 
 cloudflared tunnel --url localhost:8000
+scp -r -P 38 redlinegs-b0c63-firebase-adminsdk-6z95o-085c505941.json gonzalo@75.119.135.38:/home/gonzalo/Django/sup/

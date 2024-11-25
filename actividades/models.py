@@ -4,6 +4,9 @@ from main.models import Sitio
 import datetime
 from .managers import ProgresoManager, DetalleProgresoManager
 from django.conf import settings
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+
 
 class Actividad(models.Model):
     nombre = models.CharField(max_length=200)
@@ -76,6 +79,14 @@ class ProyectoActividad(models.Model):
     def __str__(self):
         return f"{self.proyecto} ---> {self.grupo}"
 
+    def save(self, *args, **kwargs):
+        # Verificar si es un nuevo objeto
+        is_new = self.pk is None
+        super().save(*args, **kwargs)  # Llamar al método save original
+        if is_new:
+            # Crear el objeto Progreso relacionado
+            Progreso.objects.create(progreso=self)
+
 
 class Progreso(models.Model):
     progreso = models.OneToOneField(
@@ -88,6 +99,20 @@ class Progreso(models.Model):
 
     def __str__(self):
         return f"{self.progreso.proyecto}"
+
+
+@receiver(post_save, sender=Progreso)
+def crear_detalles_progreso(sender, instance, created, **kwargs):
+    if created:
+        actividades = ActividadGrupo.objects.filter(
+            grupo=instance.progreso.grupo).order_by('order')
+        for actividad in actividades:
+            DetalleProgreso.objects.create(
+                progreso=instance,
+                actividad_grupo=actividad,
+                porcentaje=0,
+                order=actividad.order
+                )
 
 
 class DetalleProgreso(models.Model):
