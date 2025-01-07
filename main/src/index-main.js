@@ -489,11 +489,17 @@ document.addEventListener("DOMContentLoaded", function () {
     const tbody = document.getElementById('sitios-table-body');
 
     sitios.forEach((sitio) => {
+        console.log(sitio.lat);
+        console.log(sitio.lon);
+        
         const row = tbody.insertRow();
         row.style.cursor = 'pointer';
         row.insertCell().textContent = sitio.sitio;
         row.insertCell().textContent = sitio.cod_id;
         row.insertCell().textContent = sitio.nombre;
+        row.insertCell().textContent = sitio.lat.toFixed(6);
+        row.insertCell().textContent = sitio.lon.toFixed(6);
+        row.insertCell().textContent = sitio.altura ? `${sitio.altura}m` : '';
         row.insertCell().textContent = sitio.estado;
         row.insertCell().textContent = sitio.contratista?.cod || '';
         row.insertCell().textContent = sitio.ito
