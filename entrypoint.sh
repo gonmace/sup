@@ -8,7 +8,9 @@ done
 
 echo "PostgreSQL está listo"
 
+# Recolectar estáticos sobre el volumen montado (collectstatic del build queda
+# tapado por el bind mount de ./staticfiles, hay que regenerarlo en runtime)
+python manage.py collectstatic --noinput --settings=config.prod
+
 # Ejecutar Gunicorn después de que PostgreSQL esté listo
 exec uvicorn config.asgi:application --host 0.0.0.0 --port 8000
-
-exec "$@"
