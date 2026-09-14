@@ -1,7 +1,8 @@
 // Definición de capas de tiles
-export const osm = (opacidad) => L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+export const osm = (opacidad) => L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
     maxZoom: 19,
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    subdomains: 'abcd',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
     opacity: opacidad
 });
 
@@ -11,8 +12,9 @@ export const ewi = (opacidad) => L.tileLayer('https://server.arcgisonline.com/Ar
     opacity: opacidad
 });
 
-export const osm_dark = (opacidad) => L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+export const osm_dark = (opacidad) => L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    subdomains: 'abcd',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
     opacity: opacidad
 });
